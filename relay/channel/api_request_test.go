@@ -1,11 +1,16 @@
 package channel
 
 import (
+	"bytes"
+	"io"
 	"net/http"
 	"net/http/httptest"
 	"testing"
 
+	common2 "github.com/QuantumNous/new-api/common"
+	"github.com/QuantumNous/new-api/constant"
 	relaycommon "github.com/QuantumNous/new-api/relay/common"
+	relayconstant "github.com/QuantumNous/new-api/relay/constant"
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/require"
 )
@@ -190,4 +195,110 @@ func TestProcessHeaderOverride_PassHeadersTemplateSetsRuntimeHeaders(t *testing.
 	require.Equal(t, "Codex CLI", upstreamReq.Header.Get("Originator"))
 	require.Equal(t, "sess-123", upstreamReq.Header.Get("Session_id"))
 	require.Empty(t, upstreamReq.Header.Get("X-Codex-Beta-Features"))
+}
+
+func TestApplyPackyOpenAICompat_ResponsesReasoningAndInputString(t *testing.T) {
+	t.Parallel()
+
+	gin.SetMode(gin.TestMode)
+	recorder := httptest.NewRecorder()
+	ctx, _ := gin.CreateTestContext(recorder)
+	ctx.Request = httptest.NewRequest(http.MethodPost, "/v1/responses", nil)
+	ctx.Request.Header.Set("Content-Type", "application/json")
+
+	info := &relaycommon.RelayInfo{
+		RelayMode: relayconstant.RelayModeResponses,
+		ChannelMeta: &relaycommon.ChannelMeta{
+			ChannelType:    constant.ChannelTypeOpenAI,
+			ChannelBaseUrl: "https://www.packyapi.com",
+		},
+	}
+
+	body := bytes.NewBufferString(`{"model":"gpt-5.3-codex","input":"hello","reasoning_effort":"high"}`)
+	outReader, err := applyPackyOpenAICompat(ctx, info, body)
+	require.NoError(t, err)
+
+	outBytes, err := io.ReadAll(outReader)
+	require.NoError(t, err)
+
+	var payload map[string]interface{}
+	require.NoError(t, common2.Unmarshal(outBytes, &payload))
+
+	_, exists := payload["reasoning_effort"]
+	require.False(t, exists)
+
+	reasoning, ok := payload["reasoning"].(map[string]interface{})
+	require.True(t, ok)
+	require.Equal(t, "high", reasoning["effort"])
+
+	input, ok := payload["input"].([]interface{})
+	require.True(t, ok)
+	require.Len(t, input, 1)
+	message, ok := input[0].(map[string]interface{})
+	require.True(t, ok)
+	require.Equal(t, "user", message["role"])
+	content, ok := message["content"].([]interface{})
+	require.True(t, ok)
+	require.Len(t, content, 1)
+	part, ok := content[0].(map[string]interface{})
+	require.True(t, ok)
+	require.Equal(t, "input_text", part["type"])
+	require.Equal(t, "hello", part["text"])
+}
+
+func TestApplyPackyOpenAICompat_ChatConvertsReasoningObject(t *testing.T) {
+	t.Parallel()
+
+	gin.SetMode(gin.TestMode)
+	recorder := httptest.NewRecorder()
+	ctx, _ := gin.CreateTestContext(recorder)
+	ctx.Request = httptest.NewRequest(http.MethodPost, "/v1/chat/completions", nil)
+	ctx.Request.Header.Set("Content-Type", "application/json")
+
+	info := &relaycommon.RelayInfo{
+		RelayMode: relayconstant.RelayModeChatCompletions,
+		ChannelMeta: &relaycommon.ChannelMeta{
+			ChannelType:    constant.ChannelTypeOpenAI,
+			ChannelBaseUrl: "https://www.packyapi.com/v1",
+		},
+	}
+
+	body := bytes.NewBufferString(`{"model":"gpt-5.3-codex","messages":[{"role":"user","content":"hi"}],"reasoning":{"enabled":true,"effort":"high"}}`)
+	outReader, err := applyPackyOpenAICompat(ctx, info, body)
+	require.NoError(t, err)
+
+	outBytes, err := io.ReadAll(outReader)
+	require.NoError(t, err)
+
+	var payload map[string]interface{}
+	require.NoError(t, common2.Unmarshal(outBytes, &payload))
+	require.Equal(t, "high", payload["reasoning_effort"])
+	_, exists := payload["reasoning"]
+	require.False(t, exists)
+}
+
+func TestApplyPackyOpenAICompat_NonPackyUnchanged(t *testing.T) {
+	t.Parallel()
+
+	gin.SetMode(gin.TestMode)
+	recorder := httptest.NewRecorder()
+	ctx, _ := gin.CreateTestContext(recorder)
+	ctx.Request = httptest.NewRequest(http.MethodPost, "/v1/responses", nil)
+	ctx.Request.Header.Set("Content-Type", "application/json")
+
+	info := &relaycommon.RelayInfo{
+		RelayMode: relayconstant.RelayModeResponses,
+		ChannelMeta: &relaycommon.ChannelMeta{
+			ChannelType:    constant.ChannelTypeOpenAI,
+			ChannelBaseUrl: "https://api.openai.com",
+		},
+	}
+
+	origin := `{"model":"gpt-5.3-codex","input":"hello","reasoning_effort":"high"}`
+	outReader, err := applyPackyOpenAICompat(ctx, info, bytes.NewBufferString(origin))
+	require.NoError(t, err)
+
+	outBytes, err := io.ReadAll(outReader)
+	require.NoError(t, err)
+	require.Equal(t, origin, string(outBytes))
 }

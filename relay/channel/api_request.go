@@ -1,6 +1,7 @@
 package channel
 
 import (
+	"bytes"
 	"context"
 	"errors"
 	"fmt"
@@ -12,9 +13,10 @@ import (
 	"time"
 
 	common2 "github.com/QuantumNous/new-api/common"
+	appconstant "github.com/QuantumNous/new-api/constant"
 	"github.com/QuantumNous/new-api/logger"
 	"github.com/QuantumNous/new-api/relay/common"
-	"github.com/QuantumNous/new-api/relay/constant"
+	relayconstant "github.com/QuantumNous/new-api/relay/constant"
 	"github.com/QuantumNous/new-api/relay/helper"
 	"github.com/QuantumNous/new-api/service"
 	"github.com/QuantumNous/new-api/setting/operation_setting"
@@ -26,9 +28,9 @@ import (
 )
 
 func SetupApiRequestHeader(info *common.RelayInfo, c *gin.Context, req *http.Header) {
-	if info.RelayMode == constant.RelayModeAudioTranscription || info.RelayMode == constant.RelayModeAudioTranslation {
+	if info.RelayMode == relayconstant.RelayModeAudioTranscription || info.RelayMode == relayconstant.RelayModeAudioTranslation {
 		// multipart/form-data
-	} else if info.RelayMode == constant.RelayModeRealtime {
+	} else if info.RelayMode == relayconstant.RelayModeRealtime {
 		// websocket
 	} else {
 		req.Set("Content-Type", c.Request.Header.Get("Content-Type"))
@@ -288,6 +290,10 @@ func applyHeaderOverrideToRequest(req *http.Request, headerOverride map[string]s
 }
 
 func DoApiRequest(a Adaptor, c *gin.Context, info *common.RelayInfo, requestBody io.Reader) (*http.Response, error) {
+	requestBody, err := applyPackyOpenAICompat(c, info, requestBody)
+	if err != nil {
+		return nil, fmt.Errorf("apply packy request compatibility failed: %w", err)
+	}
 	fullRequestURL, err := a.GetRequestURL(info)
 	if err != nil {
 		return nil, fmt.Errorf("get request url failed: %w", err)
@@ -316,6 +322,215 @@ func DoApiRequest(a Adaptor, c *gin.Context, info *common.RelayInfo, requestBody
 		return nil, fmt.Errorf("do request failed: %w", err)
 	}
 	return resp, nil
+}
+
+func applyPackyOpenAICompat(c *gin.Context, info *common.RelayInfo, requestBody io.Reader) (io.Reader, error) {
+	if !isPackyOpenAIChannel(info) || requestBody == nil {
+		return requestBody, nil
+	}
+	if c != nil && c.Request != nil {
+		contentType := strings.ToLower(strings.TrimSpace(c.Request.Header.Get("Content-Type")))
+		if contentType != "" && !strings.Contains(contentType, "application/json") {
+			return requestBody, nil
+		}
+	}
+
+	bodyBytes, err := io.ReadAll(requestBody)
+	if err != nil {
+		return nil, err
+	}
+	trimmed := strings.TrimSpace(string(bodyBytes))
+	if trimmed == "" {
+		return bytes.NewReader(bodyBytes), nil
+	}
+
+	payload := make(map[string]interface{})
+	if err := common2.Unmarshal(bodyBytes, &payload); err != nil {
+		// Keep original body for non-JSON payloads.
+		return bytes.NewReader(bodyBytes), nil
+	}
+
+	changed := false
+	switch info.RelayMode {
+	case relayconstant.RelayModeResponses, relayconstant.RelayModeResponsesCompact:
+		if normalizePackyResponsesInput(payload) {
+			changed = true
+		}
+		if normalizePackyResponsesReasoning(payload) {
+			changed = true
+		}
+	default:
+		if normalizePackyClassicReasoning(payload) {
+			changed = true
+		}
+	}
+
+	if !changed {
+		return bytes.NewReader(bodyBytes), nil
+	}
+	newBody, err := common2.Marshal(payload)
+	if err != nil {
+		return nil, err
+	}
+	if common2.DebugEnabled {
+		println("packy compat requestBody:", string(newBody))
+	}
+	return bytes.NewReader(newBody), nil
+}
+
+func isPackyOpenAIChannel(info *common.RelayInfo) bool {
+	if info == nil {
+		return false
+	}
+	if info.ChannelType != appconstant.ChannelTypeOpenAI {
+		return false
+	}
+	baseURL := strings.ToLower(strings.TrimSpace(info.ChannelBaseUrl))
+	return strings.Contains(baseURL, "packyapi.com")
+}
+
+func normalizePackyResponsesReasoning(payload map[string]interface{}) bool {
+	effortRaw, hasEffort := payload["reasoning_effort"]
+	if !hasEffort {
+		return false
+	}
+	delete(payload, "reasoning_effort")
+
+	effort, ok := effortRaw.(string)
+	effort = strings.TrimSpace(effort)
+	if !ok || effort == "" {
+		return true
+	}
+
+	reasoningMap := map[string]interface{}{}
+	if raw, ok := payload["reasoning"]; ok {
+		if parsed, ok := raw.(map[string]interface{}); ok {
+			reasoningMap = parsed
+		}
+	}
+	if _, exists := reasoningMap["effort"]; !exists {
+		reasoningMap["effort"] = effort
+	}
+	payload["reasoning"] = reasoningMap
+	return true
+}
+
+func normalizePackyClassicReasoning(payload map[string]interface{}) bool {
+	reasoningRaw, exists := payload["reasoning"]
+	if !exists {
+		return false
+	}
+
+	reasoningMap, ok := reasoningRaw.(map[string]interface{})
+	if !ok {
+		return false
+	}
+
+	changed := false
+	if _, hasReasoningEffort := payload["reasoning_effort"]; !hasReasoningEffort {
+		if effort, ok := reasoningMap["effort"].(string); ok {
+			effort = strings.TrimSpace(effort)
+			if effort != "" {
+				payload["reasoning_effort"] = effort
+				changed = true
+			}
+		}
+		if !changed {
+			if enabled, ok := reasoningMap["enabled"].(bool); ok && !enabled {
+				payload["reasoning_effort"] = "none"
+				changed = true
+			}
+		}
+	}
+	delete(payload, "reasoning")
+	return true
+}
+
+func normalizePackyResponsesInput(payload map[string]interface{}) bool {
+	inputRaw, exists := payload["input"]
+	if !exists {
+		return false
+	}
+	switch v := inputRaw.(type) {
+	case string:
+		text := strings.TrimSpace(v)
+		payload["input"] = []interface{}{
+			map[string]interface{}{
+				"role": "user",
+				"content": []interface{}{
+					map[string]interface{}{
+						"type": "input_text",
+						"text": text,
+					},
+				},
+			},
+		}
+		return true
+	case []interface{}:
+		changed := false
+		for i, item := range v {
+			msg, ok := item.(map[string]interface{})
+			if !ok {
+				continue
+			}
+			content, exists := msg["content"]
+			if !exists {
+				continue
+			}
+			normalized, contentChanged := normalizePackyResponsesContent(content)
+			if contentChanged {
+				msg["content"] = normalized
+				v[i] = msg
+				changed = true
+			}
+		}
+		if changed {
+			payload["input"] = v
+		}
+		return changed
+	default:
+		return false
+	}
+}
+
+func normalizePackyResponsesContent(content interface{}) (interface{}, bool) {
+	switch c := content.(type) {
+	case string:
+		return []interface{}{
+			map[string]interface{}{
+				"type": "input_text",
+				"text": c,
+			},
+		}, true
+	case []interface{}:
+		changed := false
+		normalized := make([]interface{}, 0, len(c))
+		for _, part := range c {
+			switch p := part.(type) {
+			case string:
+				normalized = append(normalized, map[string]interface{}{
+					"type": "input_text",
+					"text": p,
+				})
+				changed = true
+			case map[string]interface{}:
+				partType, _ := p["type"].(string)
+				if partType == "text" {
+					p["type"] = "input_text"
+					changed = true
+				}
+				normalized = append(normalized, p)
+			default:
+				normalized = append(normalized, part)
+			}
+		}
+		if changed {
+			return normalized, true
+		}
+		return content, false
+	default:
+		return content, false
+	}
 }
 
 func DoFormRequest(a Adaptor, c *gin.Context, info *common.RelayInfo, requestBody io.Reader) (*http.Response, error) {
