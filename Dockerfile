@@ -2,6 +2,9 @@ FROM node:22-alpine AS builder
 
 WORKDIR /build
 COPY web/package.json .
+# Keep Semi UI on a version that still supports dist/css deep import path
+# used by this codebase: @douyinfe/semi-ui/dist/css/semi.css
+RUN npm pkg set dependencies.@douyinfe/semi-ui=2.72.2
 # Bun 1.3.x may generate broken bin remaps for vite in some Linux Docker environments.
 # Use npm in container build stage for stable frontend production builds.
 # This project depends on React 18, while some transitive deps may declare React 19 peers.
