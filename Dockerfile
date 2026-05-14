@@ -4,7 +4,9 @@ WORKDIR /build
 COPY web/package.json .
 # Bun 1.3.x may generate broken bin remaps for vite in some Linux Docker environments.
 # Use npm in container build stage for stable frontend production builds.
-RUN npm install --no-audit --no-fund
+# This project depends on React 18, while some transitive deps may declare React 19 peers.
+# `--legacy-peer-deps` keeps install compatible for reproducible container builds.
+RUN npm install --no-audit --no-fund --legacy-peer-deps
 COPY ./web .
 COPY ./VERSION .
 RUN DISABLE_ESLINT_PLUGIN='true' VITE_REACT_APP_VERSION=$(cat VERSION) npm run build
