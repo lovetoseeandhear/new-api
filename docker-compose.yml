@@ -16,10 +16,7 @@ version: '3.4' # For compatibility with older Docker versions
 
 services:
   new-api:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    image: new-api:local
+    image: calciumion/new-api:latest
     container_name: new-api
     restart: always
     command: --log-dir /app/logs
@@ -76,7 +73,7 @@ services:
     networks:
       - new-api-network
     ports:
-      - "5432:5432"  # Expose PostgreSQL for local tools such as DBeaver
+      - "5432:5432"  # Uncomment if you need to access PostgreSQL from outside Docker
 
 #  mysql:
 #    image: mysql:8.2
