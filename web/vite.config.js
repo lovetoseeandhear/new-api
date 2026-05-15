@@ -52,7 +52,8 @@ export default defineConfig({
     },
     react(),
     vitePluginSemi({
-      cssLayer: true,
+      // Avoid Sass `~` import resolution failures in Linux/Docker builds.
+      cssLayer: false,
     }),
   ],
   optimizeDeps: {
