@@ -17,38 +17,41 @@ import re
 class PricingSeed:
     model_name: str
     input_price: float
-    cache_write_price: float
-    cache_read_price: float
+    cache_write_price: Optional[float]
+    cache_read_price: Optional[float]
     output_price: float
 
 
 SEEDS: List[PricingSeed] = [
-    PricingSeed("MiniMax M2.7", 0.30, 0.375, 0.06, 1.20),
-    PricingSeed("MiniMax M2.5", 0.30, 0.30, 0.03, 1.20),
-    PricingSeed("Kimi K2.6", 0.95, 0.95, 0.16, 4.00),
-    PricingSeed("Kimi K2.5", 0.59, 0.59, 0.177, 3.00),
-    PricingSeed("GLM-5.1", 1.40, 1.40, 0.26, 4.40),
-    PricingSeed("GLM-5", 1.00, 1.00, 0.20, 3.20),
-    PricingSeed("DeepSeek V3.2", 0.29, 0.29, 0.145, 0.44),
-    PricingSeed("DeepSeek V4 Flash", 0.28, 0.28, 0.0056, 0.56),
-    PricingSeed("DeepSeek V4 Pro", 0.87, 0.87, 0.0087, 1.74),
-    PricingSeed("GPT-5.4", 2.50, 2.50, 0.25, 15.00),
-    PricingSeed("GPT-5.5", 5.00, 5.00, 0.50, 30.00),
-    PricingSeed("GPT-5.5 Instant", 5.00, 5.00, 0.50, 30.00),
-    PricingSeed("GPT-5.4 Pro", 30.00, 30.00, 3.00, 180.00),
-    PricingSeed("GPT-5.2", 1.75, 1.75, 0.175, 14.00),
-    PricingSeed("GPT-5.4 Mini", 0.75, 0.75, 0.075, 4.50),
-    PricingSeed("GPT-5 Mini", 0.25, 0.25, 0.025, 2.00),
-    PricingSeed("GPT-5.4 Nano", 0.20, 0.20, 0.02, 1.25),
-    PricingSeed("GPT-5 Nano", 0.05, 0.05, 0.005, 0.40),
-    PricingSeed("Claude Opus 4.7", 5.00, 6.25, 0.50, 25.00),
-    PricingSeed("Claude Opus 4.6", 5.00, 6.25, 0.50, 25.00),
-    PricingSeed("Claude Opus 4.5", 5.00, 6.25, 0.50, 25.00),
-    PricingSeed("Claude Sonnet 4.6", 3.00, 3.75, 0.30, 15.00),
-    PricingSeed("Claude Sonnet 4.5", 3.00, 3.75, 0.30, 15.00),
-    PricingSeed("Claude Haiku 4.5", 1.00, 1.25, 0.10, 5.00),
-    PricingSeed("Gemini 3.1 Pro", 2.00, 2.00, 0.20, 12.00),
-    PricingSeed("Gemini 3 Flash", 0.50, 0.50, 0.05, 3.00),
+    PricingSeed("minimax-m2.7", 0.30, 0.375, 0.06, 1.20),
+    PricingSeed("minimax-m2.5", 0.30, 0.30, 0.03, 1.20),
+    PricingSeed("kimi-k2.6", 0.95, 0.95, 0.16, 4.00),
+    PricingSeed("kimi-k2.5", 0.59, 0.59, 0.177, 3.00),
+    PricingSeed("glm-5.1", 1.40, 1.40, 0.26, 4.40),
+    PricingSeed("glm-5", 1.00, 1.00, 0.20, 3.20),
+    PricingSeed("deepseek-v3.2", 0.29, 0.29, 0.145, 0.44),
+    PricingSeed("deepseek-v4-flash", 0.28, 0.28, 0.0056, 0.56),
+    PricingSeed("deepseek-v4-pro", 0.87, 0.87, 0.0087, 1.74),
+    PricingSeed("gpt-5.5", 5.00, 5.00, 0.50, 30.00),
+    PricingSeed("gpt-5.5-instant", 5.00, 5.00, 0.50, 30.00),
+    PricingSeed("gpt-5.5-pro", 30.00, 30.00, None, 180.00),
+    PricingSeed("gpt-5.4", 2.50, 2.50, 0.25, 15.00),
+    PricingSeed("gpt-5.4-pro", 30.00, 30.00, None, 180.00),
+    PricingSeed("gpt-5.4-mini", 0.75, 0.75, 0.075, 4.50),
+    PricingSeed("gpt-5.4-nano", 0.20, 0.20, 0.02, 1.25),
+    PricingSeed("gpt-5.2", 1.75, 1.75, 0.175, 14.00),
+    PricingSeed("gpt-5", 1.25, 1.25, 0.125, 10.00),
+    PricingSeed("gpt-5-pro", 15.00, 15.00, None, 120.00),
+    PricingSeed("gpt-5-mini", 0.25, 0.25, 0.025, 2.00),
+    PricingSeed("gpt-5-nano", 0.05, 0.05, 0.005, 0.40),
+    PricingSeed("claude-opus-4.7", 5.00, 6.25, 0.50, 25.00),
+    PricingSeed("claude-opus-4-6", 5.00, 6.25, 0.50, 25.00),
+    PricingSeed("claude-opus-4.5", 5.00, 6.25, 0.50, 25.00),
+    PricingSeed("claude-sonnet-4.6", 3.00, 3.75, 0.30, 15.00),
+    PricingSeed("claude-sonnet-4.5", 3.00, 3.75, 0.30, 15.00),
+    PricingSeed("claude-haiku-4.5", 1.00, 1.25, 0.10, 5.00),
+    PricingSeed("gemini-3.1-pro", 2.00, 2.00, 0.20, 12.00),
+    PricingSeed("gemini-3-flash", 0.50, 0.50, 0.05, 3.00),
 ]
 
 
@@ -320,6 +323,22 @@ def upsert_option_map(db: DB, key: str, data: Dict[str, float]) -> None:
         )
 
 
+def set_price_ratio(target: Dict[str, float], model_name: str, price: Optional[float], base_price: float) -> None:
+    if price is None:
+        target.pop(model_name, None)
+        return
+    if base_price == 0:
+        target.pop(model_name, None)
+        return
+    target[model_name] = price / base_price
+
+
+def set_model_input_price(target: Dict[str, float], model_name: str, input_price: float) -> None:
+    # The admin pricing UI displays ModelRatio as ratio * 2 USD / 1M tokens.
+    # Store the backend ratio form so the UI and billing show the original price.
+    target[model_name] = input_price / 2
+
+
 def ensure_model_exists(db: DB, model_name: str) -> bool:
     row = db.fetch_one(
         f"SELECT id FROM models WHERE model_name = {db.param} AND deleted_at IS NULL LIMIT 1",
@@ -334,7 +353,7 @@ def ensure_model_exists(db: DB, model_name: str) -> bool:
         (model_name, description, status, sync_official, created_time, updated_time, name_rule)
         VALUES ({db.param}, {db.param}, {db.param}, {db.param}, {db.param}, {db.param}, {db.param})
         """,
-        (model_name, "seeded by update_model_pricing.py", 1, 0, now, now, 0),
+        (model_name, "", 1, 0, now, now, 0),
     )
     return True
 
@@ -344,7 +363,6 @@ def main() -> None:
     write_top_n = int(os.getenv("WRITE_TOP_N", str(len(SEEDS))))
     if write_top_n <= 0:
         raise RuntimeError("WRITE_TOP_N must be greater than 0")
-    billing_mode = os.getenv("BILLING_MODE", "ratio").strip().lower()
     db = DB()
     db.connect()
     try:
@@ -360,15 +378,11 @@ def main() -> None:
         for s in selected:
             if ensure_model_exists(db, s.model_name):
                 created_count += 1
-            if billing_mode == "ratio":
-                model_price.pop(s.model_name, None)
-            else:
-                model_price[s.model_name] = s.input_price
-            # 按用户要求：不做任何换算，直接写原始值到现有计费配置项
-            model_ratio[s.model_name] = s.input_price
-            completion_ratio[s.model_name] = s.output_price
-            cache_ratio[s.model_name] = s.cache_read_price
-            create_cache_ratio[s.model_name] = s.cache_write_price
+            model_price.pop(s.model_name, None)
+            set_model_input_price(model_ratio, s.model_name, s.input_price)
+            set_price_ratio(completion_ratio, s.model_name, s.output_price, s.input_price)
+            set_price_ratio(cache_ratio, s.model_name, s.cache_read_price, s.input_price)
+            set_price_ratio(create_cache_ratio, s.model_name, s.cache_write_price, s.input_price)
             raw_pricing[s.model_name] = {
                 "input_price": s.input_price,
                 "cache_write_price": s.cache_write_price,
@@ -398,8 +412,8 @@ def main() -> None:
             )
 
         db.commit()
-        print(f"done: selected={len(selected)}/{len(SEEDS)}, created_models={created_count}, billing_mode={billing_mode}")
-        print("saved without conversion: ModelPrice/ModelRatio/CompletionRatio/CacheRatio/CreateCacheRatio + RawModelPricing")
+        print(f"done: selected={len(selected)}/{len(SEEDS)}, created_models={created_count}")
+        print("saved official prices for admin model pricing display; group ratios were not changed")
     except Exception:
         db.rollback()
         raise
