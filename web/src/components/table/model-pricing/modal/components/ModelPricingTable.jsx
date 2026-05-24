@@ -21,6 +21,7 @@ import React from 'react';
 import { Card, Avatar, Typography, Table, Tag } from '@douyinfe/semi-ui';
 import { IconCoinMoneyStroked } from '@douyinfe/semi-icons';
 import { calculateModelPrice, getModelPriceItems } from '../../../../../helpers';
+import { getDiscountZheByGroupRatio } from '../../discount';
 
 const { Text } = Typography;
 
@@ -70,6 +71,7 @@ const ModelPricingTable = ({
         key: group,
         group: group,
         ratio: groupRatioValue,
+        discountZhe: getDiscountZheByGroupRatio(groupRatioValue),
         billingType:
           modelData?.quota_type === 0
             ? t('按量计费')
@@ -85,10 +87,13 @@ const ModelPricingTable = ({
       {
         title: t('分组'),
         dataIndex: 'group',
-        render: (text) => (
+        render: (text, record) => (
           <Tag color='white' size='small' shape='circle'>
             {text}
             {t('分组')}
+            {record.discountZhe === null
+              ? ''
+              : ` ${record.discountZhe}${t('折')}`}
           </Tag>
         ),
       },

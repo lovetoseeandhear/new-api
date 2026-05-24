@@ -44,6 +44,7 @@ import PricingCardSkeleton from './PricingCardSkeleton';
 import { useMinimumLoadingTime } from '../../../../../hooks/common/useMinimumLoadingTime';
 import { renderLimitedItems } from '../../../../common/ui/RenderUtils';
 import { useIsMobile } from '../../../../../hooks/common/useIsMobile';
+import { getDiscountZheByGroupRatio } from '../../discount';
 
 const CARD_STYLES = {
   container:
@@ -149,6 +150,17 @@ const PricingCardView = ({
   // 获取模型描述
   const getModelDescription = (record) => {
     return record.description || '';
+  };
+
+  const renderDiscountTag = (usedGroupRatio) => {
+    const zhe = getDiscountZheByGroupRatio(usedGroupRatio);
+    if (zhe === null) return null;
+    return (
+      <Tag color='green' shape='circle' size='small'>
+        {zhe}
+        {t('折')}
+      </Tag>
+    );
   };
 
   // 渲染标签
@@ -263,9 +275,14 @@ const PricingCardView = ({
                   <div className='flex items-start space-x-3 flex-1 min-w-0'>
                     {getModelIcon(model)}
                     <div className='flex-1 min-w-0'>
-                      <h3 className='text-lg font-bold text-gray-900 truncate'>
-                        {model.model_name}
-                      </h3>
+                      <div className='flex items-center gap-2 min-w-0'>
+                        <h3 className='text-lg font-bold text-gray-900 truncate'>
+                          {model.model_name}
+                        </h3>
+                        <div className='shrink-0'>
+                          {renderDiscountTag(priceData?.usedGroupRatio)}
+                        </div>
+                      </div>
                       <div className='flex flex-col gap-1 text-xs mt-1'>
                         {formatPriceInfo(priceData, t, siteDisplayType)}
                       </div>

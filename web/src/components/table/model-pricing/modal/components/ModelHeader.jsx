@@ -29,7 +29,11 @@ const CARD_STYLES = {
   icon: 'w-8 h-8 flex items-center justify-center',
 };
 
-const ModelHeader = ({ modelData, vendorsMap = {}, t }) => {
+const ModelHeader = ({
+  modelData,
+  vendorsMap = {},
+  t,
+}) => {
   // 获取模型图标（优先模型图标，其次供应商图标）
   const getModelIcon = () => {
     // 1) 优先使用模型自定义图标

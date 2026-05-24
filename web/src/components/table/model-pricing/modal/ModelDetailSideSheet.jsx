@@ -33,6 +33,7 @@ const ModelDetailSideSheet = ({
   visible,
   onClose,
   modelData,
+  selectedGroup,
   groupRatio,
   currency,
   siteDisplayType,
@@ -51,7 +52,11 @@ const ModelDetailSideSheet = ({
     <SideSheet
       placement='right'
       title={
-        <ModelHeader modelData={modelData} vendorsMap={vendorsMap} t={t} />
+        <ModelHeader
+          modelData={modelData}
+          vendorsMap={vendorsMap}
+          t={t}
+        />
       }
       bodyStyle={{
         padding: '0',

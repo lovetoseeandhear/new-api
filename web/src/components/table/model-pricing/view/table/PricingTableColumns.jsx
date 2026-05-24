@@ -32,6 +32,7 @@ import {
   renderDescription,
 } from '../../../../common/ui/RenderUtils';
 import { useIsMobile } from '../../../../../hooks/common/useIsMobile';
+import { getDiscountZheByGroupRatio } from '../../discount';
 
 function renderQuotaType(type, t) {
   switch (type) {
@@ -146,11 +147,23 @@ export const getPricingTableColumns = ({
     title: t('模型名称'),
     dataIndex: 'model_name',
     render: (text, record, index) => {
-      return renderModelTag(text, {
-        onClick: () => {
-          copyText(text);
-        },
-      });
+      const priceData = getPriceData(record);
+      const zhe = getDiscountZheByGroupRatio(priceData?.usedGroupRatio);
+      return (
+        <Space wrap spacing={6}>
+          {renderModelTag(text, {
+            onClick: () => {
+              copyText(text);
+            },
+          })}
+          {zhe === null ? null : (
+            <Tag color='green' shape='circle' size='small'>
+              {zhe}
+              {t('折')}
+            </Tag>
+          )}
+        </Space>
+      );
     },
     onFilter: (value, record) =>
       record.model_name.toLowerCase().includes(value.toLowerCase()),
