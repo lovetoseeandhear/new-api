@@ -36,6 +36,9 @@ export default function SettingsCreditLimit(props) {
     PreConsumedQuota: '',
     QuotaForInviter: '',
     QuotaForInvitee: '',
+    InviteTopupRewardEnabled: false,
+    InviteTopupRewardRatio: '',
+    InviteTopupRewardFirstOnly: true,
     'quota_setting.enable_free_model_pre_consume': true,
   });
   const refForm = useRef();
@@ -162,6 +165,51 @@ export default function SettingsCreditLimit(props) {
                     setInputs({
                       ...inputs,
                       QuotaForInvitee: String(value),
+                    })
+                  }
+                />
+              </Col>
+            </Row>
+            <Row>
+              <Col xs={24} sm={12} md={8} lg={8} xl={6}>
+                <Form.Switch
+                  label={t('启用充值邀请奖励')}
+                  field={'InviteTopupRewardEnabled'}
+                  extraText={t('开启后，被邀请用户充值成功时，邀请人可获得奖励')}
+                  onChange={(value) =>
+                    setInputs({
+                      ...inputs,
+                      InviteTopupRewardEnabled: value,
+                    })
+                  }
+                />
+              </Col>
+              <Col xs={24} sm={12} md={8} lg={8} xl={6}>
+                <Form.InputNumber
+                  label={t('充值邀请奖励比例')}
+                  field={'InviteTopupRewardRatio'}
+                  step={0.1}
+                  min={0}
+                  suffix={'%'}
+                  extraText={t('按被邀请用户本次到账额度计算，奖励进入邀请额度')}
+                  placeholder={t('例如：10')}
+                  onChange={(value) =>
+                    setInputs({
+                      ...inputs,
+                      InviteTopupRewardRatio: String(value),
+                    })
+                  }
+                />
+              </Col>
+              <Col xs={24} sm={12} md={8} lg={8} xl={6}>
+                <Form.Switch
+                  label={t('仅首充奖励')}
+                  field={'InviteTopupRewardFirstOnly'}
+                  extraText={t('开启后，仅被邀请用户第一次充值成功时奖励邀请人')}
+                  onChange={(value) =>
+                    setInputs({
+                      ...inputs,
+                      InviteTopupRewardFirstOnly: value,
                     })
                   }
                 />

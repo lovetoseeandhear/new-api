@@ -42,6 +42,64 @@ const homePageHtml = `<!doctype html>
     <div id="root"></div>
     <script>
       (function () {
+        function replaceBrandLogos() {
+          var brandLabels = Array.prototype.slice.call(document.querySelectorAll('span')).filter(function (node) {
+            return (node.textContent || '').trim() === 'Flowbay API';
+          });
+
+          brandLabels.forEach(function (label) {
+            var logoWrap = label.previousElementSibling;
+            if (!logoWrap || logoWrap.getAttribute('data-new-api-logo') === 'true') return;
+
+            logoWrap.setAttribute('data-new-api-logo', 'true');
+            logoWrap.innerHTML = '<img src="/logo.png" alt="new-api" style="width:100%;height:100%;object-fit:contain;border-radius:inherit;" />';
+            logoWrap.style.background = 'transparent';
+          });
+        }
+
+        function restyleGatewayCard() {
+          var gatewayTitle = Array.prototype.slice.call(document.querySelectorAll('h3')).find(function (node) {
+            return (node.textContent || '').trim() === '异构网关 统一融合';
+          });
+          if (!gatewayTitle) return;
+
+          var card = gatewayTitle.parentElement;
+          while (card && (!card.className || String(card.className).indexOf('lg:col-span-2') === -1)) {
+            card = card.parentElement;
+          }
+          if (!card || card.getAttribute('data-new-api-gateway-style') === 'true') return;
+
+          card.setAttribute('data-new-api-gateway-style', 'true');
+          card.style.background = 'linear-gradient(135deg, rgba(10,12,16,0.98) 0%, rgba(15,23,42,0.96) 44%, rgba(17,24,39,0.95) 100%)';
+          card.style.border = '1px solid rgba(34,211,238,0.16)';
+          card.style.boxShadow = '0 22px 60px rgba(0,0,0,0.34), inset 0 1px 0 rgba(255,255,255,0.06)';
+
+          gatewayTitle.style.color = '#f8fafc';
+          gatewayTitle.style.textShadow = '0 0 24px rgba(34,211,238,0.18)';
+
+          var description = gatewayTitle.nextElementSibling;
+          if (description) {
+            description.style.color = 'rgba(203,213,225,0.86)';
+          }
+
+          Array.prototype.slice.call(card.children).forEach(function (child) {
+            var className = String(child.className || '');
+            if (className.indexOf('top-0') !== -1 && className.indexOf('right-0') !== -1) {
+              child.style.background = 'radial-gradient(circle, rgba(34,211,238,0.18), rgba(139,92,246,0.10) 42%, transparent 70%)';
+              child.style.opacity = '1';
+            }
+          });
+        }
+
+        function applyHomeAdjustments() {
+          replaceBrandLogos();
+          restyleGatewayCard();
+        }
+
+        applyHomeAdjustments();
+        var homeObserver = new MutationObserver(applyHomeAdjustments);
+        homeObserver.observe(document.body, { childList: true, subtree: true });
+
         var routeMap = {
           '登录': '/login',
           '开始使用': '/register',
