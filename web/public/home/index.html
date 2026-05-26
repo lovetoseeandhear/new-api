@@ -60,9 +60,70 @@
           });
         }
 
+        function restyleTrustBlocks() {
+          if (!document.getElementById('new-api-trust-blocks-style')) {
+            var style = document.createElement('style');
+            style.id = 'new-api-trust-blocks-style';
+            style.textContent = [
+              '.new-api-trust-grid{max-width:72rem!important;width:100%;}',
+              '.new-api-trust-grid-primary{margin-top:3.75rem!important;gap:1rem!important;}',
+              '.new-api-trust-grid-secondary{margin-top:1rem!important;padding:0!important;background:transparent!important;border:0!important;backdrop-filter:none!important;gap:1rem!important;divide:none!important;}',
+              '.new-api-trust-card{min-height:156px;text-align:left!important;background:linear-gradient(135deg,rgba(10,12,16,.66),rgba(15,23,42,.48))!important;border:1px solid rgba(255,255,255,.065)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.045),0 18px 48px rgba(0,0,0,.18)!important;}',
+              '.new-api-trust-card:hover{border-color:rgba(34,211,238,.18)!important;background:linear-gradient(135deg,rgba(10,12,16,.78),rgba(15,23,42,.58))!important;}',
+              '.new-api-trust-card-icon{margin-left:0!important;margin-right:0!important;}',
+              '.new-api-trust-mini{min-height:132px;padding:1.25rem!important;border:1px solid rgba(255,255,255,.065)!important;border-radius:1rem;background:linear-gradient(135deg,rgba(255,255,255,.025),rgba(15,23,42,.32));box-shadow:inset 0 1px 0 rgba(255,255,255,.035);}',
+              '.new-api-trust-mini{padding-top:1.25rem!important;padding-left:1.25rem!important;padding-right:1.25rem!important;}',
+              '.new-api-trust-mini + .new-api-trust-mini{border-left:1px solid rgba(255,255,255,.065)!important;}',
+              '@media(max-width:767px){.new-api-trust-grid-primary,.new-api-trust-grid-secondary{max-width:28rem!important;grid-template-columns:1fr!important;}.new-api-trust-mini{min-height:auto;}.new-api-trust-mini + .new-api-trust-mini{border-left:1px solid rgba(255,255,255,.065)!important;}}'
+            ].join('');
+            document.head.appendChild(style);
+          }
+
+          var complianceTitle = Array.prototype.slice.call(document.querySelectorAll('h4')).find(function (node) {
+            return (node.textContent || '').trim() === '业务监管合规';
+          });
+          if (!complianceTitle) return;
+
+          var firstCard = complianceTitle.parentElement;
+          while (firstCard && (!firstCard.className || String(firstCard.className).indexOf('glass-card') === -1)) {
+            firstCard = firstCard.parentElement;
+          }
+          if (!firstCard) return;
+
+          var primaryGrid = firstCard.parentElement;
+          if (primaryGrid && primaryGrid.getAttribute('data-new-api-trust-primary') !== 'true') {
+            primaryGrid.setAttribute('data-new-api-trust-primary', 'true');
+            primaryGrid.classList.add('new-api-trust-grid', 'new-api-trust-grid-primary');
+            Array.prototype.slice.call(primaryGrid.children).forEach(function (card) {
+              card.classList.add('new-api-trust-card');
+              var iconWrap = card.querySelector('div');
+              if (iconWrap) iconWrap.classList.add('new-api-trust-card-icon');
+            });
+          }
+
+          var nodeLabel = Array.prototype.slice.call(document.querySelectorAll('span')).find(function (node) {
+            return (node.textContent || '').trim() === '国内直连 · 全球节点';
+          });
+          if (!nodeLabel) return;
+
+          var miniCard = nodeLabel.parentElement;
+          while (miniCard && (!miniCard.parentElement || String(miniCard.parentElement.className || '').indexOf('grid') === -1)) {
+            miniCard = miniCard.parentElement;
+          }
+          var secondaryGrid = miniCard && miniCard.parentElement;
+          if (secondaryGrid && secondaryGrid.getAttribute('data-new-api-trust-secondary') !== 'true') {
+            secondaryGrid.setAttribute('data-new-api-trust-secondary', 'true');
+            secondaryGrid.classList.add('new-api-trust-grid', 'new-api-trust-grid-secondary');
+            Array.prototype.slice.call(secondaryGrid.children).forEach(function (card) {
+              card.classList.add('new-api-trust-mini');
+            });
+          }
+        }
+
         function applyHomeAdjustments() {
           replaceBrandLogos();
           restyleGatewayCard();
+          restyleTrustBlocks();
         }
 
         applyHomeAdjustments();
