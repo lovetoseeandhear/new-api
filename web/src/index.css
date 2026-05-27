@@ -1401,3 +1401,29 @@ body[theme-mode='dark'] .pricing-aurora-hero {
 .pricing-glass-scope .pricing-skeleton .semi-skeleton-title {
   background: color-mix(in srgb, var(--plaza-primary) 12%, transparent) !important;
 }
+
+/* === Mobile filter drawer (Semi Modal) glass === */
+.pricing-glass-filter-drawer .semi-modal-content {
+  background: var(--plaza-surface) !important;
+  -webkit-backdrop-filter: blur(var(--plaza-blur));
+  backdrop-filter: blur(var(--plaza-blur));
+  border: 1px solid var(--plaza-border);
+}
+.pricing-glass-filter-drawer .semi-modal-mask {
+  background: rgba(11, 14, 26, 0.5) !important;
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+}
+.pricing-glass-filter-drawer .semi-modal-body {
+  color: var(--plaza-text-1);
+}
+
+/* === Mobile-only adjustments to pricing page === */
+@media (max-width: 768px) {
+  /* Hero Aurora is gated by !isMobile in JSX, so no extra hide needed.
+     Drop the sticky-bottom fade mask on small screens (negative-bottom
+     can fight tight mobile layouts). */
+  .pricing-search-header::after {
+    display: none;
+  }
+}

@@ -46,6 +46,7 @@ const PricingFilterModal = ({ visible, onClose, sidebarProps, t }) => {
 
   return (
     <Modal
+      className='pricing-glass-filter-drawer'
       title={t('筛选')}
       visible={visible}
       onCancel={onClose}
