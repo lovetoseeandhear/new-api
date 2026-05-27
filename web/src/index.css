@@ -1122,48 +1122,24 @@ body[theme-mode='dark'] {
 }
 .pricing-glass-scope .semi-tag.pricing-chip-primary,
 .pricing-chip-primary {
-  background: color-mix(
-    in srgb,
-    var(--plaza-primary) 12%,
-    transparent
-  ) !important;
-  color: color-mix(
-    in srgb,
-    var(--plaza-primary) 55%,
-    var(--plaza-text-1)
-  ) !important;
-  border-color: color-mix(
-    in srgb,
-    var(--plaza-primary) 20%,
-    transparent
-  ) !important;
+  background: var(--plaza-primary) !important;
+  color: #ffffff !important;
+  border-color: var(--plaza-primary) !important;
 }
 .pricing-glass-scope .semi-tag.pricing-chip-accent,
 .pricing-chip-accent {
-  background: color-mix(
-    in srgb,
-    var(--plaza-accent) 14%,
-    transparent
-  ) !important;
-  color: color-mix(
-    in srgb,
-    var(--plaza-accent) 45%,
-    var(--plaza-text-1)
-  ) !important;
-  border-color: color-mix(
-    in srgb,
-    var(--plaza-accent) 25%,
-    transparent
-  ) !important;
+  background: var(--plaza-accent) !important;
+  color: #ffffff !important;
+  border-color: var(--plaza-accent) !important;
 }
 .pricing-glass-scope .semi-tag.pricing-chip-neutral,
 .pricing-chip-neutral {
   background: color-mix(
     in srgb,
-    var(--plaza-text-3) 10%,
+    var(--plaza-text-3) 14%,
     transparent
   ) !important;
-  color: var(--plaza-text-2) !important;
+  color: var(--plaza-text-1) !important;
   border-top-color: var(--plaza-border) !important;
   border-right-color: var(--plaza-border) !important;
   border-bottom-color: var(--plaza-border) !important;
@@ -1553,7 +1529,7 @@ body[theme-mode='dark'] .pricing-aurora-hero {
 .pricing-glass-scope .pricing-section-divider {
   height: 1px;
   background: color-mix(in srgb, var(--plaza-border) 60%, transparent);
-  margin: 12px 0;
+  margin: 10px 0;
 }
 
 .pricing-glass-scope .pricing-ratio-row {
@@ -1567,31 +1543,35 @@ body[theme-mode='dark'] .pricing-aurora-hero {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 2px 8px;
+  padding: 2px 10px;
   border-radius: 999px;
-  border: 1px solid var(--plaza-border);
-  background: transparent;
-  font-size: 11px;
+  border: none;
+  background: color-mix(in srgb, var(--plaza-primary) 8%, transparent);
+  font-size: 12px;
   line-height: 1.6;
-  transition: border-color 160ms ease;
+  transition: background 160ms ease;
 }
 
 .pricing-glass-scope .pricing-ratio-chip:hover {
-  border-color: color-mix(
-    in srgb,
-    var(--plaza-primary) 35%,
-    var(--plaza-border)
-  );
+  background: color-mix(in srgb, var(--plaza-primary) 12%, transparent);
 }
 
 .pricing-glass-scope .pricing-ratio-chip-value {
   font-family: var(--plaza-font-mono);
-  font-weight: 500;
-  color: var(--plaza-text-1);
+  font-weight: 600;
+  color: var(--plaza-primary);
 }
 
 .pricing-glass-scope .pricing-ratio-chip-label {
   color: var(--plaza-text-3);
+}
+
+/* 暗色模式：主色填充加深保对比 */
+[data-theme='dark'] .pricing-glass-scope .pricing-ratio-chip {
+  background: color-mix(in srgb, var(--plaza-primary) 12%, transparent);
+}
+[data-theme='dark'] .pricing-glass-scope .pricing-ratio-chip:hover {
+  background: color-mix(in srgb, var(--plaza-primary) 18%, transparent);
 }
 
 .pricing-glass-scope .pricing-tags-row {
