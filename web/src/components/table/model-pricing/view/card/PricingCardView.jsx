@@ -272,33 +272,31 @@ const PricingCardView = ({
               onClick={() => openModelDetail && openModelDetail(model)}
             >
               <div className='flex flex-col h-full'>
-                {/* 身份区：图标 + 模型名称 + 操作按钮 */}
-                <div className='flex items-start justify-between mb-3'>
+                {/* 身份区：图标 + 模型名称 + 折扣徽章 + 选择框 */}
+                <div className='flex items-start justify-between mb-2.5'>
                   <div className='flex items-start space-x-3 flex-1 min-w-0'>
                     {getModelIcon(model)}
-                    <div className='flex-1 min-w-0'>
-                      <h3 className='text-base font-semibold truncate'>
+                    <div className='flex-1 min-w-0 flex items-center gap-2'>
+                      <h3 className='text-base font-semibold truncate min-w-0'>
                         {model.model_name}
                       </h3>
+                      {(() => {
+                        const zhe = getDiscountZheByGroupRatio(
+                          priceData?.usedGroupRatio,
+                        );
+                        if (zhe === null) return null;
+                        return (
+                          <span className='pricing-discount-badge'>
+                            {zhe}
+                            {t('折')}
+                          </span>
+                        );
+                      })()}
                     </div>
                   </div>
 
-                  <div className='flex items-center space-x-2 ml-3'>
-                    {/* 复制按钮 */}
-                    <Button
-                      size='small'
-                      theme='borderless'
-                      type='tertiary'
-                      icon={<Copy size={12} />}
-                      className='!bg-[var(--plaza-primary)]/8 hover:!bg-[var(--plaza-primary)]/15 !text-[var(--plaza-primary)]'
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        copyText(model.model_name);
-                      }}
-                    />
-
-                    {/* 选择框 */}
-                    {rowSelection && (
+                  {rowSelection && (
+                    <div className='flex items-center ml-3'>
                       <Checkbox
                         checked={isSelected}
                         onChange={(e) => {
@@ -306,8 +304,8 @@ const PricingCardView = ({
                           handleCheckboxChange(model, e.target.checked);
                         }}
                       />
-                    )}
-                  </div>
+                    </div>
+                  )}
                 </div>
 
                 {/* 模型描述 - 占据剩余空间 */}
