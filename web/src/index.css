@@ -889,13 +889,13 @@ html.dark .with-pastel-balls::before {
   min-width: clamp(280px, 24vw, 520px) !important;
   max-width: clamp(280px, 24vw, 520px) !important;
   height: calc(100vh - 60px);
-  background-color: var(--semi-color-bg-0);
+  background-color: var(--plaza-bg);
   overflow: auto;
 }
 
 .pricing-content {
   height: calc(100vh - 60px);
-  background-color: var(--semi-color-bg-0);
+  background-color: var(--plaza-bg);
   display: flex;
   flex-direction: column;
 }
@@ -912,8 +912,9 @@ html.dark .with-pastel-balls::before {
 }
 
 .pricing-search-header {
+  position: relative;
   padding: 0.5rem;
-  background-color: var(--semi-color-bg-0);
+  background-color: var(--plaza-bg);
   flex-shrink: 0;
   position: sticky;
   top: 0;
@@ -1006,3 +1007,186 @@ html.dark .with-pastel-balls::before {
 }
 
 .ec-dbcd0a3c01b55203 { forced-color-adjust: auto; }
+
+/* ==================== Model Plaza Glassmorphism Tokens ==================== */
+:root {
+  --plaza-primary: #7C5CFF;
+  --plaza-accent: #00C9D7;
+  --plaza-cta-glow: rgba(124, 92, 255, 0.35);
+  --plaza-bg: #FAFAFE;
+  --plaza-surface: rgba(255, 255, 255, 0.65);
+  --plaza-surface-solid: #F8F9FE;
+  --plaza-border: rgba(124, 92, 255, 0.12);
+  --plaza-text-1: #0F172A;
+  --plaza-text-2: #475569;
+  --plaza-text-3: #94A3B8;
+  --plaza-blur: 12px;
+  --plaza-font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  --plaza-font-mono: 'JetBrains Mono', 'SF Mono', Menlo, Consolas, monospace;
+  --plaza-radius-card: 16px;
+  --plaza-radius-pill: 999px;
+  --plaza-transition: 200ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+body[theme-mode='dark'] {
+  --plaza-primary: #A78BFA;
+  --plaza-accent: #22D3EE;
+  --plaza-cta-glow: rgba(167, 139, 250, 0.45);
+  --plaza-bg: #0B0E1A;
+  --plaza-surface: rgba(22, 26, 42, 0.55);
+  --plaza-surface-solid: #161A2A;
+  --plaza-border: rgba(167, 139, 250, 0.18);
+  --plaza-text-1: #F1F5F9;
+  --plaza-text-2: #94A3B8;
+  --plaza-text-3: #64748B;
+  --plaza-blur: 16px;
+}
+
+/* === Scope wrapper === */
+.pricing-glass-scope {
+  font-family: var(--plaza-font-sans);
+  color: var(--plaza-text-1);
+  letter-spacing: -0.01em;
+}
+
+.pricing-glass-scope .pricing-mono,
+.pricing-glass-scope [data-mono='true'] {
+  font-family: var(--plaza-font-mono);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0;
+}
+
+/* === Page background === */
+.pricing-glass-page-bg {
+  background: var(--plaza-bg);
+}
+
+/* === Glass surfaces === */
+.pricing-glass-card {
+  background: var(--plaza-surface);
+  -webkit-backdrop-filter: blur(var(--plaza-blur));
+  backdrop-filter: blur(var(--plaza-blur));
+  border: 1px solid var(--plaza-border);
+  border-radius: var(--plaza-radius-card);
+  transition: transform var(--plaza-transition),
+              box-shadow var(--plaza-transition),
+              border-color var(--plaza-transition),
+              background var(--plaza-transition);
+}
+.pricing-glass-card:hover {
+  transform: translateY(-4px);
+  border-color: color-mix(in srgb, var(--plaza-primary) 40%, transparent);
+  box-shadow:
+    0 8px 28px -8px var(--plaza-cta-glow),
+    0 2px 8px rgba(0, 0, 0, 0.04);
+}
+.pricing-glass-card:active {
+  transform: scale(0.98);
+  transition-duration: 100ms;
+}
+.pricing-glass-card[data-selected='true'] {
+  box-shadow: 0 0 0 2px var(--plaza-primary);
+  background: color-mix(in srgb, var(--plaza-primary) 5%, var(--plaza-surface));
+}
+
+.pricing-glass-sidebar {
+  background: var(--plaza-surface);
+  -webkit-backdrop-filter: blur(var(--plaza-blur));
+  backdrop-filter: blur(var(--plaza-blur));
+  border-right: 1px solid var(--plaza-border);
+}
+
+/* === Chip system === */
+.pricing-chip {
+  display: inline-flex;
+  align-items: center;
+  height: 22px;
+  padding: 0 10px;
+  border-radius: var(--plaza-radius-pill);
+  font-size: 11px;
+  font-weight: 500;
+  border: 1px solid transparent;
+  transition: background var(--plaza-transition), border-color var(--plaza-transition);
+}
+/* Override Semi Tag inside our scope when paired with chip classes */
+.pricing-glass-scope .semi-tag.pricing-chip {
+  background: transparent;
+  border: 1px solid transparent;
+}
+.pricing-glass-scope .semi-tag.pricing-chip-primary,
+.pricing-chip-primary {
+  background: color-mix(in srgb, var(--plaza-primary) 12%, transparent) !important;
+  color: var(--plaza-primary) !important;
+  border-color: color-mix(in srgb, var(--plaza-primary) 20%, transparent) !important;
+}
+.pricing-glass-scope .semi-tag.pricing-chip-accent,
+.pricing-chip-accent {
+  background: color-mix(in srgb, var(--plaza-accent) 14%, transparent) !important;
+  color: color-mix(in srgb, var(--plaza-accent) 90%, var(--plaza-text-1)) !important;
+  border-color: color-mix(in srgb, var(--plaza-accent) 25%, transparent) !important;
+}
+.pricing-glass-scope .semi-tag.pricing-chip-neutral,
+.pricing-chip-neutral {
+  background: color-mix(in srgb, var(--plaza-text-3) 10%, transparent) !important;
+  color: var(--plaza-text-2) !important;
+  border-color: var(--plaza-border) !important;
+}
+
+/* === Focus rings === */
+.pricing-glass-scope :focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 2px var(--plaza-bg),
+    0 0 0 4px var(--plaza-primary);
+  transition: box-shadow 180ms ease-out;
+}
+
+/* === Mono utility === */
+.pricing-mono {
+  font-family: var(--plaza-font-mono);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0;
+}
+
+/* === Caption (uppercase 小标题) === */
+.pricing-caption {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--plaza-text-3);
+}
+
+/* === Stagger fade-in for grid === */
+@keyframes plaza-fade-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.pricing-glass-card-enter {
+  animation: plaza-fade-in 200ms ease-out backwards;
+}
+.pricing-glass-card-enter:nth-child(1) { animation-delay: 0ms; }
+.pricing-glass-card-enter:nth-child(2) { animation-delay: 30ms; }
+.pricing-glass-card-enter:nth-child(3) { animation-delay: 60ms; }
+.pricing-glass-card-enter:nth-child(4) { animation-delay: 90ms; }
+.pricing-glass-card-enter:nth-child(5) { animation-delay: 120ms; }
+.pricing-glass-card-enter:nth-child(6) { animation-delay: 150ms; }
+
+/* === Fallback for browsers without backdrop-filter === */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .pricing-glass-card,
+  .pricing-glass-sidebar {
+    background: var(--plaza-surface-solid);
+  }
+}
+
+/* === Reduced motion === */
+@media (prefers-reduced-motion: reduce) {
+  .pricing-glass-card:hover,
+  .pricing-glass-card:active {
+    transform: none;
+  }
+  .pricing-glass-card-enter {
+    animation: none;
+  }
+}
