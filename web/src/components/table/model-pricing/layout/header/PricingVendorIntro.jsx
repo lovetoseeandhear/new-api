@@ -56,7 +56,7 @@ const COMPONENT_STYLES = {
     fontWeight: '500',
   },
   avatarContainer:
-    'w-16 h-16 rounded-2xl bg-white/90 shadow-md backdrop-blur-sm flex items-center justify-center',
+    'w-16 h-16 rounded-2xl bg-white/40 shadow-md backdrop-blur-[6px] border border-[var(--plaza-border)] flex items-center justify-center hover:-translate-y-0.5 transition-transform',
   titleText: { color: 'white' },
   descriptionText: { color: 'rgba(255,255,255,0.9)' },
 };
@@ -330,7 +330,7 @@ const PricingVendorIntro = memo(
                 <div className='flex-1 min-w-0 mr-4'>
                   <div className='flex flex-row flex-wrap items-center gap-2 sm:gap-3 mb-2'>
                     <h2
-                      className='text-lg sm:text-xl font-bold truncate'
+                      className='text-2xl md:text-3xl font-bold tracking-[-0.02em] truncate'
                       style={COMPONENT_STYLES.titleText}
                     >
                       {title}
@@ -339,7 +339,7 @@ const PricingVendorIntro = memo(
                       style={COMPONENT_STYLES.tag}
                       shape='circle'
                       size='small'
-                      className='self-center'
+                      className='self-center pricing-mono'
                     >
                       {t('共 {{count}} 个模型', { count })}
                     </Tag>

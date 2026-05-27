@@ -19,6 +19,7 @@ For commercial licensing, please contact support@quantumnous.com
 
 import React from 'react';
 import PricingTopSection from '../header/PricingTopSection';
+import PricingAuroraBg from '../header/PricingAuroraBg';
 import PricingView from './PricingView';
 
 const PricingContent = ({ isMobile, sidebarProps, ...props }) => {
@@ -28,6 +29,7 @@ const PricingContent = ({ isMobile, sidebarProps, ...props }) => {
     >
       {/* 固定的顶部区域（分类介绍 + 搜索和操作） */}
       <div className='pricing-search-header'>
+        {!isMobile && <PricingAuroraBg />}
         <PricingTopSection
           {...props}
           isMobile={isMobile}
