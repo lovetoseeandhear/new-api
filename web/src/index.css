@@ -1427,3 +1427,51 @@ body[theme-mode='dark'] .pricing-aurora-hero {
     display: none;
   }
 }
+
+/* === Pricing card refinement (2026-05-27): section dividers + ratio chips === */
+.pricing-glass-scope .pricing-section-divider {
+  height: 1px;
+  background: color-mix(in srgb, var(--plaza-border) 60%, transparent);
+  margin: 12px 0;
+}
+
+.pricing-glass-scope .pricing-ratio-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+
+.pricing-glass-scope .pricing-ratio-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  border: 1px solid var(--plaza-border);
+  background: transparent;
+  font-size: 11px;
+  line-height: 1.6;
+  transition: border-color 160ms ease;
+}
+
+.pricing-glass-scope .pricing-ratio-chip:hover {
+  border-color: color-mix(in srgb, var(--plaza-primary) 35%, var(--plaza-border));
+}
+
+.pricing-glass-scope .pricing-ratio-chip-value {
+  font-family: var(--plaza-font-mono);
+  font-weight: 500;
+  color: var(--plaza-text-1);
+}
+
+.pricing-glass-scope .pricing-ratio-chip-label {
+  color: var(--plaza-text-3);
+}
+
+.pricing-glass-scope .pricing-tags-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
