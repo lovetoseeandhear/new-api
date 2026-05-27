@@ -37,7 +37,7 @@ import {
 import {
   stringToColor,
   calculateModelPrice,
-  formatPriceInfo,
+  formatPriceInfoCard,
   getLobeHubIcon,
 } from '../../../../../helpers';
 import PricingCardSkeleton from './PricingCardSkeleton';
@@ -309,7 +309,7 @@ const PricingCardView = ({
                 </div>
 
                 {/* 模型描述 - 占据剩余空间 */}
-                <div className='flex-1 mb-4'>
+                <div className='flex-1 mb-3 min-h-[2.25rem]'>
                   <p className='text-xs line-clamp-2 leading-relaxed text-[var(--plaza-text-3)]'>
                     {getModelDescription(model)}
                   </p>
@@ -317,12 +317,9 @@ const PricingCardView = ({
 
                 {/* 计价区 + 标签区 */}
                 <div className='mt-auto'>
-                  {/* 区段分隔线（计价区上方） */}
-                  <div className='pricing-section-divider' />
-
-                  {/* 计价区：价格信息 + 倍率 chip 行 */}
-                  <div className='flex flex-col gap-1 text-xs pricing-mono text-[var(--plaza-text-2)]'>
-                    {formatPriceInfo(priceData, t, siteDisplayType)}
+                  {/* 计价区：价格信息（两列） + 倍率 chip 行 */}
+                  <div className='pricing-price-list flex flex-col gap-1.5'>
+                    {formatPriceInfoCard(priceData, t, siteDisplayType)}
                   </div>
 
                   {showRatio && (
