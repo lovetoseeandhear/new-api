@@ -34,30 +34,19 @@ const PricingCardSkeleton = ({
             className='!rounded-2xl border border-gray-200'
             bodyStyle={{ padding: '24px' }}
           >
-            {/* 头部：图标 + 模型名称 + 操作按钮 */}
+            {/* 身份区：图标 + 名称 + 操作按钮 */}
             <div className='flex items-start justify-between mb-3'>
               <div className='flex items-start space-x-3 flex-1 min-w-0'>
-                {/* 模型图标骨架 */}
                 <div className='w-12 h-12 rounded-2xl flex items-center justify-center relative shadow-sm'>
                   <Skeleton.Avatar
                     size='large'
                     style={{ width: 48, height: 48, borderRadius: 16 }}
                   />
                 </div>
-                {/* 模型名称和价格区域 */}
                 <div className='flex-1 min-w-0'>
-                  {/* 模型名称骨架 */}
                   <Skeleton.Title
                     style={{
                       width: `${120 + (index % 3) * 30}px`,
-                      height: 20,
-                      marginBottom: 8,
-                    }}
-                  />
-                  {/* 价格信息骨架 */}
-                  <Skeleton.Title
-                    style={{
-                      width: `${160 + (index % 4) * 20}px`,
                       height: 20,
                       marginBottom: 0,
                     }}
@@ -66,12 +55,10 @@ const PricingCardSkeleton = ({
               </div>
 
               <div className='flex items-center space-x-2 ml-3'>
-                {/* 复制按钮骨架 */}
                 <Skeleton.Button
                   size='small'
                   style={{ width: 16, height: 16, borderRadius: 4 }}
                 />
-                {/* 勾选框骨架 */}
                 {rowSelection && (
                   <Skeleton.Button
                     size='small'
@@ -81,7 +68,7 @@ const PricingCardSkeleton = ({
               </div>
             </div>
 
-            {/* 模型描述骨架 */}
+            {/* 描述区 */}
             <div className='mb-4'>
               <Skeleton.Paragraph
                 rows={2}
@@ -90,7 +77,40 @@ const PricingCardSkeleton = ({
               />
             </div>
 
-            {/* 标签区域骨架 */}
+            {/* 区段分隔线 + 计价区 */}
+            <div className='pricing-section-divider' />
+            <div className='flex flex-col gap-1'>
+              <Skeleton.Title
+                style={{
+                  width: `${160 + (index % 4) * 20}px`,
+                  height: 14,
+                  marginBottom: 0,
+                }}
+              />
+              <Skeleton.Title
+                style={{
+                  width: `${140 + (index % 3) * 20}px`,
+                  height: 14,
+                  marginBottom: 0,
+                }}
+              />
+            </div>
+
+            {/* 倍率 chip 行占位（可选） */}
+            {showRatio && (
+              <div className='flex flex-wrap items-center gap-1.5 mt-2'>
+                {Array.from({ length: 3 }).map((_, ratioIndex) => (
+                  <Skeleton.Button
+                    key={ratioIndex}
+                    size='small'
+                    style={{ width: 56, height: 18, borderRadius: 999 }}
+                  />
+                ))}
+              </div>
+            )}
+
+            {/* 区段分隔线 + 标签区 */}
+            <div className='pricing-section-divider' />
             <div className='flex flex-wrap gap-2'>
               {Array.from({ length: 2 + (index % 3) }).map((_, tagIndex) => (
                 <Skeleton.Button
@@ -99,34 +119,11 @@ const PricingCardSkeleton = ({
                   style={{
                     width: 64,
                     height: 18,
-                    borderRadius: 10,
+                    borderRadius: 999,
                   }}
                 />
               ))}
             </div>
-
-            {/* 倍率信息骨架（可选） */}
-            {showRatio && (
-              <div className='mt-4 pt-3 border-t border-gray-100'>
-                <div className='flex items-center space-x-1 mb-2'>
-                  <Skeleton.Title
-                    style={{ width: 60, height: 12, marginBottom: 0 }}
-                  />
-                  <Skeleton.Button
-                    size='small'
-                    style={{ width: 14, height: 14, borderRadius: 7 }}
-                  />
-                </div>
-                <div className='grid grid-cols-3 gap-2'>
-                  {Array.from({ length: 3 }).map((_, ratioIndex) => (
-                    <Skeleton.Title
-                      key={ratioIndex}
-                      style={{ width: '100%', height: 12, marginBottom: 0 }}
-                    />
-                  ))}
-                </div>
-              </div>
-            )}
           </Card>
         ))}
       </div>
