@@ -149,40 +149,58 @@ const PricingCardView = ({
     return record.description || '';
   };
 
-  const renderDiscountTag = (usedGroupRatio) => {
-    const zhe = getDiscountZheByGroupRatio(usedGroupRatio);
-    if (zhe === null) return null;
-    return (
-      <Tag color='green' shape='circle' size='small' className='pricing-chip pricing-chip-accent'>
-        {zhe}
-        {t('折')}
-      </Tag>
-    );
-  };
+  // 渲染标签 - 计费 + 折扣 + 自定义 三档质感
+  const renderTags = (record, priceData) => {
+    const tags = [];
 
-  // 渲染标签
-  const renderTags = (record) => {
-    // 计费类型标签（左边）
-    let billingTag = (
-      <Tag key='billing' shape='circle' color='white' size='small'>
-        -
-      </Tag>
-    );
+    // 1. 计费 chip（实心）
     if (record.quota_type === 1) {
-      billingTag = (
-        <Tag key='billing' shape='circle' color='teal' size='small' className='pricing-chip pricing-chip-accent'>
+      tags.push(
+        <Tag
+          key='billing'
+          shape='circle'
+          size='small'
+          className='pricing-chip pricing-chip-accent'
+        >
           {t('按次计费')}
-        </Tag>
+        </Tag>,
       );
     } else if (record.quota_type === 0) {
-      billingTag = (
-        <Tag key='billing' shape='circle' color='violet' size='small' className='pricing-chip pricing-chip-primary'>
+      tags.push(
+        <Tag
+          key='billing'
+          shape='circle'
+          size='small'
+          className='pricing-chip pricing-chip-primary'
+        >
           {t('按量计费')}
-        </Tag>
+        </Tag>,
+      );
+    } else {
+      tags.push(
+        <Tag key='billing' shape='circle' size='small'>
+          -
+        </Tag>,
       );
     }
 
-    // 自定义标签（右边）
+    // 2. 折扣 chip（实心，仅当 zhe 非空）
+    const zhe = getDiscountZheByGroupRatio(priceData?.usedGroupRatio);
+    if (zhe !== null) {
+      tags.push(
+        <Tag
+          key='discount'
+          shape='circle'
+          size='small'
+          className='pricing-chip pricing-chip-accent'
+        >
+          {zhe}
+          {t('折')}
+        </Tag>,
+      );
+    }
+
+    // 3. 自定义 tag（描边 + 左色条，最多 3 个）
     const customTags = [];
     if (record.tags) {
       const tagArr = record.tags.split(',').filter(Boolean);
@@ -193,7 +211,10 @@ const PricingCardView = ({
             shape='circle'
             size='small'
             className='pricing-chip pricing-chip-neutral'
-            style={{ borderLeftWidth: '2px', borderLeftColor: stringToColor(tg) }}
+            style={{
+              borderLeftWidth: '2px',
+              borderLeftColor: stringToColor(tg),
+            }}
           >
             {tg}
           </Tag>,
@@ -202,19 +223,17 @@ const PricingCardView = ({
     }
 
     return (
-      <div className='flex items-center justify-between'>
-        <div className='flex items-center gap-2'>{billingTag}</div>
-        <div className='flex items-center gap-1'>
-          {customTags.length > 0 &&
-            renderLimitedItems({
-              items: customTags.map((tag, idx) => ({
-                key: `custom-${idx}`,
-                element: tag,
-              })),
-              renderItem: (item, idx) => item.element,
-              maxDisplay: 3,
-            })}
-        </div>
+      <div className='pricing-tags-row'>
+        {tags}
+        {customTags.length > 0 &&
+          renderLimitedItems({
+            items: customTags.map((tag, idx) => ({
+              key: `custom-${idx}`,
+              element: tag,
+            })),
+            renderItem: (item) => item.element,
+            maxDisplay: 3,
+          })}
       </div>
     );
   };
@@ -269,22 +288,14 @@ const PricingCardView = ({
               onClick={() => openModelDetail && openModelDetail(model)}
             >
               <div className='flex flex-col h-full'>
-                {/* 头部：图标 + 模型名称 + 操作按钮 */}
+                {/* 身份区：图标 + 模型名称 + 操作按钮 */}
                 <div className='flex items-start justify-between mb-3'>
                   <div className='flex items-start space-x-3 flex-1 min-w-0'>
                     {getModelIcon(model)}
                     <div className='flex-1 min-w-0'>
-                      <div className='flex items-center gap-2 min-w-0'>
-                        <h3 className='text-base font-semibold truncate'>
-                          {model.model_name}
-                        </h3>
-                        <div className='shrink-0'>
-                          {renderDiscountTag(priceData?.usedGroupRatio)}
-                        </div>
-                      </div>
-                      <div className='flex flex-col gap-1 text-xs mt-1 pricing-mono text-[var(--plaza-text-2)]'>
-                        {formatPriceInfo(priceData, t, siteDisplayType)}
-                      </div>
+                      <h3 className='text-base font-semibold truncate'>
+                        {model.model_name}
+                      </h3>
                     </div>
                   </div>
 
@@ -322,18 +333,48 @@ const PricingCardView = ({
                   </p>
                 </div>
 
-                {/* 底部区域 */}
+                {/* 计价区 + 标签区 */}
                 <div className='mt-auto'>
-                  {/* 标签区域 */}
-                  {renderTags(model)}
+                  {/* 区段分隔线（计价区上方） */}
+                  <div className='pricing-section-divider' />
 
-                  {/* 倍率信息（可选） */}
+                  {/* 计价区：价格信息 + 倍率 chip 行 */}
+                  <div className='flex flex-col gap-1 text-xs pricing-mono text-[var(--plaza-text-2)]'>
+                    {formatPriceInfo(priceData, t, siteDisplayType)}
+                  </div>
+
                   {showRatio && (
-                    <div className='pt-3'>
-                      <div className='flex items-center space-x-1 mb-2'>
-                        <span className='pricing-caption'>
-                          {t('倍率信息')}
+                    <div className='pricing-ratio-row mt-2'>
+                      {model.quota_type === 0 && (
+                        <>
+                          <span className='pricing-ratio-chip'>
+                            <span className='pricing-ratio-chip-value'>
+                              ×{model.model_ratio}
+                            </span>
+                            <span className='pricing-ratio-chip-label'>
+                              {t('模型')}
+                            </span>
+                          </span>
+                          <span className='pricing-ratio-chip'>
+                            <span className='pricing-ratio-chip-value'>
+                              ×{parseFloat(model.completion_ratio.toFixed(3))}
+                            </span>
+                            <span className='pricing-ratio-chip-label'>
+                              {t('补全')}
+                            </span>
+                          </span>
+                        </>
+                      )}
+                      <span className='pricing-ratio-chip'>
+                        <span className='pricing-ratio-chip-value'>
+                          ×{priceData?.usedGroupRatio ?? '-'}
                         </span>
+                        <span className='pricing-ratio-chip-label'>
+                          {t('分组')}
+                        </span>
+                      </span>
+                      <span className='pricing-caption ml-auto inline-flex items-center gap-1'>
+                        {t('倍率信息')}
                         <Tooltip
                           content={t('倍率是为了方便换算不同价格的模型')}
                         >
@@ -347,24 +388,15 @@ const PricingCardView = ({
                             }}
                           />
                         </Tooltip>
-                      </div>
-                      <div className='grid grid-cols-3 gap-2 text-xs text-[var(--plaza-text-2)] pricing-mono'>
-                        <div>
-                          {t('模型')}:{' '}
-                          {model.quota_type === 0 ? model.model_ratio : t('无')}
-                        </div>
-                        <div>
-                          {t('补全')}:{' '}
-                          {model.quota_type === 0
-                            ? parseFloat(model.completion_ratio.toFixed(3))
-                            : t('无')}
-                        </div>
-                        <div>
-                          {t('分组')}: {priceData?.usedGroupRatio ?? '-'}
-                        </div>
-                      </div>
+                      </span>
                     </div>
                   )}
+
+                  {/* 区段分隔线（标签区上方） */}
+                  <div className='pricing-section-divider' />
+
+                  {/* 标签区：计费 + 折扣 + 自定义 */}
+                  {renderTags(model, priceData)}
                 </div>
               </div>
             </Card>
