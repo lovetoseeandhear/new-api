@@ -367,7 +367,9 @@ code {
   line-height: 1;
   background-color: var(--semi-color-fill-0);
   color: var(--semi-color-text-2);
-  transition: background-color 0.15s ease, color 0.15s ease;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
 }
 
 .sbg-badge-active {
@@ -1005,22 +1007,25 @@ html.dark .with-pastel-balls::before {
   }
 }
 
-.ec-dbcd0a3c01b55203 { forced-color-adjust: auto; }
+.ec-dbcd0a3c01b55203 {
+  forced-color-adjust: auto;
+}
 
 /* ==================== Model Plaza Glassmorphism Tokens ==================== */
 :root {
-  --plaza-primary: #7C5CFF;
-  --plaza-accent: #00C9D7;
+  --plaza-primary: #7c5cff;
+  --plaza-accent: #00c9d7;
   --plaza-cta-glow: rgba(124, 92, 255, 0.35);
-  --plaza-bg: #FAFAFE;
+  --plaza-bg: #fafafe;
   --plaza-surface: rgba(255, 255, 255, 0.65);
-  --plaza-surface-solid: #F8F9FE;
+  --plaza-surface-solid: #f8f9fe;
   --plaza-border: rgba(124, 92, 255, 0.12);
-  --plaza-text-1: #0F172A;
+  --plaza-text-1: #0f172a;
   --plaza-text-2: #475569;
-  --plaza-text-3: #94A3B8;
+  --plaza-text-3: #94a3b8;
   --plaza-blur: 12px;
-  --plaza-font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  --plaza-font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI',
+    system-ui, sans-serif;
   --plaza-font-mono: 'JetBrains Mono', 'SF Mono', Menlo, Consolas, monospace;
   --plaza-radius-card: 16px;
   --plaza-radius-pill: 999px;
@@ -1028,16 +1033,16 @@ html.dark .with-pastel-balls::before {
 }
 
 body[theme-mode='dark'] {
-  --plaza-primary: #A78BFA;
-  --plaza-accent: #22D3EE;
+  --plaza-primary: #a78bfa;
+  --plaza-accent: #22d3ee;
   --plaza-cta-glow: rgba(167, 139, 250, 0.45);
-  --plaza-bg: #0B0E1A;
+  --plaza-bg: #0b0e1a;
   --plaza-surface: rgba(22, 26, 42, 0.55);
-  --plaza-surface-solid: #161A2A;
+  --plaza-surface-solid: #161a2a;
   --plaza-border: rgba(167, 139, 250, 0.18);
-  --plaza-text-1: #F1F5F9;
-  --plaza-text-2: #94A3B8;
-  --plaza-text-3: #64748B;
+  --plaza-text-1: #f1f5f9;
+  --plaza-text-2: #94a3b8;
+  --plaza-text-3: #64748b;
   --plaza-blur: 16px;
 }
 
@@ -1067,10 +1072,11 @@ body[theme-mode='dark'] {
   backdrop-filter: blur(var(--plaza-blur));
   border: 1px solid var(--plaza-border);
   border-radius: var(--plaza-radius-card);
-  transition: transform var(--plaza-transition),
-              box-shadow var(--plaza-transition),
-              border-color var(--plaza-transition),
-              background var(--plaza-transition);
+  transition:
+    transform var(--plaza-transition),
+    box-shadow var(--plaza-transition),
+    border-color var(--plaza-transition),
+    background var(--plaza-transition);
 }
 .pricing-glass-card:hover {
   transform: translateY(-4px);
@@ -1105,7 +1111,9 @@ body[theme-mode='dark'] {
   font-size: 11px;
   font-weight: 500;
   border: 1px solid transparent;
-  transition: background var(--plaza-transition), border-color var(--plaza-transition);
+  transition:
+    background var(--plaza-transition),
+    border-color var(--plaza-transition);
 }
 /* Override Semi Tag inside our scope when paired with chip classes */
 .pricing-glass-scope .semi-tag.pricing-chip {
@@ -1114,19 +1122,47 @@ body[theme-mode='dark'] {
 }
 .pricing-glass-scope .semi-tag.pricing-chip-primary,
 .pricing-chip-primary {
-  background: color-mix(in srgb, var(--plaza-primary) 12%, transparent) !important;
-  color: color-mix(in srgb, var(--plaza-primary) 55%, var(--plaza-text-1)) !important;
-  border-color: color-mix(in srgb, var(--plaza-primary) 20%, transparent) !important;
+  background: color-mix(
+    in srgb,
+    var(--plaza-primary) 12%,
+    transparent
+  ) !important;
+  color: color-mix(
+    in srgb,
+    var(--plaza-primary) 55%,
+    var(--plaza-text-1)
+  ) !important;
+  border-color: color-mix(
+    in srgb,
+    var(--plaza-primary) 20%,
+    transparent
+  ) !important;
 }
 .pricing-glass-scope .semi-tag.pricing-chip-accent,
 .pricing-chip-accent {
-  background: color-mix(in srgb, var(--plaza-accent) 14%, transparent) !important;
-  color: color-mix(in srgb, var(--plaza-accent) 45%, var(--plaza-text-1)) !important;
-  border-color: color-mix(in srgb, var(--plaza-accent) 25%, transparent) !important;
+  background: color-mix(
+    in srgb,
+    var(--plaza-accent) 14%,
+    transparent
+  ) !important;
+  color: color-mix(
+    in srgb,
+    var(--plaza-accent) 45%,
+    var(--plaza-text-1)
+  ) !important;
+  border-color: color-mix(
+    in srgb,
+    var(--plaza-accent) 25%,
+    transparent
+  ) !important;
 }
 .pricing-glass-scope .semi-tag.pricing-chip-neutral,
 .pricing-chip-neutral {
-  background: color-mix(in srgb, var(--plaza-text-3) 10%, transparent) !important;
+  background: color-mix(
+    in srgb,
+    var(--plaza-text-3) 10%,
+    transparent
+  ) !important;
   color: var(--plaza-text-2) !important;
   border-top-color: var(--plaza-border) !important;
   border-right-color: var(--plaza-border) !important;
@@ -1161,21 +1197,41 @@ body[theme-mode='dark'] {
 
 /* === Stagger fade-in for grid === */
 @keyframes plaza-fade-in {
-  from { opacity: 0; transform: translateY(8px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 .pricing-glass-card-enter {
   animation: plaza-fade-in 200ms ease-out backwards;
 }
-.pricing-glass-card-enter:nth-child(1) { animation-delay: 0ms; }
-.pricing-glass-card-enter:nth-child(2) { animation-delay: 30ms; }
-.pricing-glass-card-enter:nth-child(3) { animation-delay: 60ms; }
-.pricing-glass-card-enter:nth-child(4) { animation-delay: 90ms; }
-.pricing-glass-card-enter:nth-child(5) { animation-delay: 120ms; }
-.pricing-glass-card-enter:nth-child(6) { animation-delay: 150ms; }
+.pricing-glass-card-enter:nth-child(1) {
+  animation-delay: 0ms;
+}
+.pricing-glass-card-enter:nth-child(2) {
+  animation-delay: 30ms;
+}
+.pricing-glass-card-enter:nth-child(3) {
+  animation-delay: 60ms;
+}
+.pricing-glass-card-enter:nth-child(4) {
+  animation-delay: 90ms;
+}
+.pricing-glass-card-enter:nth-child(5) {
+  animation-delay: 120ms;
+}
+.pricing-glass-card-enter:nth-child(6) {
+  animation-delay: 150ms;
+}
 
 /* === Fallback for browsers without backdrop-filter === */
-@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+@supports not (
+  (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))
+) {
   .pricing-glass-card,
   .pricing-glass-sidebar {
     background: var(--plaza-surface-solid);
@@ -1200,13 +1256,19 @@ body[theme-mode='dark'] {
   pointer-events: none;
   z-index: 0;
   overflow: hidden;
-  background:
-    radial-gradient(at 20% 0%, rgba(181, 168, 255, 0.33), transparent 60%),
+  background: radial-gradient(
+      at 20% 0%,
+      rgba(181, 168, 255, 0.33),
+      transparent 60%
+    ),
     radial-gradient(at 80% 10%, rgba(157, 215, 224, 0.33), transparent 60%);
 }
 body[theme-mode='dark'] .pricing-aurora-hero {
-  background:
-    radial-gradient(at 20% 0%, rgba(76, 58, 153, 0.67), transparent 60%),
+  background: radial-gradient(
+      at 20% 0%,
+      rgba(76, 58, 153, 0.67),
+      transparent 60%
+    ),
     radial-gradient(at 80% 10%, rgba(14, 86, 100, 0.67), transparent 60%);
 }
 
@@ -1221,22 +1283,27 @@ body[theme-mode='dark'] .pricing-aurora-hero {
 .pricing-aurora-blob-1 {
   width: 320px;
   height: 320px;
-  background: #A78BFA;
+  background: #a78bfa;
   top: -80px;
   left: 10%;
 }
 .pricing-aurora-blob-2 {
   width: 280px;
   height: 280px;
-  background: #5EEAD4;
+  background: #5eead4;
   top: -40px;
   right: 15%;
   animation-delay: -12s;
 }
 
 @keyframes plaza-aurora-drift {
-  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
-  50% { transform: translate3d(40px, 20px, 0) scale(1.05); }
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(40px, 20px, 0) scale(1.05);
+  }
 }
 
 @media (prefers-reduced-motion: reduce), (max-width: 768px) {
@@ -1270,16 +1337,31 @@ body[theme-mode='dark'] .pricing-aurora-hero {
   border-radius: 12px !important;
   border-color: var(--plaza-border) !important;
   background-color: transparent !important;
-  transition: background-color 150ms ease-out, border-color 150ms ease-out, color 150ms ease-out !important;
+  transition:
+    background-color 150ms ease-out,
+    border-color 150ms ease-out,
+    color 150ms ease-out !important;
 }
 .pricing-glass-scope .sbg-button:hover {
-  background-color: color-mix(in srgb, var(--plaza-primary) 6%, transparent) !important;
-  border-color: color-mix(in srgb, var(--plaza-primary) 22%, transparent) !important;
+  background-color: color-mix(
+    in srgb,
+    var(--plaza-primary) 6%,
+    transparent
+  ) !important;
+  border-color: color-mix(
+    in srgb,
+    var(--plaza-primary) 22%,
+    transparent
+  ) !important;
 }
 /* Active item keeps its per-category variant color (--semi-color-primary set by .sbg-variant-*) */
 .pricing-glass-scope .sbg-button.semi-button-primary {
   background-color: var(--semi-color-primary-light-default) !important;
-  border-color: color-mix(in srgb, var(--semi-color-primary) 30%, transparent) !important;
+  border-color: color-mix(
+    in srgb,
+    var(--semi-color-primary) 30%,
+    transparent
+  ) !important;
   font-weight: 500 !important;
 }
 /* Group title divider → caption styling (best-effort; harmless if Semi class differs) */
@@ -1301,11 +1383,14 @@ body[theme-mode='dark'] .pricing-aurora-hero {
   backdrop-filter: blur(var(--plaza-blur));
   border: 1px solid var(--plaza-border) !important;
   border-radius: 12px !important;
-  transition: border-color 180ms ease-out, box-shadow 180ms ease-out;
+  transition:
+    border-color 180ms ease-out,
+    box-shadow 180ms ease-out;
 }
 .pricing-glass-search .semi-input-wrapper-focus {
   border-color: var(--plaza-primary) !important;
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--plaza-primary) 25%, transparent) !important;
+  box-shadow: 0 0 0 3px
+    color-mix(in srgb, var(--plaza-primary) 25%, transparent) !important;
 }
 
 /* === Segmented control (view switch) === */
@@ -1323,7 +1408,9 @@ body[theme-mode='dark'] .pricing-aurora-hero {
   font-size: 12px;
   font-weight: 500;
   color: var(--plaza-text-3);
-  transition: background var(--plaza-transition), color var(--plaza-transition);
+  transition:
+    background var(--plaza-transition),
+    color var(--plaza-transition);
   cursor: pointer;
   display: inline-flex;
   align-items: center;
@@ -1339,7 +1426,11 @@ body[theme-mode='dark'] .pricing-aurora-hero {
 
 /* === CTA: gradient (copy selected) === */
 .pricing-cta-gradient {
-  background: linear-gradient(90deg, var(--plaza-primary), var(--plaza-accent)) !important;
+  background: linear-gradient(
+    90deg,
+    var(--plaza-primary),
+    var(--plaza-accent)
+  ) !important;
   color: white !important;
   border: none !important;
   box-shadow: 0 4px 14px var(--plaza-cta-glow) !important;
@@ -1364,14 +1455,20 @@ body[theme-mode='dark'] .pricing-aurora-hero {
   position: absolute;
   inset: 0;
   border-radius: 14px;
-  background: linear-gradient(135deg,
+  background: linear-gradient(
+    135deg,
     color-mix(in srgb, var(--plaza-primary) 15%, transparent),
-    color-mix(in srgb, var(--plaza-accent) 15%, transparent));
+    color-mix(in srgb, var(--plaza-accent) 15%, transparent)
+  );
   z-index: -1;
 }
 
 /* === Table view (scoped) === */
-.pricing-glass-scope .pricing-glass-table .semi-table-thead > .semi-table-row > .semi-table-row-head {
+.pricing-glass-scope
+  .pricing-glass-table
+  .semi-table-thead
+  > .semi-table-row
+  > .semi-table-row-head {
   background: var(--plaza-surface) !important;
   -webkit-backdrop-filter: blur(8px);
   backdrop-filter: blur(8px);
@@ -1381,11 +1478,27 @@ body[theme-mode='dark'] .pricing-aurora-hero {
   text-transform: uppercase !important;
   letter-spacing: 0.06em !important;
 }
-.pricing-glass-scope .pricing-glass-table .semi-table-tbody > .semi-table-row:hover > .semi-table-row-cell {
-  background: color-mix(in srgb, var(--plaza-primary) 5%, transparent) !important;
+.pricing-glass-scope
+  .pricing-glass-table
+  .semi-table-tbody
+  > .semi-table-row:hover
+  > .semi-table-row-cell {
+  background: color-mix(
+    in srgb,
+    var(--plaza-primary) 5%,
+    transparent
+  ) !important;
 }
-.pricing-glass-scope .pricing-glass-table .semi-table-tbody > .semi-table-row.semi-table-row-selected > .semi-table-row-cell {
-  background: color-mix(in srgb, var(--plaza-primary) 8%, transparent) !important;
+.pricing-glass-scope
+  .pricing-glass-table
+  .semi-table-tbody
+  > .semi-table-row.semi-table-row-selected
+  > .semi-table-row-cell {
+  background: color-mix(
+    in srgb,
+    var(--plaza-primary) 8%,
+    transparent
+  ) !important;
   box-shadow: inset 2px 0 0 var(--plaza-primary);
 }
 .pricing-glass-scope .pricing-mono-col {
@@ -1396,10 +1509,18 @@ body[theme-mode='dark'] .pricing-aurora-hero {
 
 /* === Skeleton shimmer color override (scoped) === */
 .pricing-glass-scope .pricing-skeleton .semi-skeleton-paragraph {
-  background: color-mix(in srgb, var(--plaza-primary) 8%, transparent) !important;
+  background: color-mix(
+    in srgb,
+    var(--plaza-primary) 8%,
+    transparent
+  ) !important;
 }
 .pricing-glass-scope .pricing-skeleton .semi-skeleton-title {
-  background: color-mix(in srgb, var(--plaza-primary) 12%, transparent) !important;
+  background: color-mix(
+    in srgb,
+    var(--plaza-primary) 12%,
+    transparent
+  ) !important;
 }
 
 /* === Mobile filter drawer (Semi Modal) glass === */
@@ -1456,7 +1577,11 @@ body[theme-mode='dark'] .pricing-aurora-hero {
 }
 
 .pricing-glass-scope .pricing-ratio-chip:hover {
-  border-color: color-mix(in srgb, var(--plaza-primary) 35%, var(--plaza-border));
+  border-color: color-mix(
+    in srgb,
+    var(--plaza-primary) 35%,
+    var(--plaza-border)
+  );
 }
 
 .pricing-glass-scope .pricing-ratio-chip-value {
@@ -1474,4 +1599,47 @@ body[theme-mode='dark'] .pricing-aurora-hero {
   flex-wrap: wrap;
   align-items: center;
   gap: 8px;
+}
+
+/* === Pricing card v2 (2026-05-28): discount badge + two-column price rows === */
+
+/* 折扣徽章 - 红橙渐变实心 pill，最高优先级 */
+.pricing-glass-scope .pricing-discount-badge {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  height: 22px;
+  padding: 0 10px;
+  border-radius: 999px;
+  font-family: var(--plaza-font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1;
+  color: #ffffff;
+  background: linear-gradient(135deg, #ff5470 0%, #ff8a3d 100%);
+  box-shadow: 0 2px 8px rgba(255, 84, 112, 0.35);
+  white-space: nowrap;
+}
+
+/* 价格行 - 两列：dim label + mono 粗体 value */
+.pricing-glass-scope .pricing-price-row {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  line-height: 1.5;
+}
+
+.pricing-glass-scope .pricing-price-label {
+  flex: 0 0 72px;
+  font-size: 11px;
+  color: var(--plaza-text-3);
+}
+
+.pricing-glass-scope .pricing-price-value {
+  flex: 1;
+  min-width: 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--plaza-text-1);
+  word-break: break-word;
 }
