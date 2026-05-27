@@ -49,8 +49,6 @@ import { getDiscountZheByGroupRatio } from '../../discount';
 const CARD_STYLES = {
   container: 'pricing-card-icon-wrap',
   icon: 'w-8 h-8 flex items-center justify-center',
-  selected: '',
-  default: '',
 };
 
 const PricingCardView = ({

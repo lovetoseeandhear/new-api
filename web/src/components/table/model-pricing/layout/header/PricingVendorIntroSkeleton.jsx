@@ -206,7 +206,7 @@ const PricingVendorIntroSkeleton = memo(
         loading={true}
         active
         placeholder={placeholder}
-        className="[&_.semi-skeleton-paragraph]:!bg-[var(--plaza-primary)]/8 [&_.semi-skeleton-title]:!bg-[var(--plaza-primary)]/12"
+        className="pricing-skeleton"
       ></Skeleton>
     );
   },

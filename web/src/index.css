@@ -1115,20 +1115,23 @@ body[theme-mode='dark'] {
 .pricing-glass-scope .semi-tag.pricing-chip-primary,
 .pricing-chip-primary {
   background: color-mix(in srgb, var(--plaza-primary) 12%, transparent) !important;
-  color: var(--plaza-primary) !important;
+  color: color-mix(in srgb, var(--plaza-primary) 55%, var(--plaza-text-1)) !important;
   border-color: color-mix(in srgb, var(--plaza-primary) 20%, transparent) !important;
 }
 .pricing-glass-scope .semi-tag.pricing-chip-accent,
 .pricing-chip-accent {
   background: color-mix(in srgb, var(--plaza-accent) 14%, transparent) !important;
-  color: color-mix(in srgb, var(--plaza-accent) 90%, var(--plaza-text-1)) !important;
+  color: color-mix(in srgb, var(--plaza-accent) 45%, var(--plaza-text-1)) !important;
   border-color: color-mix(in srgb, var(--plaza-accent) 25%, transparent) !important;
 }
 .pricing-glass-scope .semi-tag.pricing-chip-neutral,
 .pricing-chip-neutral {
   background: color-mix(in srgb, var(--plaza-text-3) 10%, transparent) !important;
   color: var(--plaza-text-2) !important;
-  border-color: var(--plaza-border) !important;
+  border-top-color: var(--plaza-border) !important;
+  border-right-color: var(--plaza-border) !important;
+  border-bottom-color: var(--plaza-border) !important;
+  /* border-left-color is intentionally left to inline style for per-tag accent */
 }
 
 /* === Focus rings === */
@@ -1389,4 +1392,12 @@ body[theme-mode='dark'] .pricing-aurora-hero {
   font-family: var(--plaza-font-mono);
   font-variant-numeric: tabular-nums;
   text-align: right;
+}
+
+/* === Skeleton shimmer color override (scoped) === */
+.pricing-glass-scope .pricing-skeleton .semi-skeleton-paragraph {
+  background: color-mix(in srgb, var(--plaza-primary) 8%, transparent) !important;
+}
+.pricing-glass-scope .pricing-skeleton .semi-skeleton-title {
+  background: color-mix(in srgb, var(--plaza-primary) 12%, transparent) !important;
 }
