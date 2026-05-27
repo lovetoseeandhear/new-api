@@ -1290,3 +1290,103 @@ body[theme-mode='dark'] .pricing-aurora-hero {
   text-transform: uppercase;
   color: var(--plaza-text-3);
 }
+
+/* === Glass search input === */
+.pricing-glass-search .semi-input-wrapper {
+  background: var(--plaza-surface) !important;
+  -webkit-backdrop-filter: blur(var(--plaza-blur));
+  backdrop-filter: blur(var(--plaza-blur));
+  border: 1px solid var(--plaza-border) !important;
+  border-radius: 12px !important;
+  transition: border-color 180ms ease-out, box-shadow 180ms ease-out;
+}
+.pricing-glass-search .semi-input-wrapper-focus {
+  border-color: var(--plaza-primary) !important;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--plaza-primary) 25%, transparent) !important;
+}
+
+/* === Segmented control (view switch) === */
+.pricing-segmented {
+  display: inline-flex;
+  padding: 2px;
+  background: color-mix(in srgb, var(--plaza-text-3) 8%, transparent);
+  border-radius: 12px;
+  gap: 2px;
+}
+.pricing-segmented-item {
+  padding: 4px 12px;
+  height: 28px;
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--plaza-text-3);
+  transition: background var(--plaza-transition), color var(--plaza-transition);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  border: none;
+  background: transparent;
+}
+.pricing-segmented-item[data-active='true'] {
+  background: var(--plaza-primary);
+  color: white;
+  box-shadow: 0 2px 6px var(--plaza-cta-glow);
+}
+
+/* === CTA: gradient (copy selected) === */
+.pricing-cta-gradient {
+  background: linear-gradient(90deg, var(--plaza-primary), var(--plaza-accent)) !important;
+  color: white !important;
+  border: none !important;
+  box-shadow: 0 4px 14px var(--plaza-cta-glow) !important;
+}
+.pricing-cta-gradient:hover {
+  filter: brightness(1.05);
+}
+
+/* === Glass icon wrapper for model card === */
+.pricing-card-icon-wrap {
+  position: relative;
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+.pricing-card-icon-wrap::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 14px;
+  background: linear-gradient(135deg,
+    color-mix(in srgb, var(--plaza-primary) 15%, transparent),
+    color-mix(in srgb, var(--plaza-accent) 15%, transparent));
+  z-index: -1;
+}
+
+/* === Table view (scoped) === */
+.pricing-glass-scope .pricing-glass-table .semi-table-thead > .semi-table-row > .semi-table-row-head {
+  background: var(--plaza-surface) !important;
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  color: var(--plaza-text-3) !important;
+  font-size: 11px !important;
+  font-weight: 500 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.06em !important;
+}
+.pricing-glass-scope .pricing-glass-table .semi-table-tbody > .semi-table-row:hover > .semi-table-row-cell {
+  background: color-mix(in srgb, var(--plaza-primary) 5%, transparent) !important;
+}
+.pricing-glass-scope .pricing-glass-table .semi-table-tbody > .semi-table-row.semi-table-row-selected > .semi-table-row-cell {
+  background: color-mix(in srgb, var(--plaza-primary) 8%, transparent) !important;
+  box-shadow: inset 2px 0 0 var(--plaza-primary);
+}
+.pricing-glass-scope .pricing-mono-col {
+  font-family: var(--plaza-font-mono);
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}

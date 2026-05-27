@@ -66,7 +66,7 @@ const SearchActions = memo(
 
     return (
       <div className='flex items-center gap-2 w-full'>
-        <div className='flex-1'>
+        <div className='flex-1 pricing-glass-search'>
           <Input
             prefix={<IconSearch />}
             placeholder={t('模糊搜索模型名称')}
@@ -84,7 +84,7 @@ const SearchActions = memo(
           icon={<IconCopy />}
           onClick={handleCopyClick}
           disabled={selectedRowKeys.length === 0}
-          className='!bg-blue-500 hover:!bg-blue-600 !text-white disabled:!bg-gray-300 disabled:!text-gray-500'
+          className='pricing-cta-gradient !bg-blue-500 hover:!bg-blue-600 !text-white disabled:!bg-gray-300 disabled:!text-gray-500'
         >
           {t('复制')}
         </Button>
@@ -96,7 +96,7 @@ const SearchActions = memo(
             {/* 充值价格显示开关 */}
             {supportsCurrencyDisplay && (
               <div className='flex items-center gap-2'>
-                <span className='text-sm text-gray-600'>{t('充值价格显示')}</span>
+                <span className='text-sm text-[var(--plaza-text-2)]'>{t('充值价格显示')}</span>
                 <Switch
                   checked={showWithRecharge}
                   onChange={setShowWithRecharge}
@@ -119,7 +119,7 @@ const SearchActions = memo(
 
             {/* 显示倍率开关 */}
             <div className='flex items-center gap-2'>
-              <span className='text-sm text-gray-600'>{t('倍率')}</span>
+              <span className='text-sm text-[var(--plaza-text-2)]'>{t('倍率')}</span>
               <Switch checked={showRatio} onChange={setShowRatio} />
             </div>
 

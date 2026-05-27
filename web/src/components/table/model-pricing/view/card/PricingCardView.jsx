@@ -47,11 +47,10 @@ import { useIsMobile } from '../../../../../hooks/common/useIsMobile';
 import { getDiscountZheByGroupRatio } from '../../discount';
 
 const CARD_STYLES = {
-  container:
-    'w-12 h-12 rounded-2xl flex items-center justify-center relative shadow-md',
+  container: 'pricing-card-icon-wrap',
   icon: 'w-8 h-8 flex items-center justify-center',
-  selected: 'border-blue-500 bg-blue-50',
-  default: 'border-gray-200 hover:border-gray-300',
+  selected: '',
+  default: '',
 };
 
 const PricingCardView = ({
@@ -156,7 +155,7 @@ const PricingCardView = ({
     const zhe = getDiscountZheByGroupRatio(usedGroupRatio);
     if (zhe === null) return null;
     return (
-      <Tag color='green' shape='circle' size='small'>
+      <Tag color='green' shape='circle' size='small' className='pricing-chip pricing-chip-accent'>
         {zhe}
         {t('折')}
       </Tag>
@@ -173,13 +172,13 @@ const PricingCardView = ({
     );
     if (record.quota_type === 1) {
       billingTag = (
-        <Tag key='billing' shape='circle' color='teal' size='small'>
+        <Tag key='billing' shape='circle' color='teal' size='small' className='pricing-chip pricing-chip-accent'>
           {t('按次计费')}
         </Tag>
       );
     } else if (record.quota_type === 0) {
       billingTag = (
-        <Tag key='billing' shape='circle' color='violet' size='small'>
+        <Tag key='billing' shape='circle' color='violet' size='small' className='pricing-chip pricing-chip-primary'>
           {t('按量计费')}
         </Tag>
       );
@@ -194,8 +193,9 @@ const PricingCardView = ({
           <Tag
             key={`custom-${idx}`}
             shape='circle'
-            color={stringToColor(tg)}
             size='small'
+            className='pricing-chip pricing-chip-neutral'
+            style={{ borderLeftWidth: '2px', borderLeftColor: stringToColor(tg) }}
           >
             {tg}
           </Tag>,
@@ -265,7 +265,8 @@ const PricingCardView = ({
           return (
             <Card
               key={modelKey || index}
-              className={`!rounded-2xl transition-all duration-200 hover:shadow-lg border cursor-pointer ${isSelected ? CARD_STYLES.selected : CARD_STYLES.default}`}
+              className='pricing-glass-card pricing-glass-card-enter !border-0 cursor-pointer'
+              data-selected={isSelected || undefined}
               bodyStyle={{ height: '100%' }}
               onClick={() => openModelDetail && openModelDetail(model)}
             >
@@ -276,14 +277,14 @@ const PricingCardView = ({
                     {getModelIcon(model)}
                     <div className='flex-1 min-w-0'>
                       <div className='flex items-center gap-2 min-w-0'>
-                        <h3 className='text-lg font-bold text-gray-900 truncate'>
+                        <h3 className='text-base font-semibold truncate'>
                           {model.model_name}
                         </h3>
                         <div className='shrink-0'>
                           {renderDiscountTag(priceData?.usedGroupRatio)}
                         </div>
                       </div>
-                      <div className='flex flex-col gap-1 text-xs mt-1'>
+                      <div className='flex flex-col gap-1 text-xs mt-1 pricing-mono text-[var(--plaza-text-2)]'>
                         {formatPriceInfo(priceData, t, siteDisplayType)}
                       </div>
                     </div>
@@ -293,9 +294,10 @@ const PricingCardView = ({
                     {/* 复制按钮 */}
                     <Button
                       size='small'
-                      theme='outline'
+                      theme='borderless'
                       type='tertiary'
                       icon={<Copy size={12} />}
+                      className='!bg-[var(--plaza-primary)]/8 hover:!bg-[var(--plaza-primary)]/15 !text-[var(--plaza-primary)]'
                       onClick={(e) => {
                         e.stopPropagation();
                         copyText(model.model_name);
@@ -317,10 +319,7 @@ const PricingCardView = ({
 
                 {/* 模型描述 - 占据剩余空间 */}
                 <div className='flex-1 mb-4'>
-                  <p
-                    className='text-xs line-clamp-2 leading-relaxed'
-                    style={{ color: 'var(--semi-color-text-2)' }}
-                  >
+                  <p className='text-xs line-clamp-2 leading-relaxed text-[var(--plaza-text-3)]'>
                     {getModelDescription(model)}
                   </p>
                 </div>
@@ -334,7 +333,7 @@ const PricingCardView = ({
                   {showRatio && (
                     <div className='pt-3'>
                       <div className='flex items-center space-x-1 mb-2'>
-                        <span className='text-xs font-medium text-gray-700'>
+                        <span className='pricing-caption'>
                           {t('倍率信息')}
                         </span>
                         <Tooltip
@@ -351,7 +350,7 @@ const PricingCardView = ({
                           />
                         </Tooltip>
                       </div>
-                      <div className='grid grid-cols-3 gap-2 text-xs text-gray-600'>
+                      <div className='grid grid-cols-3 gap-2 text-xs text-[var(--plaza-text-2)] pricing-mono'>
                         <div>
                           {t('模型')}:{' '}
                           {model.quota_type === 0 ? model.model_ratio : t('无')}

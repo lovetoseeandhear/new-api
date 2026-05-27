@@ -225,7 +225,7 @@ export const getPricingTableColumns = ({
       const priceData = getPriceData(record);
 
       return (
-        <div className='space-y-1'>
+        <div className='space-y-1 pricing-mono-col'>
           <div className='text-gray-700'>
             {t('模型倍率')}：{record.quota_type === 0 ? text : t('无')}
           </div>
@@ -250,7 +250,7 @@ export const getPricingTableColumns = ({
       const priceItems = getModelPriceItems(priceData, t, siteDisplayType);
 
       return (
-        <div className='space-y-1'>
+        <div className='space-y-1 pricing-mono-col'>
           {priceItems.map((item) => (
             <div key={item.key} className='text-gray-700'>
               {item.label} {item.value}
