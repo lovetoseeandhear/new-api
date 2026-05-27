@@ -184,23 +184,7 @@ const PricingCardView = ({
       );
     }
 
-    // 2. 折扣 chip（实心，仅当 zhe 非空）
-    const zhe = getDiscountZheByGroupRatio(priceData?.usedGroupRatio);
-    if (zhe !== null) {
-      tags.push(
-        <Tag
-          key='discount'
-          shape='circle'
-          size='small'
-          className='pricing-chip pricing-chip-accent'
-        >
-          {zhe}
-          {t('折')}
-        </Tag>,
-      );
-    }
-
-    // 3. 自定义 tag（描边 + 左色条，最多 3 个）
+    // 2. 自定义 tag（描边 + 左色条，最多 3 个）
     const customTags = [];
     if (record.tags) {
       const tagArr = record.tags.split(',').filter(Boolean);
