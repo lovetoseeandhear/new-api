@@ -912,7 +912,6 @@ html.dark .with-pastel-balls::before {
 }
 
 .pricing-search-header {
-  position: relative;
   padding: 0.5rem;
   background-color: var(--plaza-bg);
   flex-shrink: 0;
