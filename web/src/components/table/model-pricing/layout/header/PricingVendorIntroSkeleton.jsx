@@ -206,7 +206,7 @@ const PricingVendorIntroSkeleton = memo(
         loading={true}
         active
         placeholder={placeholder}
-        className="pricing-skeleton"
+        className='pricing-skeleton'
       ></Skeleton>
     );
   },

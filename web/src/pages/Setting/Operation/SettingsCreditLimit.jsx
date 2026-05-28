@@ -175,7 +175,9 @@ export default function SettingsCreditLimit(props) {
                 <Form.Switch
                   label={t('启用充值邀请奖励')}
                   field={'InviteTopupRewardEnabled'}
-                  extraText={t('开启后，被邀请用户充值成功时，邀请人可获得奖励')}
+                  extraText={t(
+                    '开启后，被邀请用户充值成功时，邀请人可获得奖励',
+                  )}
                   onChange={(value) =>
                     setInputs({
                       ...inputs,
@@ -191,7 +193,9 @@ export default function SettingsCreditLimit(props) {
                   step={0.1}
                   min={0}
                   suffix={'%'}
-                  extraText={t('按被邀请用户本次到账额度计算，奖励进入邀请额度')}
+                  extraText={t(
+                    '按被邀请用户本次到账额度计算，奖励进入邀请额度',
+                  )}
                   placeholder={t('例如：10')}
                   onChange={(value) =>
                     setInputs({
@@ -205,7 +209,9 @@ export default function SettingsCreditLimit(props) {
                 <Form.Switch
                   label={t('仅首充奖励')}
                   field={'InviteTopupRewardFirstOnly'}
-                  extraText={t('开启后，仅被邀请用户第一次充值成功时奖励邀请人')}
+                  extraText={t(
+                    '开启后，仅被邀请用户第一次充值成功时奖励邀请人',
+                  )}
                   onChange={(value) =>
                     setInputs({
                       ...inputs,
