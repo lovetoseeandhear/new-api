@@ -35,8 +35,8 @@ const PricingCardSkeleton = ({
             bodyStyle={{ padding: '24px' }}
           >
             <div className='flex flex-col h-full'>
-              {/* 身份区：图标 + 名称 + 操作按钮 */}
-              <div className='flex items-start justify-between mb-3'>
+              {/* 身份区：图标 + 名称 + 折扣徽章占位 + 选择框 */}
+              <div className='flex items-start justify-between mb-2.5'>
                 <div className='flex items-start space-x-3 flex-1 min-w-0'>
                   <div className='w-12 h-12 rounded-2xl flex items-center justify-center relative shadow-sm'>
                     <Skeleton.Avatar
@@ -44,7 +44,7 @@ const PricingCardSkeleton = ({
                       style={{ width: 48, height: 48, borderRadius: 16 }}
                     />
                   </div>
-                  <div className='flex-1 min-w-0'>
+                  <div className='flex-1 min-w-0 flex items-center gap-2'>
                     <Skeleton.Title
                       style={{
                         width: `${120 + (index % 3) * 30}px`,
@@ -52,25 +52,27 @@ const PricingCardSkeleton = ({
                         marginBottom: 0,
                       }}
                     />
+                    {index % 2 === 0 && (
+                      <Skeleton.Button
+                        size='small'
+                        style={{ width: 56, height: 22, borderRadius: 999 }}
+                      />
+                    )}
                   </div>
                 </div>
 
-                <div className='flex items-center space-x-2 ml-3'>
-                  <Skeleton.Button
-                    size='small'
-                    style={{ width: 16, height: 16, borderRadius: 4 }}
-                  />
-                  {rowSelection && (
+                {rowSelection && (
+                  <div className='flex items-center ml-3'>
                     <Skeleton.Button
                       size='small'
                       style={{ width: 16, height: 16, borderRadius: 2 }}
                     />
-                  )}
-                </div>
+                  </div>
+                )}
               </div>
 
               {/* 描述区 */}
-              <div className='flex-1 mb-4'>
+              <div className='flex-1 mb-3 min-h-[2.25rem]'>
                 <Skeleton.Paragraph
                   rows={2}
                   style={{ marginBottom: 0 }}
@@ -78,23 +80,28 @@ const PricingCardSkeleton = ({
                 />
               </div>
 
-              {/* 区段分隔线 + 计价区 */}
-              <div className='pricing-section-divider' />
-              <div className='flex flex-col gap-1'>
-                <Skeleton.Title
-                  style={{
-                    width: `${160 + (index % 4) * 20}px`,
-                    height: 14,
-                    marginBottom: 0,
-                  }}
-                />
-                <Skeleton.Title
-                  style={{
-                    width: `${140 + (index % 3) * 20}px`,
-                    height: 14,
-                    marginBottom: 0,
-                  }}
-                />
+              {/* 计价区两列骨架（无上分隔线） */}
+              <div className='flex flex-col gap-1.5'>
+                {Array.from({ length: 2 + (index % 2) }).map(
+                  (_, rowIndex) => (
+                    <div key={rowIndex} className='flex items-baseline gap-3'>
+                      <Skeleton.Title
+                        style={{
+                          width: 64,
+                          height: 12,
+                          marginBottom: 0,
+                        }}
+                      />
+                      <Skeleton.Title
+                        style={{
+                          width: `${120 + (rowIndex % 3) * 20}px`,
+                          height: 14,
+                          marginBottom: 0,
+                        }}
+                      />
+                    </div>
+                  ),
+                )}
               </div>
 
               {/* 倍率 chip 行占位（可选） */}
@@ -104,26 +111,30 @@ const PricingCardSkeleton = ({
                     <Skeleton.Button
                       key={ratioIndex}
                       size='small'
-                      style={{ width: 56, height: 18, borderRadius: 999 }}
+                      style={{ width: 64, height: 22, borderRadius: 999 }}
                     />
                   ))}
                 </div>
               )}
 
-              {/* 区段分隔线 + 标签区 */}
+              {/* 区段分隔线 + 标签区（含右端复制按钮占位） */}
               <div className='pricing-section-divider' />
-              <div className='flex flex-wrap gap-2'>
-                {Array.from({ length: 2 + (index % 3) }).map((_, tagIndex) => (
-                  <Skeleton.Button
-                    key={tagIndex}
-                    size='small'
-                    style={{
-                      width: 64,
-                      height: 18,
-                      borderRadius: 999,
-                    }}
-                  />
-                ))}
+              <div className='flex justify-between items-center gap-2'>
+                <div className='flex flex-wrap gap-2 flex-1 min-w-0'>
+                  {Array.from({ length: 2 + (index % 3) }).map(
+                    (_, tagIndex) => (
+                      <Skeleton.Button
+                        key={tagIndex}
+                        size='small'
+                        style={{ width: 64, height: 22, borderRadius: 999 }}
+                      />
+                    ),
+                  )}
+                </div>
+                <Skeleton.Button
+                  size='small'
+                  style={{ width: 24, height: 22, borderRadius: 6 }}
+                />
               </div>
             </div>
           </Card>
