@@ -374,8 +374,23 @@ const PricingCardView = ({
                   {/* 区段分隔线（标签区上方） */}
                   <div className='pricing-section-divider' />
 
-                  {/* 标签区：计费 + 折扣 + 自定义 */}
-                  {renderTags(model, priceData)}
+                  {/* 标签区：计费 + 自定义（左） + 复制按钮（右） */}
+                  <div className='flex justify-between items-center gap-2'>
+                    <div className='flex-1 min-w-0'>
+                      {renderTags(model, priceData)}
+                    </div>
+                    <Button
+                      size='small'
+                      theme='borderless'
+                      type='tertiary'
+                      icon={<Copy size={12} />}
+                      className='!bg-[var(--plaza-primary)]/8 hover:!bg-[var(--plaza-primary)]/15 !text-[var(--plaza-primary)] flex-shrink-0'
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        copyText(model.model_name);
+                      }}
+                    />
+                  </div>
                 </div>
               </div>
             </Card>
