@@ -149,7 +149,7 @@ const PricingCardView = ({
     return record.description || '';
   };
 
-  // 渲染标签 - 计费 + 折扣 + 自定义 三档质感
+  // 渲染标签 - 计费 + 自定义
   const renderTags = (record, priceData) => {
     const tags = [];
 
@@ -184,23 +184,20 @@ const PricingCardView = ({
       );
     }
 
-    // 2. 自定义 tag（描边 + 左色条，最多 3 个）
+    // 2. 自定义 tag（与表格视图一致，使用 Semi 内置颜色）
     const customTags = [];
     if (record.tags) {
       const tagArr = record.tags.split(',').filter(Boolean);
       tagArr.forEach((tg, idx) => {
+        const tagText = tg.trim();
         customTags.push(
           <Tag
             key={`custom-${idx}`}
+            color={stringToColor(tagText)}
             shape='circle'
             size='small'
-            className='pricing-chip pricing-chip-neutral'
-            style={{
-              borderLeftWidth: '2px',
-              borderLeftColor: stringToColor(tg),
-            }}
           >
-            {tg}
+            {tagText}
           </Tag>,
         );
       });
@@ -318,7 +315,7 @@ const PricingCardView = ({
                 {/* 计价区 + 标签区 */}
                 <div className='mt-auto'>
                   {/* 计价区：价格信息（两列） + 倍率 chip 行 */}
-                  <div className='pricing-price-list flex flex-col gap-1.5'>
+                  <div className='pricing-price-list flex flex-col justify-evenly gap-1.5'>
                     {formatPriceInfoCard(priceData, t, siteDisplayType)}
                   </div>
 

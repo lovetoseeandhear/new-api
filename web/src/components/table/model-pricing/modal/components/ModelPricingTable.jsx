@@ -90,15 +90,27 @@ const ModelPricingTable = ({
       {
         title: t('分组'),
         dataIndex: 'group',
-        render: (text, record) => (
+        render: (text) => (
           <Tag color='white' size='small' shape='circle'>
             {text}
             {t('分组')}
-            {record.discountZhe === null
-              ? ''
-              : ` ${record.discountZhe}${t('折')}`}
           </Tag>
         ),
+      },
+      {
+        title: t('折扣'),
+        dataIndex: 'discountZhe',
+        render: (text) =>
+          text === null ? (
+            <Tag color='white' size='small' shape='circle'>
+              -
+            </Tag>
+          ) : (
+            <Tag color='green' size='small' shape='circle'>
+              {text}
+              {t('折')}
+            </Tag>
+          ),
       },
     ];
 

@@ -1136,25 +1136,13 @@ body[theme-mode='dark'] {
 .pricing-chip-neutral {
   background: color-mix(
     in srgb,
-    var(--plaza-primary) 16%,
+    var(--plaza-text-3) 14%,
     transparent
   ) !important;
   color: var(--plaza-text-1) !important;
-  border-top-color: color-mix(
-    in srgb,
-    var(--plaza-primary) 28%,
-    var(--plaza-border)
-  ) !important;
-  border-right-color: color-mix(
-    in srgb,
-    var(--plaza-primary) 28%,
-    var(--plaza-border)
-  ) !important;
-  border-bottom-color: color-mix(
-    in srgb,
-    var(--plaza-primary) 28%,
-    var(--plaza-border)
-  ) !important;
+  border-top-color: var(--plaza-border) !important;
+  border-right-color: var(--plaza-border) !important;
+  border-bottom-color: var(--plaza-border) !important;
   /* border-left-color is intentionally left to inline style for per-tag accent */
 }
 
@@ -1634,4 +1622,8 @@ body[theme-mode='dark'] .pricing-aurora-hero {
   font-weight: 600;
   color: var(--plaza-text-1);
   word-break: break-word;
+}
+
+.pricing-glass-scope .pricing-price-list {
+  min-height: 58px;
 }
