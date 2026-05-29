@@ -1352,6 +1352,294 @@ body[theme-mode='dark'] .pricing-aurora-hero {
   color: var(--plaza-text-3);
 }
 
+/* === Model pricing sidebar custom filter cards === */
+.pricing-glass-scope .pricing-filter-card {
+  margin-bottom: 16px;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid var(--plaza-border);
+  background: color-mix(in srgb, var(--plaza-bg-card) 94%, transparent);
+  box-shadow: 0 2px 8px color-mix(in srgb, var(--plaza-text-1) 5%, transparent);
+}
+.pricing-glass-scope .pricing-filter-card-title {
+  margin-bottom: 10px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--plaza-text-1);
+}
+
+.pricing-glass-scope .pricing-vendor-tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.pricing-glass-scope .pricing-vendor-tag {
+  min-height: 30px;
+  padding: 5px 8px;
+  border-radius: 999px;
+  border: 1px solid
+    color-mix(in srgb, var(--plaza-primary-soft) 28%, var(--plaza-border));
+  background: color-mix(
+    in srgb,
+    var(--plaza-primary-soft) 12%,
+    var(--plaza-bg-card)
+  );
+  color: var(--plaza-text-1);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  cursor: pointer;
+  transition:
+    border-color 150ms ease-out,
+    background-color 150ms ease-out,
+    color 150ms ease-out;
+}
+.pricing-glass-scope .pricing-vendor-tag-main {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.pricing-glass-scope .pricing-vendor-tag-icon {
+  line-height: 0;
+  display: inline-flex;
+}
+.pricing-glass-scope .pricing-vendor-tag-label {
+  font-weight: 500;
+}
+.pricing-glass-scope .pricing-filter-count {
+  min-width: 20px;
+  height: 18px;
+  border-radius: 999px;
+  padding: 0 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+  border: 1px solid
+    color-mix(in srgb, var(--plaza-primary-soft) 36%, var(--plaza-border));
+  background: color-mix(in srgb, var(--plaza-primary-soft) 22%, transparent);
+  color: color-mix(in srgb, var(--plaza-primary-soft) 78%, var(--plaza-text-1));
+}
+.pricing-glass-scope .pricing-filter-count[data-all='true'] {
+  background: color-mix(in srgb, var(--plaza-primary) 15%, transparent);
+  color: var(--plaza-primary);
+  border-color: color-mix(in srgb, var(--plaza-primary) 45%, transparent);
+}
+.pricing-glass-scope .pricing-vendor-tag:hover {
+  border-color: color-mix(in srgb, var(--plaza-primary) 30%, transparent);
+}
+.pricing-glass-scope .pricing-vendor-tag[data-active='true'] {
+  background: color-mix(in srgb, var(--plaza-primary) 16%, var(--plaza-bg-card));
+  border-color: color-mix(in srgb, var(--plaza-primary) 52%, transparent);
+}
+.pricing-glass-scope .pricing-vendor-tag[data-active='true'] .pricing-filter-count {
+  background: color-mix(in srgb, var(--plaza-primary) 30%, transparent);
+  color: var(--plaza-primary);
+  border-color: color-mix(in srgb, var(--plaza-primary) 56%, transparent);
+}
+.pricing-glass-scope .pricing-vendor-tag[data-empty='true'] {
+  background: color-mix(in srgb, var(--plaza-bg-card) 88%, transparent);
+  border-color: color-mix(in srgb, var(--plaza-text-3) 30%, transparent);
+  color: var(--plaza-text-3);
+}
+.pricing-glass-scope .pricing-vendor-tag[data-empty='true'] .pricing-filter-count {
+  background: color-mix(in srgb, var(--plaza-text-3) 8%, transparent);
+  border-color: color-mix(in srgb, var(--plaza-text-3) 22%, transparent);
+  color: var(--plaza-text-3);
+}
+
+.pricing-glass-scope .pricing-filter-card-groups {
+  background: #f8f9fc;
+  border-color: #e9ecef;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+.pricing-glass-scope .pricing-groups-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+.pricing-glass-scope .pricing-groups-panel-heading {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 8px;
+  min-width: 0;
+}
+.pricing-glass-scope .pricing-filter-card-groups .pricing-filter-card-title {
+  margin-bottom: 0;
+  color: #1a1a2e;
+  font-family: SF Pro Text, Inter, Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+.pricing-glass-scope .pricing-groups-total {
+  font-size: 12px;
+  color: #6c757d;
+}
+.pricing-glass-scope .pricing-groups-search {
+  margin-bottom: 10px;
+}
+.pricing-glass-scope .pricing-groups-search input {
+  width: 100%;
+  height: 32px;
+  padding: 0 10px;
+  border-radius: 10px;
+  border: 1px solid #e9ecef;
+  background: #ffffff;
+  color: #1a1a2e;
+  outline: none;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03) inset;
+  font-size: 12px;
+  font-family: SF Pro Text, Inter, Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+.pricing-glass-scope .pricing-groups-search input::placeholder {
+  color: #9ca3af;
+}
+.pricing-glass-scope .pricing-groups-search input:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.12);
+}
+.pricing-glass-scope .pricing-group-grid-office {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+}
+.pricing-glass-scope .pricing-group-tile {
+  position: relative;
+  min-height: 70px;
+  border-radius: 10px;
+  border: 1px solid #e9ecef;
+  background: #ffffff;
+  color: #1a1a2e;
+  padding: 10px 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    border-color 150ms ease-out,
+    transform 150ms ease-out,
+    box-shadow 150ms ease-out;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+.pricing-glass-scope .pricing-group-tile-name {
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.2;
+  color: #1a1a2e;
+  word-break: break-word;
+}
+.pricing-glass-scope .pricing-group-ratio-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 20px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  font-size: 11px;
+  line-height: 1.2;
+  font-weight: 700;
+}
+.pricing-glass-scope .pricing-group-tile[data-ratio-kind='equal'] .pricing-group-ratio-badge {
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+.pricing-glass-scope .pricing-group-tile[data-ratio-kind='low'] .pricing-group-ratio-badge {
+  background: #e3f2fd;
+  color: #1565c0;
+}
+.pricing-glass-scope .pricing-group-tile[data-ratio-kind='high'] .pricing-group-ratio-badge {
+  background: #fff3e0;
+  color: #e65100;
+}
+.pricing-glass-scope .pricing-group-tile[data-ratio-kind='all'] .pricing-group-ratio-badge {
+  background: #f1f0ff;
+  color: #5b5bd6;
+}
+.pricing-glass-scope .pricing-group-subscription-badge {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  padding: 1px 6px;
+  border-radius: 999px;
+  border: 1px solid #dfe3e8;
+  background: #f4f5f7;
+  color: #6b7280;
+  font-size: 10px;
+  line-height: 1.2;
+}
+.pricing-glass-scope .pricing-group-tile:hover {
+  border-color: #cfd6de;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.06);
+  transform: translateY(-1px);
+}
+.pricing-glass-scope .pricing-group-tile[data-active='true'] {
+  border-color: #8b5cf6;
+  box-shadow:
+    0 0 0 1px rgba(139, 92, 246, 0.16),
+    0 1px 3px rgba(0, 0, 0, 0.06);
+}
+.pricing-glass-scope .pricing-group-tile[data-empty='true'] {
+  background: #f8fafc;
+  border-color: #e5e7eb;
+  color: #9ca3af;
+  box-shadow: none;
+}
+.pricing-glass-scope .pricing-group-tile[data-empty='true'] .pricing-group-tile-name {
+  color: #9ca3af;
+}
+.pricing-glass-scope .pricing-group-tile[data-empty='true'] .pricing-group-ratio-badge {
+  opacity: 0.7;
+}
+
+.pricing-glass-scope .pricing-filter-loading-chip,
+.pricing-glass-scope .pricing-filter-loading-tile {
+  display: block;
+  border-radius: 10px;
+}
+
+.pricing-glass-scope .pricing-filter-loading-chip {
+  width: 82px;
+  height: 30px;
+  border-radius: 999px;
+  border: 1px solid var(--plaza-border);
+  background: color-mix(in srgb, var(--plaza-text-3) 12%, transparent);
+}
+
+.pricing-glass-scope .pricing-filter-loading-tile {
+  height: 70px;
+  border: 1px solid #e9ecef;
+  background: linear-gradient(90deg, #ffffff 25%, #f1f3f5 50%, #ffffff 75%);
+  background-size: 220% 100%;
+  animation: pricing-group-skeleton 1.4s ease infinite;
+}
+
+@media (max-width: 768px) {
+  .pricing-glass-scope .pricing-group-grid-office {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+  }
+}
+
+@media (max-width: 520px) {
+  .pricing-glass-scope .pricing-group-grid-office {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@keyframes pricing-group-skeleton {
+  0% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0 50%;
+  }
+}
+
 /* === Glass search input === */
 .pricing-glass-search .semi-input-wrapper {
   background: var(--plaza-surface) !important;

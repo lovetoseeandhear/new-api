@@ -18,7 +18,6 @@ For commercial licensing, please contact support@quantumnous.com
 */
 
 import React from 'react';
-import SelectableButtonGroup from '../../../common/ui/SelectableButtonGroup';
 import { getLobeHubIcon } from '../../../../helpers';
 
 /**
@@ -111,16 +110,56 @@ const PricingVendors = ({
     return result;
   }, [getAllVendors, getVendorCount, t]);
 
+  if (loading) {
+    return (
+      <section className='pricing-filter-card pricing-filter-card-vendors'>
+        <div className='pricing-filter-card-title'>{t('供应商')}</div>
+        <div className='pricing-vendor-tag-list'>
+          {Array.from({ length: 6 }).map((_, idx) => (
+            <span
+              key={`vendor-loading-${idx}`}
+              className='pricing-filter-loading-chip'
+            />
+          ))}
+        </div>
+      </section>
+    );
+  }
+
   return (
-    <SelectableButtonGroup
-      title={t('供应商')}
-      items={items}
-      activeValue={filterVendor}
-      onChange={setFilterVendor}
-      loading={loading}
-      variant='violet'
-      t={t}
-    />
+    <section className='pricing-filter-card pricing-filter-card-vendors'>
+      <div className='pricing-filter-card-title'>{t('供应商')}</div>
+      <div className='pricing-vendor-tag-list'>
+        {items.map((item) => {
+          const isActive = filterVendor === item.value;
+          const isAll = item.value === 'all';
+          const isEmpty = Number(item.tagCount || 0) === 0;
+          return (
+            <button
+              key={item.value}
+              type='button'
+              className='pricing-vendor-tag'
+              data-active={isActive ? 'true' : undefined}
+              data-empty={isEmpty ? 'true' : undefined}
+              onClick={() => setFilterVendor(item.value)}
+            >
+              <span className='pricing-vendor-tag-main'>
+                {item.icon ? (
+                  <span className='pricing-vendor-tag-icon'>{item.icon}</span>
+                ) : null}
+                <span className='pricing-vendor-tag-label'>{item.label}</span>
+              </span>
+              <span
+                className='pricing-filter-count'
+                data-all={isAll ? 'true' : undefined}
+              >
+                {item.tagCount}
+              </span>
+            </button>
+          );
+        })}
+      </div>
+    </section>
   );
 };
 

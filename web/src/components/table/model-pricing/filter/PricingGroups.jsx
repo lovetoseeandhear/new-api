@@ -17,8 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 For commercial licensing, please contact support@quantumnous.com
 */
 
-import React from 'react';
-import SelectableButtonGroup from '../../../common/ui/SelectableButtonGroup';
+import React, { useMemo, useState } from 'react';
 
 /**
  * 分组筛选组件
@@ -39,45 +38,157 @@ const PricingGroups = ({
   loading = false,
   t,
 }) => {
-  const groups = [
-    'all',
-    ...Object.keys(usableGroup).filter((key) => key !== ''),
-  ];
+  const [searchText, setSearchText] = useState('');
 
-  const items = groups.map((g) => {
-    const modelCount =
-      g === 'all'
-        ? models.length
-        : models.filter((m) => m.enable_groups && m.enable_groups.includes(g))
-            .length;
-    let ratioDisplay = '';
-    if (g === 'all') {
-      // ratioDisplay = t('全部');
-    } else {
-      const ratio = groupRatio[g];
-      if (ratio !== undefined && ratio !== null) {
-        ratioDisplay = `${ratio}x`;
-      } else {
-        ratioDisplay = '1x';
-      }
+  const totalGroups = useMemo(
+    () => Object.keys(usableGroup).filter((key) => key && key !== 'all').length,
+    [usableGroup],
+  );
+
+  const items = useMemo(() => {
+    const groups = ['all', ...Object.keys(usableGroup).filter((key) => key !== '')];
+    return groups.map((g) => {
+      const modelCount =
+        g === 'all'
+          ? models.length
+          : models.filter((m) => m.enable_groups && m.enable_groups.includes(g))
+              .length;
+
+      const rawRatio = g === 'all' ? null : groupRatio[g];
+      const ratioNumber =
+        rawRatio !== undefined && rawRatio !== null && !Number.isNaN(Number(rawRatio))
+          ? Number(rawRatio)
+          : 1;
+      const ratioDisplay = g === 'all' ? t('全部') : `${ratioNumber}x`;
+      const rawLabel = g === 'all' ? t('全部分组') : g;
+      const isNonSubscription =
+        g !== 'all' &&
+        /(非订阅|non[-_\s]?subscription)/i.test(String(g || ''));
+      const displayLabel =
+        g === 'all'
+          ? rawLabel
+          : rawLabel
+              .replace(/非订阅/gi, '')
+              .replace(/\s{2,}/g, ' ')
+              .replace(/^[\s_\-()（）]+|[\s_\-()（）]+$/g, '')
+              .trim() || rawLabel;
+
+      return {
+        value: g,
+        label: rawLabel,
+        displayLabel,
+        ratioNumber,
+        ratioDisplay,
+        isNonSubscription,
+        modelCount,
+      };
+    });
+  }, [groupRatio, models, t, usableGroup]);
+
+  const visibleItems = useMemo(() => {
+    const keyword = searchText.trim().toLowerCase();
+    if (!keyword) {
+      return items;
     }
-    return {
-      value: g,
-      label: g === 'all' ? t('全部分组') : g,
-      tagCount: ratioDisplay,
-    };
-  });
+    const allItem = items.find((item) => item.value === 'all');
+    const filtered = items.filter((item) => {
+      if (item.value === 'all') return false;
+      return (
+        String(item.displayLabel || '').toLowerCase().includes(keyword) ||
+        String(item.label || '').toLowerCase().includes(keyword)
+      );
+    });
+    return allItem ? [allItem, ...filtered] : filtered;
+  }, [items, searchText]);
+
+  if (loading) {
+    return (
+      <section className='pricing-filter-card pricing-filter-card-groups'>
+        <div className='pricing-groups-panel-header'>
+          <div className='pricing-groups-panel-heading'>
+            <div className='pricing-filter-card-title'>{t('可用令牌分组')}</div>
+            <span className='pricing-groups-total'>{`${totalGroups}${t('个')}`}</span>
+          </div>
+        </div>
+        <div className='pricing-groups-search'>
+          <input
+            type='text'
+            value={searchText}
+            onChange={(e) => setSearchText(e.target.value)}
+            placeholder={t('搜索分组')}
+            aria-label={t('搜索分组')}
+          />
+        </div>
+        <div className='pricing-group-grid pricing-group-grid-office'>
+          {Array.from({ length: 10 }).map((_, idx) => (
+            <span
+              key={`group-loading-${idx}`}
+              className='pricing-filter-loading-tile'
+            />
+          ))}
+        </div>
+      </section>
+    );
+  }
 
   return (
-    <SelectableButtonGroup
-      title={t('可用令牌分组')}
-      items={items}
-      activeValue={filterGroup}
-      onChange={setFilterGroup}
-      loading={loading}
-      variant='teal'
-      t={t}
-    />
+    <section className='pricing-filter-card pricing-filter-card-groups'>
+      <div className='pricing-groups-panel-header'>
+        <div className='pricing-groups-panel-heading'>
+          <div className='pricing-filter-card-title'>{t('可用令牌分组')}</div>
+          <span className='pricing-groups-total'>{`${totalGroups}${t('个')}`}</span>
+        </div>
+      </div>
+      <div className='pricing-groups-search'>
+        <input
+          type='text'
+          value={searchText}
+          onChange={(e) => setSearchText(e.target.value)}
+          placeholder={t('搜索分组')}
+          aria-label={t('搜索分组')}
+        />
+      </div>
+      <div className='pricing-group-grid pricing-group-grid-office'>
+        {visibleItems.map((item) => {
+          const isActive = filterGroup === item.value;
+          const isEmpty = Number(item.modelCount || 0) === 0;
+          const ratioKind =
+            item.value === 'all'
+              ? 'all'
+              : item.ratioNumber === 1
+                ? 'equal'
+                : item.ratioNumber < 1
+                  ? 'low'
+                  : 'high';
+          return (
+            <button
+              key={item.value}
+              type='button'
+              className='pricing-group-tile'
+              data-active={isActive ? 'true' : undefined}
+              data-empty={isEmpty ? 'true' : undefined}
+              data-ratio-kind={ratioKind}
+              data-non-subscription={
+                item.isNonSubscription ? 'true' : undefined
+              }
+              onClick={() => setFilterGroup(item.value)}
+            >
+              {item.isNonSubscription && (
+                <span className='pricing-group-subscription-badge'>
+                  {t('非订阅')}
+                </span>
+              )}
+              <span className='pricing-group-tile-name'>{item.displayLabel}</span>
+              <span className='pricing-group-ratio-badge'>
+                {item.value === 'all'
+                  ? `${item.modelCount}`
+                  : item.ratioDisplay}
+              </span>
+            </button>
+          );
+        })}
+      </div>
+    </section>
   );
 };
 
