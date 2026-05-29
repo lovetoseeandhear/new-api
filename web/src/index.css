@@ -1581,6 +1581,148 @@ body[theme-mode='dark'] .pricing-aurora-hero {
   gap: 8px;
 }
 
+.pricing-glass-scope .pricing-card-info-grid {
+  display: grid;
+  grid-template-columns: minmax(220px, 1fr) minmax(210px, 0.85fr);
+  gap: 16px;
+  align-items: start;
+  margin-top: 4px;
+  min-width: 0;
+}
+
+.pricing-glass-scope .pricing-card-price-zone {
+  min-width: 0;
+}
+
+.pricing-glass-scope .pricing-card-meta-zone {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+  padding: 2px 0 2px 14px;
+  border-left: 1px solid color-mix(in srgb, var(--plaza-border) 90%, transparent);
+  background: color-mix(in srgb, var(--plaza-border) 8%, transparent);
+  border-radius: 8px;
+}
+
+.pricing-glass-scope .pricing-card-meta-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.pricing-glass-scope .pricing-card-meta-title {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--plaza-text-3);
+}
+
+.pricing-glass-scope .pricing-ratio-row-compact {
+  justify-content: flex-end;
+  gap: 7px;
+}
+
+.pricing-glass-scope .pricing-ratio-row-compact .pricing-ratio-chip {
+  padding: 2px 9px;
+  font-size: 12px;
+  line-height: 1.65;
+}
+
+.pricing-glass-scope .pricing-card-meta-actions {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-end;
+  gap: 6px;
+  min-width: 0;
+}
+
+.pricing-glass-scope .pricing-card-meta-zone .pricing-tags-row {
+  justify-content: flex-end;
+  gap: 7px;
+  min-width: 0;
+}
+
+.pricing-glass-scope .pricing-card-description {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 10px;
+  align-items: start;
+  margin-top: 4px;
+  padding: 10px 0 2px;
+  border-top: 1px solid color-mix(in srgb, var(--plaza-border) 90%, transparent);
+  background: color-mix(in srgb, var(--plaza-border) 5%, transparent);
+  border-radius: 8px;
+  min-width: 0;
+}
+
+.pricing-glass-scope .pricing-card-description-label {
+  flex-shrink: 0;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.6;
+  color: var(--plaza-text-1);
+  white-space: nowrap;
+}
+
+.pricing-glass-scope .pricing-card-description-text {
+  margin: 0;
+  min-width: 0;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.7;
+  color: var(--plaza-text-2);
+  white-space: normal;
+  overflow: visible;
+  display: block;
+}
+
+@media (max-width: 900px) {
+  .pricing-glass-scope .pricing-card-info-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .pricing-glass-scope .pricing-card-meta-zone {
+    padding: 0;
+    border-left: none;
+    border-radius: 0;
+    background: transparent;
+  }
+
+  .pricing-glass-scope .pricing-card-meta-title {
+    justify-content: flex-start;
+  }
+
+  .pricing-glass-scope .pricing-ratio-row-compact {
+    justify-content: flex-start;
+  }
+
+  .pricing-glass-scope .pricing-card-meta-actions {
+    justify-content: flex-start;
+  }
+
+  .pricing-glass-scope .pricing-card-meta-zone .pricing-tags-row {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 640px) {
+  .pricing-glass-scope .pricing-card-description {
+    grid-template-columns: 1fr;
+    gap: 6px;
+    padding-top: 8px;
+    background: transparent;
+    border-radius: 0;
+  }
+}
+
 /* === Pricing card v2 (2026-05-28): discount badge + two-column price rows === */
 
 /* 折扣徽章 - 红橙渐变实心 pill，最高优先级 */
@@ -1601,29 +1743,59 @@ body[theme-mode='dark'] .pricing-aurora-hero {
   white-space: nowrap;
 }
 
-/* 价格行 - 两列：dim label + mono 粗体 value */
+/* 价格行 - 紧凑两列：标签固定、价格放大、整行禁止换行 */
+.pricing-glass-scope .pricing-price-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-height: 0;
+}
+
+.pricing-glass-scope .pricing-price-list-hero {
+  margin-top: 0;
+}
+
 .pricing-glass-scope .pricing-price-row {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   gap: 8px;
-  line-height: 1.5;
+  min-width: 0;
+  line-height: 1.35;
+  white-space: nowrap;
+}
+
+.pricing-glass-scope .pricing-price-row[data-price-count='4'] {
+  line-height: 1.35;
 }
 
 .pricing-glass-scope .pricing-price-label {
-  flex: 0 0 56px;
-  font-size: 11px;
-  color: var(--plaza-text-3);
+  flex: 0 0 78px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--plaza-text-1);
+  line-height: 1.35;
+  white-space: nowrap;
 }
 
 .pricing-glass-scope .pricing-price-value {
-  flex: 1;
+  flex: 1 1 auto;
   min-width: 0;
-  font-size: 13px;
-  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 15px;
+  font-weight: 700;
   color: var(--plaza-text-1);
-  word-break: break-word;
+  line-height: 1.35;
+  white-space: nowrap;
 }
 
-.pricing-glass-scope .pricing-price-list {
-  min-height: 58px;
+@media (max-width: 640px) {
+  .pricing-glass-scope .pricing-price-label {
+    flex-basis: 72px;
+    font-size: 12.5px;
+  }
+
+  .pricing-glass-scope .pricing-price-value {
+    font-size: 13.5px;
+  }
 }

@@ -305,89 +305,94 @@ const PricingCardView = ({
                   )}
                 </div>
 
-                {/* 模型描述 - 占据剩余空间 */}
-                <div className='flex-1 mb-3 min-h-[2.25rem]'>
-                  <p className='text-xs line-clamp-2 leading-relaxed text-[var(--plaza-text-3)]'>
-                    {getModelDescription(model)}
-                  </p>
-                </div>
-
-                {/* 计价区 + 标签区 */}
-                <div className='mt-auto'>
-                  {/* 计价区：价格信息（两列） + 倍率 chip 行 */}
-                  <div className='pricing-price-list flex flex-col justify-evenly gap-1.5'>
-                    {formatPriceInfoCard(priceData, t, siteDisplayType)}
+                <div className='pricing-card-info-grid'>
+                  <div className='pricing-card-price-zone'>
+                    {/* 计价区：紧跟 header */}
+                    <div className='pricing-price-list pricing-price-list-hero'>
+                      {formatPriceInfoCard(priceData, t, siteDisplayType)}
+                    </div>
                   </div>
 
-                  {showRatio && (
-                    <div className='pricing-ratio-row mt-2'>
-                      {model.quota_type === 0 && (
-                        <>
+                  <div className='pricing-card-meta-zone'>
+                    {showRatio && (
+                      <div className='pricing-card-meta-group'>
+                        <div className='pricing-card-meta-title'>
+                          <span>{t('倍率信息')}</span>
+                          <Tooltip content={t('倍率是为了方便换算不同价格的模型')}>
+                            <IconHelpCircle
+                              className='text-blue-500 cursor-pointer'
+                              size='small'
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setModalImageUrl('/ratio.png');
+                                setIsModalOpenurl(true);
+                              }}
+                            />
+                          </Tooltip>
+                        </div>
+                        <div className='pricing-ratio-row pricing-ratio-row-compact'>
+                          {model.quota_type === 0 && (
+                            <>
+                              <span className='pricing-ratio-chip'>
+                                <span className='pricing-ratio-chip-value'>
+                                  ×{model.model_ratio}
+                                </span>
+                                <span className='pricing-ratio-chip-label'>
+                                  {t('模型')}
+                                </span>
+                              </span>
+                              <span className='pricing-ratio-chip'>
+                                <span className='pricing-ratio-chip-value'>
+                                  ×{parseFloat(model.completion_ratio.toFixed(3))}
+                                </span>
+                                <span className='pricing-ratio-chip-label'>
+                                  {t('补全')}
+                                </span>
+                              </span>
+                            </>
+                          )}
                           <span className='pricing-ratio-chip'>
                             <span className='pricing-ratio-chip-value'>
-                              ×{model.model_ratio}
+                              ×{priceData?.usedGroupRatio ?? '-'}
                             </span>
                             <span className='pricing-ratio-chip-label'>
-                              {t('模型')}
+                              {t('分组')}
                             </span>
                           </span>
-                          <span className='pricing-ratio-chip'>
-                            <span className='pricing-ratio-chip-value'>
-                              ×{parseFloat(model.completion_ratio.toFixed(3))}
-                            </span>
-                            <span className='pricing-ratio-chip-label'>
-                              {t('补全')}
-                            </span>
-                          </span>
-                        </>
-                      )}
-                      <span className='pricing-ratio-chip'>
-                        <span className='pricing-ratio-chip-value'>
-                          ×{priceData?.usedGroupRatio ?? '-'}
-                        </span>
-                        <span className='pricing-ratio-chip-label'>
-                          {t('分组')}
-                        </span>
+                        </div>
+                      </div>
+                    )}
+
+                    <div className='pricing-card-meta-group'>
+                      <div className='pricing-card-meta-actions'>
+                        <div className='flex-1 min-w-0'>
+                          {renderTags(model, priceData)}
+                        </div>
+                        <Button
+                          size='small'
+                          theme='borderless'
+                          type='tertiary'
+                          icon={<Copy size={12} />}
+                          className='!bg-[var(--plaza-primary)]/8 hover:!bg-[var(--plaza-primary)]/15 !text-[var(--plaza-primary)] flex-shrink-0'
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            copyText(model.model_name);
+                          }}
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  {getModelDescription(model) && (
+                    <div className='pricing-card-description'>
+                      <span className='pricing-card-description-label'>
+                        {t('模型介绍')}
                       </span>
-                      <span className='pricing-caption ml-auto inline-flex items-center gap-1'>
-                        {t('倍率信息')}
-                        <Tooltip
-                          content={t('倍率是为了方便换算不同价格的模型')}
-                        >
-                          <IconHelpCircle
-                            className='text-blue-500 cursor-pointer'
-                            size='small'
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setModalImageUrl('/ratio.png');
-                              setIsModalOpenurl(true);
-                            }}
-                          />
-                        </Tooltip>
-                      </span>
+                      <p className='pricing-card-description-text'>
+                        {getModelDescription(model)}
+                      </p>
                     </div>
                   )}
-
-                  {/* 区段分隔线（标签区上方） */}
-                  <div className='pricing-section-divider' />
-
-                  {/* 标签区：计费 + 自定义（左） + 复制按钮（右） */}
-                  <div className='flex justify-between items-center gap-2'>
-                    <div className='flex-1 min-w-0'>
-                      {renderTags(model, priceData)}
-                    </div>
-                    <Button
-                      size='small'
-                      theme='borderless'
-                      type='tertiary'
-                      icon={<Copy size={12} />}
-                      className='!bg-[var(--plaza-primary)]/8 hover:!bg-[var(--plaza-primary)]/15 !text-[var(--plaza-primary)] flex-shrink-0'
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        copyText(model.model_name);
-                      }}
-                    />
-                  </div>
                 </div>
               </div>
             </Card>

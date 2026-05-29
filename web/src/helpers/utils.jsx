@@ -899,7 +899,11 @@ export const formatPriceInfoCard = (priceData, t, quotaDisplayType = 'USD') => {
   return (
     <>
       {items.map((item) => (
-        <div key={item.key} className='pricing-price-row'>
+        <div
+          key={item.key}
+          className='pricing-price-row'
+          data-price-count={items.length}
+        >
           <span className='pricing-price-label'>{item.label}</span>
           <span className='pricing-price-value pricing-mono'>
             {item.value}
