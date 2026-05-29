@@ -1604,7 +1604,8 @@ body[theme-mode='dark'] .pricing-aurora-hero {
 /* 价格行 - 两列：dim label + mono 粗体 value */
 .pricing-glass-scope .pricing-price-row {
   display: flex;
-  align-items: baseline;
+  align-items: center;
+  justify-content: space-between;
   gap: 8px;
   line-height: 1.5;
 }
@@ -1621,9 +1622,12 @@ body[theme-mode='dark'] .pricing-aurora-hero {
   font-size: 13px;
   font-weight: 600;
   color: var(--plaza-text-1);
-  word-break: break-word;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: right;
 }
 
 .pricing-glass-scope .pricing-price-list {
-  min-height: 58px;
+  min-height: auto;
 }
