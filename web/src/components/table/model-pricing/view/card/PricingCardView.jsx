@@ -315,7 +315,7 @@ const PricingCardView = ({
                 {/* 计价区 + 标签区 */}
                 <div className='mt-auto'>
                   {/* 计价区：价格信息（两列） + 倍率 chip 行 */}
-                  <div className='pricing-price-list flex flex-col gap-1'>
+                  <div className='pricing-price-list flex flex-col justify-evenly gap-1.5'>
                     {formatPriceInfoCard(priceData, t, siteDisplayType)}
                   </div>
 
