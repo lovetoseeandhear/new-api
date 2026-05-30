@@ -23,6 +23,7 @@ web/bun.lock
 plans
 .claude
 .nezha
+.superpowers/
 
 electron/node_modules
 electron/dist
