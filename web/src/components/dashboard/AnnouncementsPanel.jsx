@@ -37,10 +37,10 @@ const AnnouncementsPanel = ({
   return (
     <Card
       {...CARD_PROPS}
-      className='shadow-sm !rounded-2xl lg:col-span-2'
+      className='dashboard-plaza-panel dashboard-plaza-announcement-panel shadow-sm !rounded-2xl lg:col-span-2'
       title={
-        <div className='flex flex-col lg:flex-row lg:items-center lg:justify-between gap-2 w-full'>
-          <div className='flex items-center gap-2'>
+        <div className='dashboard-plaza-panel-title-row flex flex-col lg:flex-row lg:items-center lg:justify-between gap-2 w-full'>
+          <div className='dashboard-plaza-panel-title flex items-center gap-2'>
             <Bell size={16} />
             {t('系统公告')}
             <Tag color='white' shape='circle'>
@@ -48,7 +48,7 @@ const AnnouncementsPanel = ({
             </Tag>
           </div>
           {/* 图例 */}
-          <div className='flex flex-wrap gap-3 text-xs'>
+          <div className='dashboard-plaza-announcement-legend flex flex-wrap gap-3 text-xs'>
             {announcementLegendData.map((legend, index) => (
               <div key={index} className='flex items-center gap-1'>
                 <div
@@ -78,7 +78,7 @@ const AnnouncementsPanel = ({
     >
       <ScrollableContainer maxHeight='24rem'>
         {announcementData.length > 0 ? (
-          <Timeline mode='left'>
+          <Timeline className='dashboard-plaza-announcement-timeline' mode='left'>
             {announcementData.map((item, idx) => {
               const htmlExtra = item.extra ? marked.parse(item.extra) : '';
               return (
