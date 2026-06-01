@@ -946,9 +946,9 @@ export const renderGroupOption = (item) => {
     },
   };
 
-  const handleClick = () => {
+  const handleClick = (e) => {
     if (!disabled && onClick) {
-      onClick();
+      onClick(e);
     }
   };
 

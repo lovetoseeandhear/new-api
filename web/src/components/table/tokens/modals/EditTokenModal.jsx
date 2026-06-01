@@ -65,6 +65,7 @@ const EditTokenModal = (props) => {
   const [loading, setLoading] = useState(false);
   const isMobile = useIsMobile();
   const formApiRef = useRef(null);
+  const groupSelectRef = useRef(null);
   const [models, setModels] = useState([]);
   const [groups, setGroups] = useState([]);
   const [showQuotaInput, setShowQuotaInput] = useState(false);
@@ -213,6 +214,13 @@ const EditTokenModal = (props) => {
       );
     }
     return result;
+  };
+
+  const handleGroupSelect = () => {
+    requestAnimationFrame(() => {
+      groupSelectRef.current?.clearInput?.();
+      groupSelectRef.current?.close?.();
+    });
   };
 
   const submit = async (values) => {
@@ -385,11 +393,15 @@ const EditTokenModal = (props) => {
                   <Col span={24}>
                     {groups.length > 0 ? (
                       <Form.Select
+                        ref={groupSelectRef}
                         field='group'
                         label={t('令牌分组')}
                         placeholder={t('令牌分组，默认为用户的分组')}
                         optionList={groups}
                         renderOptionItem={renderGroupOption}
+                        renderSelectedItem={(option) => option.value}
+                        onSelect={handleGroupSelect}
+                        autoClearSearchValue
                         filter={(input, option) => {
                           const q = input.toLowerCase();
                           return (
