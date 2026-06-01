@@ -2224,13 +2224,31 @@ body[theme-mode='dark'] .pricing-aurora-hero {
 }
 
 .dashboard-plaza-scope .dashboard-plaza-chart-tabs .semi-tabs-tab {
+  box-sizing: border-box;
+  border: 1px solid transparent;
   border-radius: 999px;
   color: #536179;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.2s ease,
+    color 0.2s ease;
 }
 
 .dashboard-plaza-scope .dashboard-plaza-chart-tabs .semi-tabs-tab-active {
-  background: #ffffff;
+  background: linear-gradient(
+    180deg,
+    rgba(79, 124, 255, 0.18) 0%,
+    rgba(79, 124, 255, 0.12) 100%
+  );
+  border-color: rgba(79, 124, 255, 0.32);
   color: #2d4fbf;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.75),
+    inset 0 -2px 5px rgba(45, 79, 191, 0.18),
+    inset 0 0 0 1px rgba(79, 124, 255, 0.08);
+  transform: translateY(1px);
 }
 
 .dashboard-plaza-scope .dashboard-plaza-api-item:hover {
