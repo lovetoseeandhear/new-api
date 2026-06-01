@@ -138,6 +138,7 @@ const SettingsPanel = ({
             autoComplete='new-password'
             optionList={groups}
             renderOptionItem={renderGroupOption}
+            renderSelectedItem={(option) => option?.value || ''}
             style={{ width: '100%' }}
             dropdownStyle={{ width: '100%', maxWidth: '100%' }}
             className='!rounded-lg'
