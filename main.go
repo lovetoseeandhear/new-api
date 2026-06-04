@@ -277,6 +277,9 @@ func InitResources() error {
 	common.CleanupOldCacheFiles()
 
 	// 初始化模型
+	if _, _, _, err := model.BackfillModelVendors(); err != nil {
+		return err
+	}
 	model.GetPricing()
 
 	// Initialize SQL Database

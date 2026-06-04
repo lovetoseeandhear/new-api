@@ -20,6 +20,7 @@ type Pricing struct {
 	Icon                   string                  `json:"icon,omitempty"`
 	Tags                   string                  `json:"tags,omitempty"`
 	VendorID               int                     `json:"vendor_id,omitempty"`
+	VendorName             string                  `json:"vendor_name,omitempty"`
 	QuotaType              int                     `json:"quota_type"`
 	ModelRatio             float64                 `json:"model_ratio"`
 	ModelPrice             float64                 `json:"model_price"`
@@ -291,6 +292,14 @@ func updatePricing() {
 			pricing.Icon = meta.Icon
 			pricing.Tags = meta.Tags
 			pricing.VendorID = meta.VendorID
+			if meta.VendorID != 0 {
+				if vendor, ok := vendorMap[meta.VendorID]; ok {
+					pricing.VendorName = vendor.Name
+				}
+			}
+		}
+		if pricing.VendorName == "" {
+			pricing.VendorName = InferVendorName(model)
 		}
 		modelPrice, findPrice := ratio_setting.GetModelPrice(model, false)
 		if findPrice {

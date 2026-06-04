@@ -55,16 +55,18 @@ const renderModelIconCol = (record, vendorMap) => {
 };
 
 // Render vendor column with icon
-const renderVendorTag = (vendorId, vendorMap, t) => {
-  if (!vendorId || !vendorMap[vendorId]) return '-';
-  const v = vendorMap[vendorId];
+const renderVendorTag = (vendorId, record, vendorMap, t) => {
+  const vendor = vendorId && vendorMap[vendorId] ? vendorMap[vendorId] : null;
+  const vendorName = vendor?.name || record?.vendor_name;
+  if (!vendorName) return '-';
+  const vendorIcon = vendor?.icon || record?.vendor_icon;
   return (
     <Tag
       color='white'
       shape='circle'
-      prefixIcon={getLobeHubIcon(v.icon || 'Layers', 14)}
+      prefixIcon={getLobeHubIcon(vendorIcon || 'Layers', 14)}
     >
-      {v.name}
+      {vendorName}
     </Tag>
   );
 };
@@ -320,7 +322,8 @@ export const getModelsColumns = ({
     {
       title: t('供应商'),
       dataIndex: 'vendor_id',
-      render: (vendorId, record) => renderVendorTag(vendorId, vendorMap, t),
+      render: (vendorId, record) =>
+        renderVendorTag(vendorId, record, vendorMap, t),
     },
     {
       title: t('标签'),

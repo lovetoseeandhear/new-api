@@ -234,31 +234,35 @@ func fetchJSON[T any](ctx context.Context, url string, out *upstreamEnvelope[T])
 	return lastErr
 }
 
-func ensureVendorID(vendorName string, vendorByName map[string]upstreamVendor, vendorIDCache map[string]int, createdVendors *int) int {
-	if vendorName == "" {
+func ensureVendorID(vendorName string, modelName string, vendorByName map[string]upstreamVendor, vendorIDCache map[string]int, createdVendors *int) int {
+	resolvedVendorName := strings.TrimSpace(vendorName)
+	if resolvedVendorName == "" {
+		resolvedVendorName = model.InferVendorName(modelName)
+	}
+	if resolvedVendorName == "" {
 		return 0
 	}
-	if id, ok := vendorIDCache[vendorName]; ok {
+	if id, ok := vendorIDCache[resolvedVendorName]; ok {
 		return id
 	}
 	var existing model.Vendor
-	if err := model.DB.Where("name = ?", vendorName).First(&existing).Error; err == nil {
-		vendorIDCache[vendorName] = existing.Id
+	if err := model.DB.Where("name = ?", resolvedVendorName).First(&existing).Error; err == nil {
+		vendorIDCache[resolvedVendorName] = existing.Id
 		return existing.Id
 	}
-	uv := vendorByName[vendorName]
+	uv := vendorByName[resolvedVendorName]
 	v := &model.Vendor{
-		Name:        vendorName,
+		Name:        resolvedVendorName,
 		Description: uv.Description,
 		Icon:        coalesce(uv.Icon, ""),
 		Status:      chooseStatus(uv.Status, 1),
 	}
 	if err := v.Insert(); err == nil {
 		*createdVendors++
-		vendorIDCache[vendorName] = v.Id
+		vendorIDCache[resolvedVendorName] = v.Id
 		return v.Id
 	}
-	vendorIDCache[vendorName] = 0
+	vendorIDCache[resolvedVendorName] = 0
 	return 0
 }
 
@@ -369,7 +373,7 @@ func SyncUpstreamModels(c *gin.Context) {
 		}
 
 		// 确保 vendor 存在
-		vendorID := ensureVendorID(up.VendorName, vendorByName, vendorIDCache, &createdVendors)
+		vendorID := ensureVendorID(up.VendorName, up.ModelName, vendorByName, vendorIDCache, &createdVendors)
 
 		// 创建模型
 		mi := &model.Model{
@@ -408,7 +412,7 @@ func SyncUpstreamModels(c *gin.Context) {
 			}
 
 			// 映射 vendor
-			newVendorID := ensureVendorID(up.VendorName, vendorByName, vendorIDCache, &createdVendors)
+			newVendorID := ensureVendorID(up.VendorName, ow.ModelName, vendorByName, vendorIDCache, &createdVendors)
 
 			// 应用字段覆盖（事务）
 			_ = model.DB.Transaction(func(tx *gorm.DB) error {

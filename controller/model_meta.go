@@ -160,6 +160,21 @@ func DeleteModelMeta(c *gin.Context) {
 	common.ApiSuccess(c, nil)
 }
 
+// BackfillModelVendorsMeta 回填历史模型的供应商信息
+func BackfillModelVendorsMeta(c *gin.Context) {
+	updatedModels, createdVendors, skippedModels, err := model.BackfillModelVendors()
+	if err != nil {
+		common.ApiError(c, err)
+		return
+	}
+	model.RefreshPricing()
+	common.ApiSuccess(c, gin.H{
+		"updated_models":  updatedModels,
+		"created_vendors": createdVendors,
+		"skipped_models":  skippedModels,
+	})
+}
+
 // enrichModels 批量填充附加信息：端点、渠道、分组、计费类型，避免 N+1 查询
 func enrichModels(models []*model.Model) {
 	if len(models) == 0 {
@@ -199,6 +214,9 @@ func enrichModels(models []*model.Model) {
 			mm.BoundChannels = chs
 			mm.EnableGroups = model.GetModelEnableGroups(mm.ModelName)
 			mm.QuotaTypes = model.GetModelQuotaTypes(mm.ModelName)
+			if mm.VendorName == "" {
+				mm.VendorName = model.InferVendorName(mm.ModelName)
+			}
 		}
 	}
 
@@ -326,5 +344,8 @@ func enrichModels(models []*model.Model) {
 		// 匹配信息
 		mm.MatchedModels = names
 		mm.MatchedCount = len(names)
+		if mm.VendorName == "" {
+			mm.VendorName = model.InferVendorName(mm.ModelName)
+		}
 	}
 }
