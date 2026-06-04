@@ -25,6 +25,7 @@ import SettingsPaymentGatewayStripe from '../../pages/Setting/Payment/SettingsPa
 import SettingsPaymentGatewayCreem from '../../pages/Setting/Payment/SettingsPaymentGatewayCreem';
 import SettingsPaymentGatewayWaffo from '../../pages/Setting/Payment/SettingsPaymentGatewayWaffo';
 import SettingsPaymentGatewayWaffoPancake from '../../pages/Setting/Payment/SettingsPaymentGatewayWaffoPancake';
+import SettingsPaymentGatewayAlipay from '../../pages/Setting/Payment/SettingsPaymentGatewayAlipay';
 import { API, showError, toBoolean } from '../../helpers';
 import { useTranslation } from 'react-i18next';
 
@@ -60,6 +61,17 @@ const PaymentSetting = () => {
     WaffoPancakeCurrency: 'USD',
     WaffoPancakeUnitPrice: 1.0,
     WaffoPancakeMinTopUp: 1,
+
+    AlipayEnabled: false,
+    AlipaySandbox: false,
+    AlipayAppID: '',
+    AlipayPrivateKey: '',
+    AlipayPublicKey: '',
+    AlipayNotifyURL: '',
+    AlipayReturnURL: '',
+    AlipaySubscriptionReturnURL: '',
+    AlipayGatewayURL: '',
+    AlipaySandboxGatewayURL: '',
   });
 
   let [loading, setLoading] = useState(false);
@@ -118,9 +130,18 @@ const PaymentSetting = () => {
           case 'WaffoPancakeProductID':
           case 'WaffoPancakeReturnURL':
           case 'WaffoPancakeCurrency':
+          case 'AlipayAppID':
+          case 'AlipayPrivateKey':
+          case 'AlipayPublicKey':
+          case 'AlipayNotifyURL':
+          case 'AlipayReturnURL':
+          case 'AlipaySubscriptionReturnURL':
+          case 'AlipayGatewayURL':
+          case 'AlipaySandboxGatewayURL':
             newInputs[item.key] = item.value;
             break;
           case 'WaffoPancakeSandbox':
+          case 'AlipaySandbox':
             newInputs[item.key] = toBoolean(item.value);
             break;
           default:
@@ -193,6 +214,13 @@ const PaymentSetting = () => {
             </Tabs.TabPane>
             <Tabs.TabPane tab={t('Waffo 设置')} itemKey='waffo'>
               <SettingsPaymentGatewayWaffo
+                options={inputs}
+                refresh={onRefresh}
+                hideSectionTitle
+              />
+            </Tabs.TabPane>
+            <Tabs.TabPane tab={t('支付宝设置')} itemKey='alipay'>
+              <SettingsPaymentGatewayAlipay
                 options={inputs}
                 refresh={onRefresh}
                 hideSectionTitle

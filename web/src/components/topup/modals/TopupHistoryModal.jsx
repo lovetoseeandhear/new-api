@@ -52,6 +52,7 @@ const PAYMENT_METHOD_MAP = {
   stripe: 'Stripe',
   creem: 'Creem',
   waffo: 'Waffo',
+  alipay_direct: '支付宝直连',
   alipay: '支付宝',
   wxpay: '微信',
 };
