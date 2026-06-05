@@ -162,6 +162,12 @@ func AlipayNotify(c *gin.Context) {
 		return
 	}
 
+	if err := validateAlipayCallbackAppID(params); err != nil {
+		logger.LogWarn(c.Request.Context(), fmt.Sprintf("支付宝 webhook app_id 校验失败 path=%q client_ip=%s error=%q", c.Request.RequestURI, c.ClientIP(), err.Error()))
+		_, _ = c.Writer.Write([]byte("fail"))
+		return
+	}
+
 	tradeNo := strings.TrimSpace(params["out_trade_no"])
 	if tradeNo == "" {
 		logger.LogWarn(c.Request.Context(), fmt.Sprintf("支付宝 webhook 缺少 out_trade_no client_ip=%s params=%q", c.ClientIP(), common.GetJsonString(params)))
@@ -209,23 +215,51 @@ func SubscriptionAlipayReturn(c *gin.Context) {
 }
 
 func parseAlipayCallbackParams(c *gin.Context) (map[string]string, error) {
-	if err := c.Request.ParseForm(); err != nil {
-		return nil, err
+	if c.Request.Method == http.MethodPost {
+		if err := c.Request.ParseForm(); err != nil {
+			return nil, err
+		}
+		return formValuesToStringMap(c.Request.PostForm), nil
 	}
-	params := lo.Reduce(lo.Keys(c.Request.Form), func(r map[string]string, t string, i int) map[string]string {
-		r[t] = c.Request.Form.Get(t)
+	return formValuesToStringMap(c.Request.URL.Query()), nil
+}
+
+func formValuesToStringMap(values map[string][]string) map[string]string {
+	return lo.Reduce(lo.Keys(values), func(r map[string]string, t string, i int) map[string]string {
+		if len(values[t]) > 0 {
+			r[t] = values[t][0]
+		}
 		return r
 	}, map[string]string{})
-	return params, nil
+}
+
+func validateAlipayCallbackAppID(params map[string]string) error {
+	callbackAppID := strings.TrimSpace(params["app_id"])
+	expectedAppID := strings.TrimSpace(setting.AlipayAppID)
+	if callbackAppID == "" {
+		return errors.New("missing app_id")
+	}
+	if callbackAppID != expectedAppID {
+		return fmt.Errorf("app_id mismatch callback=%s expected=%s", callbackAppID, expectedAppID)
+	}
+	return nil
 }
 
 func fulfillAlipayPaidOrder(c *gin.Context, tradeNo string, params map[string]string) error {
 	payload := common.GetJsonString(params)
-	if err := model.CompleteSubscriptionOrder(tradeNo, payload, model.PaymentMethodAlipayDirect); err == nil {
+	subscriptionOrder := model.GetSubscriptionOrderByTradeNo(tradeNo)
+	if subscriptionOrder != nil {
+		if subscriptionOrder.PaymentMethod != model.PaymentMethodAlipayDirect {
+			return model.ErrPaymentMethodMismatch
+		}
+		if !isAlipayAmountEqual(params["total_amount"], subscriptionOrder.Money) {
+			return fmt.Errorf("支付金额不一致 callback=%s local=%.2f", params["total_amount"], subscriptionOrder.Money)
+		}
+		if err := model.CompleteSubscriptionOrder(tradeNo, payload, model.PaymentMethodAlipayDirect); err != nil {
+			return err
+		}
 		logger.LogInfo(c.Request.Context(), fmt.Sprintf("支付宝订阅订单处理成功 trade_no=%s client_ip=%s", tradeNo, c.ClientIP()))
 		return nil
-	} else if !errors.Is(err, model.ErrSubscriptionOrderNotFound) {
-		return err
 	}
 
 	topUp := model.GetTopUpByTradeNo(tradeNo)
