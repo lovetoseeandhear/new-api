@@ -409,6 +409,15 @@ export function getChannelIcon(channelType) {
   }
 }
 
+const customVendorIconMap = {
+  ArceeAI: '/vendor-icons/arcee.svg',
+  IBM: '/vendor-icons/ibm.svg',
+  InclusionAI: '/vendor-icons/inclusionai.png',
+  Nous: '/vendor-icons/nous.svg',
+  Riverflow: '/vendor-icons/riverflow.svg',
+  TheDrummer: '/vendor-icons/thedrummer.png',
+};
+
 /**
  * 根据图标名称动态获取 LobeHub 图标组件
  * 支持：
@@ -429,6 +438,24 @@ export function getLobeHubIcon(iconName, size = 14) {
   // 解析组件路径与点号链式属性
   const segments = String(iconName).split('.');
   const baseKey = segments[0];
+  const customIconSrc = customVendorIconMap[baseKey];
+  if (customIconSrc) {
+    return (
+      <img
+        src={customIconSrc}
+        alt={`${baseKey} icon`}
+        width={size}
+        height={size}
+        style={{
+          display: 'inline-block',
+          height: size,
+          objectFit: 'contain',
+          width: size,
+        }}
+      />
+    );
+  }
+
   const BaseIcon = LobeIcons[baseKey];
 
   let IconComponent = undefined;
