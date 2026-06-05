@@ -20,6 +20,48 @@ For commercial licensing, please contact support@quantumnous.com
 import React from 'react';
 import { getLobeHubIcon } from '../../../../helpers';
 
+const preferredVendorOrder = [
+  'OpenAI',
+  'Anthropic',
+  'Google',
+  'DeepSeek',
+  'Mistral',
+  'MiniMax',
+  '阿里巴巴',
+  '字节跳动',
+  'Microsoft',
+  'Meta',
+  'NVIDIA',
+  'Cohere',
+  'Perplexity',
+  'Recraft',
+  'BAAI',
+  'Black Forest Labs',
+];
+
+const vendorOrderMap = new Map(
+  preferredVendorOrder.map((vendor, index) => [vendor, index]),
+);
+
+const sortVendorsByPreferredOrder = (vendors) =>
+  vendors.sort((a, b) => {
+    if (a === '未知供应商') return 1;
+    if (b === '未知供应商') return -1;
+
+    const aOrder = vendorOrderMap.has(a)
+      ? vendorOrderMap.get(a)
+      : preferredVendorOrder.length;
+    const bOrder = vendorOrderMap.has(b)
+      ? vendorOrderMap.get(b)
+      : preferredVendorOrder.length;
+
+    if (aOrder !== bOrder) {
+      return aOrder - bOrder;
+    }
+
+    return a.localeCompare(b);
+  });
+
 /**
  * 供应商筛选组件
  * @param {string|'all'} filterVendor 当前值
@@ -55,7 +97,7 @@ const PricingVendors = ({
     });
 
     return {
-      vendors: Array.from(vendors).sort(),
+      vendors: sortVendorsByPreferredOrder(Array.from(vendors)),
       vendorIcons,
       hasUnknownVendor,
     };
@@ -146,7 +188,11 @@ const PricingVendors = ({
               <span className='pricing-vendor-tag-main'>
                 {item.icon ? (
                   <span className='pricing-vendor-tag-icon'>{item.icon}</span>
-                ) : null}
+                ) : (
+                  <span className='pricing-vendor-tag-icon pricing-vendor-tag-icon-fallback'>
+                    {String(item.label || '').charAt(0).toUpperCase()}
+                  </span>
+                )}
                 <span className='pricing-vendor-tag-label'>{item.label}</span>
               </span>
               <span

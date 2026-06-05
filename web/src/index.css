@@ -1369,48 +1369,67 @@ body[theme-mode='dark'] .pricing-aurora-hero {
 }
 
 .pricing-glass-scope .pricing-vendor-tag-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(132px, 1fr));
+  gap: 8px 10px;
 }
 .pricing-glass-scope .pricing-vendor-tag {
-  min-height: 30px;
-  padding: 5px 8px;
-  border-radius: 999px;
+  width: 100%;
+  min-height: 36px;
+  padding: 6px 7px;
+  border-radius: 8px;
   border: 1px solid
-    color-mix(in srgb, var(--plaza-primary-soft) 28%, var(--plaza-border));
-  background: color-mix(
-    in srgb,
-    var(--plaza-primary-soft) 12%,
-    var(--plaza-bg-card)
-  );
+    color-mix(in srgb, var(--plaza-primary-soft) 20%, var(--plaza-border));
+  background: color-mix(in srgb, var(--plaza-bg-card) 96%, transparent);
   color: var(--plaza-text-1);
-  display: inline-flex;
+  display: flex;
   align-items: center;
-  gap: 8px;
+  justify-content: space-between;
+  gap: 6px;
   font-size: 12px;
   cursor: pointer;
   transition:
     border-color 150ms ease-out,
     background-color 150ms ease-out,
-    color 150ms ease-out;
+    color 150ms ease-out,
+    box-shadow 150ms ease-out;
 }
 .pricing-glass-scope .pricing-vendor-tag-main {
-  display: inline-flex;
+  display: flex;
   align-items: center;
+  min-width: 0;
+  flex: 1;
   gap: 6px;
 }
 .pricing-glass-scope .pricing-vendor-tag-icon {
+  width: 20px;
+  height: 20px;
+  flex: 0 0 20px;
   line-height: 0;
   display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.pricing-glass-scope .pricing-vendor-tag-icon-fallback {
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--plaza-text-3) 14%, transparent);
+  color: var(--plaza-text-2);
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
 }
 .pricing-glass-scope .pricing-vendor-tag-label {
   font-weight: 500;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .pricing-glass-scope .pricing-filter-count {
-  min-width: 20px;
+  min-width: 24px;
   height: 18px;
-  border-radius: 999px;
+  flex: 0 0 auto;
+  border-radius: 6px;
   padding: 0 6px;
   display: inline-flex;
   align-items: center;
@@ -1429,10 +1448,13 @@ body[theme-mode='dark'] .pricing-aurora-hero {
 }
 .pricing-glass-scope .pricing-vendor-tag:hover {
   border-color: color-mix(in srgb, var(--plaza-primary) 30%, transparent);
+  background: color-mix(in srgb, var(--plaza-primary-soft) 8%, var(--plaza-bg-card));
+  box-shadow: 0 2px 8px color-mix(in srgb, var(--plaza-primary) 8%, transparent);
 }
 .pricing-glass-scope .pricing-vendor-tag[data-active='true'] {
-  background: color-mix(in srgb, var(--plaza-primary) 16%, var(--plaza-bg-card));
+  background: color-mix(in srgb, var(--plaza-primary) 12%, var(--plaza-bg-card));
   border-color: color-mix(in srgb, var(--plaza-primary) 52%, transparent);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--plaza-primary) 18%, transparent);
 }
 .pricing-glass-scope .pricing-vendor-tag[data-active='true'] .pricing-filter-count {
   background: color-mix(in srgb, var(--plaza-primary) 30%, transparent);
