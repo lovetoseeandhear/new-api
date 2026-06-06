@@ -90,8 +90,28 @@ func GetTopUpInfo(c *gin.Context) {
 		}
 	}
 
+	enableAlipay := isAlipayTopUpEnabled()
+	if enableAlipay {
+		hasAlipayDirect := false
+		for _, method := range payMethods {
+			if method["type"] == model.PaymentMethodAlipayDirect {
+				hasAlipayDirect = true
+				break
+			}
+		}
+		if !hasAlipayDirect {
+			payMethods = append(payMethods, map[string]string{
+				"name":      "支付宝（直连）",
+				"type":      model.PaymentMethodAlipayDirect,
+				"color":     "rgba(var(--semi-blue-5), 1)",
+				"min_topup": strconv.FormatInt(getMinTopup(), 10),
+			})
+		}
+	}
+
 	data := gin.H{
 		"enable_online_topup":        isEpayTopUpEnabled(),
+		"enable_alipay_topup":        enableAlipay,
 		"enable_stripe_topup":        isStripeTopUpEnabled(),
 		"enable_creem_topup":         isCreemTopUpEnabled(),
 		"enable_waffo_topup":         enableWaffo,
@@ -128,6 +148,7 @@ var nonEpayPaymentMethodsForCallback = []string{
 	model.PaymentMethodCreem,
 	model.PaymentMethodWaffo,
 	model.PaymentMethodWaffoPancake,
+	model.PaymentMethodAlipayDirect,
 }
 
 func isNonEpayPaymentMethodForEpayCallback(paymentMethod string) bool {
