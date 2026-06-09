@@ -36,6 +36,10 @@ func ApplyImageSpecRatios(req *dto.ImageRequest, modelName, channelName string) 
 		}
 	}
 
+	if err := rejectUnknownImageSpec(rule, size, quality); err != nil {
+		return nil, err
+	}
+
 	ratios := map[string]float64{}
 	if ratio, ok := lookupImageRatio(rule, size, quality); ok {
 		ratios["media_image"] = ratio
@@ -82,6 +86,8 @@ func ApplyVideoSpecRatios(req relaycommon.TaskSubmitReq, modelName, channelName 
 	ratios := map[string]float64{}
 	if ratio, ok := lookupVideoRatio(rule, size, resolution); ok {
 		ratios["media_video"] = ratio
+	} else if shouldRejectUnknownSpec(rule.UnknownSpecPolicy) && (size != "" || (resolution != "" && hasVideoRatioRules(rule))) {
+		return nil, fmt.Errorf("video size or resolution is not configured: size=%s resolution=%s", size, resolution)
 	}
 	if strings.EqualFold(rule.BillingMode, BillingModePerSecond) && duration > 0 {
 		ratios["seconds"] = float64(duration)
@@ -178,13 +184,52 @@ func videoSpecDuration(req relaycommon.TaskSubmitReq, rule VideoRule) int {
 	return rule.DefaultDurationSeconds
 }
 
+func rejectUnknownImageSpec(rule ImageRule, size, quality string) error {
+	if !shouldRejectUnknownSpec(rule.UnknownSpecPolicy) {
+		return nil
+	}
+	size = NormalizeSize(size)
+	quality = strings.ToLower(strings.TrimSpace(quality))
+	if imageSizeQualityOverrideMatched(rule, size, quality) {
+		return nil
+	}
+	if size != "" && len(rule.SizeRatios) > 0 {
+		if _, ok := rule.SizeRatios[size]; !ok {
+			return fmt.Errorf("image size is not configured: %s", size)
+		}
+	}
+	if quality != "" && len(rule.QualityRatios) > 0 {
+		if _, ok := rule.QualityRatios[quality]; !ok {
+			return fmt.Errorf("image quality is not configured: %s", quality)
+		}
+	}
+	if len(rule.SizeRatios) == 0 && len(rule.QualityRatios) == 0 && len(rule.SizeQualityOverrides) > 0 {
+		return fmt.Errorf("image size and quality are not configured: %s:%s", size, quality)
+	}
+	return nil
+}
+
+func shouldRejectUnknownSpec(policy string) bool {
+	return strings.EqualFold(strings.TrimSpace(policy), UnknownSpecReject)
+}
+
+func imageSizeQualityOverrideMatched(rule ImageRule, size, quality string) bool {
+	if size == "" || quality == "" || len(rule.SizeQualityOverrides) == 0 {
+		return false
+	}
+	_, ok := rule.SizeQualityOverrides[size+":"+quality]
+	return ok
+}
+
+func hasVideoRatioRules(rule VideoRule) bool {
+	return len(rule.SizeRatios) > 0 || len(rule.ResolutionRatios) > 0
+}
+
 func lookupImageRatio(rule ImageRule, size, quality string) (float64, bool) {
 	size = NormalizeSize(size)
 	quality = strings.ToLower(strings.TrimSpace(quality))
-	if size != "" && quality != "" && len(rule.SizeQualityOverrides) > 0 {
-		if ratio, ok := rule.SizeQualityOverrides[size+":"+quality]; ok {
-			return ratio, true
-		}
+	if imageSizeQualityOverrideMatched(rule, size, quality) {
+		return rule.SizeQualityOverrides[size+":"+quality], true
 	}
 	ratio := 1.0
 	matched := false

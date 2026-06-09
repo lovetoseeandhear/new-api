@@ -25,6 +25,7 @@ import {
   getModelPriceItems,
 } from '../../../../../helpers';
 import { getDiscountZheByGroupRatio } from '../../discount';
+import MediaRatioSummary from '../../MediaRatioSummary';
 
 const { Text } = Typography;
 
@@ -201,6 +202,11 @@ const ModelPricingTable = ({
         </div>
       )}
       {renderGroupPriceTable()}
+      <MediaRatioSummary
+        mediaRatio={modelData?.media_ratio}
+        t={t}
+        variant='detail'
+      />
     </Card>
   );
 };

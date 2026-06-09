@@ -45,6 +45,7 @@ import { useMinimumLoadingTime } from '../../../../../hooks/common/useMinimumLoa
 import { renderLimitedItems } from '../../../../common/ui/RenderUtils';
 import { useIsMobile } from '../../../../../hooks/common/useIsMobile';
 import { getDiscountZheByGroupRatio } from '../../discount';
+import MediaRatioSummary from '../../MediaRatioSummary';
 
 const CARD_STYLES = {
   container: 'pricing-card-icon-wrap',
@@ -311,6 +312,11 @@ const PricingCardView = ({
                     <div className='pricing-price-list pricing-price-list-hero'>
                       {formatPriceInfoCard(priceData, t, siteDisplayType)}
                     </div>
+                    <MediaRatioSummary
+                      mediaRatio={model.media_ratio}
+                      t={t}
+                      variant='card'
+                    />
                   </div>
 
                   <div className='pricing-card-meta-zone'>

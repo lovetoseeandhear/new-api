@@ -33,6 +33,7 @@ import {
 } from '../../../../common/ui/RenderUtils';
 import { useIsMobile } from '../../../../../hooks/common/useIsMobile';
 import { getDiscountZheByGroupRatio } from '../../discount';
+import MediaRatioSummary from '../../MediaRatioSummary';
 
 function renderQuotaType(type, t) {
   switch (type) {
@@ -257,6 +258,11 @@ export const getPricingTableColumns = ({
               {item.suffix}
             </div>
           ))}
+          <MediaRatioSummary
+            mediaRatio={record.media_ratio}
+            t={t}
+            variant='inline'
+          />
         </div>
       );
     },

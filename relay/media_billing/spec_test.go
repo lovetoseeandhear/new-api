@@ -30,13 +30,51 @@ func TestApplyVideoSpecRatiosReturnsRejectError(t *testing.T) {
 }
 
 func TestApplyVideoSpecRatiosRejectsUnknownResolution(t *testing.T) {
-	if err := UpdateMediaRatioByJSONString(`{"video":{"models":{"veo-3.1":{"unknown_spec_policy":"reject"}}}}`); err != nil {
+	if err := UpdateMediaRatioByJSONString(`{"video":{"models":{"veo-3.1":{"unknown_spec_policy":"reject","resolution_ratios":{"720p":1}}}}}`); err != nil {
 		t.Fatalf("UpdateMediaRatioByJSONString() error = %v", err)
 	}
 	_, err := ApplyVideoSpecRatios(relaycommon.TaskSubmitReq{
-		Resolution: "",
+		Resolution: "1440p",
 		Size:       "",
 		Metadata:   map[string]any{},
+	}, "veo-3.1", "")
+	if err == nil {
+		t.Fatalf("expected reject error")
+	}
+}
+
+func TestApplyImageSpecRatiosRejectsUnknownSize(t *testing.T) {
+	if err := UpdateMediaRatioByJSONString(`{"image":{"models":{"gpt-image-2":{"unknown_spec_policy":"reject","size_ratios":{"1024x1024":1},"quality_ratios":{"hd":2}}}}}`); err != nil {
+		t.Fatalf("UpdateMediaRatioByJSONString() error = %v", err)
+	}
+	_, err := ApplyImageSpecRatios(&dto.ImageRequest{
+		Size:    "999x999",
+		Quality: "hd",
+	}, "gpt-image-2", "")
+	if err == nil {
+		t.Fatalf("expected reject error")
+	}
+}
+
+func TestApplyImageSpecRatiosRejectsUnknownQuality(t *testing.T) {
+	if err := UpdateMediaRatioByJSONString(`{"image":{"models":{"gpt-image-2":{"unknown_spec_policy":"reject","size_ratios":{"1024x1024":1},"quality_ratios":{"standard":1}}}}}`); err != nil {
+		t.Fatalf("UpdateMediaRatioByJSONString() error = %v", err)
+	}
+	_, err := ApplyImageSpecRatios(&dto.ImageRequest{
+		Size:    "1024x1024",
+		Quality: "ultra",
+	}, "gpt-image-2", "")
+	if err == nil {
+		t.Fatalf("expected reject error")
+	}
+}
+
+func TestApplyVideoSpecRatiosRejectsUnknownSize(t *testing.T) {
+	if err := UpdateMediaRatioByJSONString(`{"video":{"models":{"veo-3.1":{"unknown_spec_policy":"reject","size_ratios":{"1280x720":1},"resolution_ratios":{"720p":1}}}}}`); err != nil {
+		t.Fatalf("UpdateMediaRatioByJSONString() error = %v", err)
+	}
+	_, err := ApplyVideoSpecRatios(relaycommon.TaskSubmitReq{
+		Size: "999x999",
 	}, "veo-3.1", "")
 	if err == nil {
 		t.Fatalf("expected reject error")
