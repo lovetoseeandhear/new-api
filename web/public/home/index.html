@@ -1,9 +1,18 @@
 <!doctype html>
-<html lang="en">
+<html lang="zh">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>My Google AI Studio App</title>
+    <title>new-api 首页</title>
+    <style>
+      html,
+      body,
+      #root {
+        min-height: 100%;
+        margin: 0;
+        background: #0a0c10;
+      }
+    </style>
     <script
       type="module"
       crossorigin
@@ -15,6 +24,144 @@
     <div id="root"></div>
     <script>
       (function () {
+        function findByText(selector, text) {
+          return Array.prototype.slice
+            .call(document.querySelectorAll(selector))
+            .find(function (node) {
+              return (node.textContent || '').trim() === text;
+            });
+        }
+
+        function closestWithClass(node, token) {
+          var current = node;
+          while (
+            current &&
+            (!current.className ||
+              String(current.className).indexOf(token) === -1)
+          ) {
+            current = current.parentElement;
+          }
+          return current;
+        }
+
+        function injectPremiumHomeStyle() {
+          if (document.getElementById('new-api-premium-home-style')) return;
+
+          document.body.classList.add('new-api-premium-home');
+          var style = document.createElement('style');
+          style.id = 'new-api-premium-home-style';
+          style.textContent = [
+            ':root{color-scheme:dark;--na-bg:oklch(14% .014 245);--na-panel:oklch(18% .017 245);--na-panel-strong:oklch(22% .019 245);--na-line:oklch(78% .026 225 / .15);--na-line-strong:oklch(82% .06 195 / .34);--na-text:oklch(92% .012 228);--na-heading:oklch(88% .014 226);--na-body:oklch(74% .028 228);--na-muted:oklch(68% .026 230);--na-subtle:oklch(56% .026 230);--na-accent:oklch(79% .15 188);--na-accent-soft:oklch(79% .15 188 / .14);--na-wash:oklch(24% .025 225 / .34);--na-shadow:0 32px 90px oklch(6% .01 245 / .38);}',
+            'html,body,#root{min-height:100%;background:var(--na-bg)!important;}',
+            'body.new-api-premium-home{font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif!important;color:var(--na-text);background:radial-gradient(circle at 82% -10%,oklch(55% .11 188 / .24),transparent 32rem),linear-gradient(115deg,transparent 0 57%,oklch(78% .08 205 / .07) 57.1% 57.35%,transparent 57.45%),linear-gradient(180deg,oklch(13% .015 245),oklch(17% .013 245) 48%,oklch(11% .01 245))!important;overflow-x:hidden;}',
+            'body.new-api-premium-home:before{content:"";position:fixed;inset:0;pointer-events:none;background-image:linear-gradient(oklch(96% .01 220 / .04) 1px,transparent 1px),linear-gradient(90deg,oklch(96% .01 220 / .032) 1px,transparent 1px);background-size:88px 88px;mask-image:linear-gradient(to bottom,black,transparent 68%);}',
+            'body.new-api-premium-home:after{content:"";position:fixed;inset:0;pointer-events:none;background:radial-gradient(circle at 88% 18%,oklch(79% .15 188 / .11),transparent 24rem),radial-gradient(circle at 8% 46%,oklch(38% .08 225 / .16),transparent 38rem);mix-blend-mode:screen;}',
+            'body.new-api-premium-home header{background:oklch(12% .014 245 / .82)!important;border-bottom:1px solid var(--na-line)!important;box-shadow:none!important;backdrop-filter:blur(20px) saturate(145%)!important;}',
+            'body.new-api-premium-home header [data-new-api-logo="true"]{width:2.35rem!important;height:2.35rem!important;border:1px solid var(--na-line-strong)!important;background:oklch(17% .018 245)!important;box-shadow:inset 0 1px 0 oklch(100% 0 0 / .08)!important;}',
+            'body.new-api-premium-home .new-api-brand-label{background:none!important;-webkit-text-fill-color:var(--na-text)!important;color:var(--na-text)!important;font-size:1.05rem!important;letter-spacing:-.02em!important;text-shadow:none!important;}',
+            'body.new-api-premium-home header a,body.new-api-premium-home header button{color:var(--na-muted)!important;}',
+            'body.new-api-premium-home header a:hover,body.new-api-premium-home header button:hover{color:var(--na-text)!important;}',
+            'body.new-api-premium-home .new-api-home-hero{min-height:100dvh!important;padding:clamp(8rem,12vw,11rem) clamp(1.25rem,4vw,4rem) clamp(5rem,8vw,7.5rem)!important;display:grid!important;align-items:center!important;overflow:hidden!important;}',
+            'body.new-api-premium-home .new-api-home-hero:before{content:"";position:absolute;right:max(1rem,7vw);top:7rem;width:min(44vw,38rem);aspect-ratio:1;border:1px solid var(--na-line);border-radius:50%;background:radial-gradient(circle,oklch(79% .15 188 / .1),transparent 61%);box-shadow:inset 0 0 0 1px oklch(100% 0 0 / .035);}',
+            'body.new-api-premium-home .new-api-home-hero:after{content:"";position:absolute;right:clamp(1rem,8vw,6.5rem);bottom:clamp(1.5rem,5vw,4rem);width:1px;height:18rem;background:linear-gradient(to bottom,transparent,var(--na-accent),transparent);opacity:.5;}',
+            'body.new-api-premium-home .new-api-hero-content{max-width:88rem!important;margin:0 auto!important;text-align:left!important;display:grid!important;grid-template-columns:minmax(0,1.18fr) minmax(20rem,.82fr)!important;column-gap:clamp(2rem,8vw,8rem)!important;align-items:end!important;}',
+            'body.new-api-premium-home .new-api-hero-badge{grid-column:1!important;width:max-content!important;margin:0 0 1.65rem!important;border-radius:999px!important;border:1px solid var(--na-line-strong)!important;background:oklch(20% .018 245 / .52)!important;box-shadow:none!important;}',
+            'body.new-api-premium-home .new-api-hero-badge span{color:var(--na-accent)!important;}',
+            'body.new-api-premium-home .new-api-hero-title{grid-column:1!important;max-width:100%!important;width:max-content!important;font-size:clamp(2.8rem,7.2vw,7.1rem)!important;line-height:1.02!important;letter-spacing:-.055em!important;margin:0 0 1.05rem!important;white-space:nowrap!important;text-wrap:nowrap!important;}',
+            'body.new-api-premium-home .new-api-hero-title span{display:block!important;background:none!important;-webkit-text-fill-color:var(--na-accent)!important;color:var(--na-accent)!important;text-shadow:0 0 52px oklch(79% .15 188 / .26)!important;}',
+            'body.new-api-premium-home .new-api-hero-subtitle{grid-column:1!important;margin:0!important;color:var(--na-accent)!important;font-size:clamp(1.1rem,1.5vw,1.35rem)!important;font-weight:700!important;line-height:1.35!important;letter-spacing:.01em!important;text-shadow:0 0 30px oklch(79% .15 188 / .2)!important;}',
+            'body.new-api-premium-home .new-api-hero-copy{grid-column:2!important;align-self:center!important;max-width:36rem!important;margin:0!important;color:var(--na-body)!important;font-size:clamp(1.08rem,1.8vw,1.35rem)!important;line-height:1.72!important;}',
+            'body.new-api-premium-home .new-api-hero-copy span{color:var(--na-accent)!important;text-decoration:none!important;border-bottom:1px solid oklch(79% .15 188 / .5)!important;}',
+            'body.new-api-premium-home .new-api-hero-actions{grid-column:1 / -1!important;justify-content:flex-start!important;margin:3rem 0 0!important;max-width:none!important;gap:1rem!important;}',
+            'body.new-api-premium-home button{border-radius:999px!important;transition:transform .22s ease,background .22s ease,border-color .22s ease,box-shadow .22s ease,color .22s ease!important;}',
+            'body.new-api-premium-home #btn-experience-hero,body.new-api-premium-home header button:last-child{background:var(--na-accent)!important;color:oklch(12% .018 220)!important;box-shadow:0 18px 48px oklch(79% .15 188 / .2),inset 0 1px 0 oklch(100% 0 0 / .55)!important;border:1px solid oklch(92% .08 188 / .42)!important;}',
+            'body.new-api-premium-home #btn-models-hero,body.new-api-premium-home .new-api-secondary-button{background:oklch(21% .018 245 / .76)!important;border:1px solid var(--na-line)!important;color:var(--na-text)!important;box-shadow:inset 0 1px 0 oklch(100% 0 0 / .06)!important;}',
+            'body.new-api-premium-home button:hover{transform:translateY(-1px)!important;}',
+            'body.new-api-premium-home .new-api-trust-grid{grid-column:1 / -1!important;max-width:none!important;width:100%;}',
+            'body.new-api-premium-home .new-api-trust-grid-primary{margin-top:clamp(4rem,7vw,6rem)!important;gap:0!important;border-top:1px solid var(--na-line)!important;border-bottom:1px solid var(--na-line)!important;}',
+            'body.new-api-premium-home .new-api-trust-grid-secondary{margin-top:0!important;padding:0!important;background:transparent!important;border:0!important;backdrop-filter:none!important;gap:0!important;border-bottom:1px solid var(--na-line)!important;}',
+            'body.new-api-premium-home .new-api-trust-card,body.new-api-premium-home .new-api-trust-mini{backdrop-filter:none!important;background:transparent!important;border:0!important;border-radius:0!important;box-shadow:none!important;}',
+            'body.new-api-premium-home .new-api-trust-card{min-height:176px;text-align:left!important;padding:1.7rem 1.55rem!important;}',
+            'body.new-api-premium-home .new-api-trust-card + .new-api-trust-card{border-left:1px solid var(--na-line)!important;}',
+            'body.new-api-premium-home .new-api-trust-card:hover,body.new-api-premium-home .new-api-trust-mini:hover{background:oklch(100% 0 0 / .025)!important;}',
+            'body.new-api-premium-home .new-api-trust-card-icon{margin-left:0!important;margin-right:0!important;width:2.35rem!important;height:2.35rem!important;border-radius:999px!important;background:var(--na-accent-soft)!important;border-color:oklch(79% .15 188 / .32)!important;}',
+            'body.new-api-premium-home .new-api-trust-card h4{font-size:1.05rem!important;margin-top:.35rem!important;margin-bottom:.65rem!important;}',
+            'body.new-api-premium-home .new-api-trust-card p{font-size:.98rem!important;line-height:1.74!important;color:var(--na-body)!important;}',
+            'body.new-api-premium-home .new-api-trust-mini{min-height:124px;padding:1.45rem 1.55rem!important;}',
+            'body.new-api-premium-home .new-api-trust-mini + .new-api-trust-mini{border-left:1px solid var(--na-line)!important;}',
+            'body.new-api-premium-home .new-api-trust-mini span{font-size:.84rem!important;}',
+            'body.new-api-premium-home .new-api-trust-mini p{font-size:.94rem!important;line-height:1.72!important;color:var(--na-body)!important;}',
+            'body.new-api-premium-home section:not(.new-api-home-hero){background:transparent!important;}',
+            'body.new-api-premium-home .new-api-section-models,body.new-api-premium-home .new-api-section-stage,body.new-api-premium-home .new-api-section-why,body.new-api-premium-home .new-api-section-core,body.new-api-premium-home .new-api-section-guide,body.new-api-premium-home .new-api-section-demo{padding-top:clamp(5rem,8vw,7.5rem)!important;padding-bottom:clamp(5rem,8vw,7.5rem)!important;border-top:1px solid var(--na-line)!important;}',
+            'body.new-api-premium-home .new-api-section-models h2,body.new-api-premium-home .new-api-section-why h2,body.new-api-premium-home .new-api-section-core h2,body.new-api-premium-home .new-api-section-guide h2,body.new-api-premium-home .new-api-section-demo h2{font-size:clamp(2.05rem,3.4vw,3.65rem)!important;line-height:1.08!important;letter-spacing:-.045em!important;color:var(--na-heading)!important;}',
+            'body.new-api-premium-home .new-api-section-models h2 + p,body.new-api-premium-home .new-api-section-why h2 + p,body.new-api-premium-home .new-api-section-guide h2 + p,body.new-api-premium-home .new-api-section-demo p{font-size:clamp(1.04rem,1.25vw,1.18rem)!important;line-height:1.78!important;color:var(--na-body)!important;}',
+            'body.new-api-premium-home .new-api-model-marquee{position:relative!important;overflow:hidden!important;margin-inline:calc(clamp(1rem,4vw,4rem) * -1)!important;padding-inline:clamp(1rem,4vw,4rem)!important;}',
+            'body.new-api-premium-home .new-api-model-marquee:before,body.new-api-premium-home .new-api-model-marquee:after{content:"";position:absolute;top:0;bottom:0;width:clamp(2.5rem,8vw,8rem);z-index:2;pointer-events:none;}',
+            'body.new-api-premium-home .new-api-model-marquee:before{left:0;background:linear-gradient(90deg,var(--na-bg),transparent);}',
+            'body.new-api-premium-home .new-api-model-marquee:after{right:0;background:linear-gradient(270deg,var(--na-bg),transparent);}',
+            'body.new-api-premium-home .new-api-model-track{display:flex!important;width:max-content!important;gap:1.1rem!important;animation:newApiModelMarquee 46s linear infinite!important;}',
+            'body.new-api-premium-home .new-api-model-marquee:hover .new-api-model-track{animation-play-state:paused!important;}',
+            'body.new-api-premium-home .new-api-model-track .glass-card{width:23rem!important;min-height:19rem!important;flex:0 0 23rem!important;padding:1.45rem!important;display:flex!important;flex-direction:column!important;gap:1rem!important;}',
+            'body.new-api-premium-home .new-api-model-track .glass-card h3{font-size:1.34rem!important;line-height:1.18!important;letter-spacing:-.02em!important;overflow-wrap:anywhere!important;}',
+            'body.new-api-premium-home .new-api-model-card-provider{font-size:.94rem!important;line-height:1.45!important;color:var(--na-muted)!important;}',
+            'body.new-api-premium-home .new-api-model-card-tags{display:flex!important;flex-wrap:wrap!important;gap:.45rem!important;}',
+            'body.new-api-premium-home .new-api-model-card-tags span{border:1px solid var(--na-line)!important;background:oklch(100% 0 0 / .03)!important;color:var(--na-body)!important;border-radius:.45rem!important;padding:.2rem .48rem!important;font-size:.74rem!important;font-weight:700!important;letter-spacing:.02em!important;}',
+            'body.new-api-premium-home .new-api-model-card-meta{margin-top:auto!important;border-top:1px solid var(--na-line)!important;padding-top:1rem!important;display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:.65rem!important;}',
+            'body.new-api-premium-home .new-api-model-card-meta div{border:1px solid var(--na-line)!important;background:oklch(100% 0 0 / .025)!important;border-radius:.7rem!important;padding:.62rem .7rem!important;min-width:0!important;}',
+            'body.new-api-premium-home .new-api-model-card-meta span{display:block!important;color:var(--na-subtle)!important;font-size:.72rem!important;line-height:1.2!important;margin-bottom:.24rem!important;}',
+            'body.new-api-premium-home .new-api-model-card-meta strong{display:block!important;color:var(--na-text)!important;font-size:.96rem!important;line-height:1.25!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;}',
+            'body.new-api-premium-home .new-api-model-card-discount strong{color:var(--na-accent)!important;}',
+            '@keyframes newApiModelMarquee{from{transform:translateX(0);}to{transform:translateX(-50%);}}',
+            'body.new-api-premium-home .new-api-section-models .glass-card{background:transparent!important;border:0!important;border-top:1px solid var(--na-line)!important;border-radius:0!important;box-shadow:none!important;backdrop-filter:none!important;padding:1.55rem 0!important;}',
+            'body.new-api-premium-home .new-api-section-models .glass-card:hover{border-color:var(--na-line-strong)!important;background:oklch(100% 0 0 / .018)!important;}',
+            'body.new-api-premium-home .new-api-section-models .new-api-model-track .glass-card{width:23rem!important;min-height:19rem!important;flex:0 0 23rem!important;padding:1.45rem!important;background:linear-gradient(145deg,oklch(100% 0 0 / .055),oklch(100% 0 0 / .018))!important;border:1px solid var(--na-line)!important;border-radius:1rem!important;box-shadow:inset 0 1px 0 oklch(100% 0 0 / .055)!important;backdrop-filter:blur(18px)!important;}',
+            'body.new-api-premium-home .new-api-section-models h3{font-size:1.28rem!important;color:var(--na-heading)!important;}',
+            'body.new-api-premium-home .new-api-section-stage .new-api-stage-grid{grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:1.25rem!important;}',
+            'body.new-api-premium-home .new-api-gateway-card{isolation:isolate;border-radius:0!important;background:linear-gradient(115deg,oklch(100% 0 0 / .055),transparent 58%)!important;border:0!important;border-top:1px solid var(--na-line-strong)!important;border-bottom:1px solid var(--na-line)!important;box-shadow:none!important;min-height:460px!important;}',
+            'body.new-api-premium-home .new-api-section-stage .new-api-gateway-card{grid-column:1 / -1!important;}',
+            'body.new-api-premium-home .new-api-gateway-card h3{color:var(--na-text)!important;font-size:clamp(2.2rem,4vw,4.45rem)!important;line-height:1!important;letter-spacing:-.055em!important;text-shadow:0 0 40px oklch(79% .15 188 / .18)!important;white-space:nowrap!important;}',
+            'body.new-api-premium-home .new-api-gateway-card p{color:var(--na-body)!important;font-size:clamp(1.02rem,1.18vw,1.16rem)!important;line-height:1.82!important;max-width:42rem!important;}',
+            'body.new-api-premium-home .new-api-gateway-card button{background:var(--na-accent)!important;color:oklch(12% .015 230)!important;border:1px solid oklch(92% .08 188 / .42)!important;}',
+            'body.new-api-premium-home .new-api-gateway-visual{right:clamp(1.5rem,4vw,4rem)!important;bottom:clamp(1.25rem,3vw,2.8rem)!important;width:clamp(24rem,38vw,36rem)!important;height:clamp(18rem,29vw,28rem)!important;}',
+            'body.new-api-premium-home .new-api-gateway-visual > *{transform-origin:center!important;}',
+            'body.new-api-premium-home .new-api-section-stage .new-api-stage-side-column{display:contents!important;}',
+            'body.new-api-premium-home .new-api-section-stage .new-api-stage-side-card{background:oklch(100% 0 0 / .025)!important;border:1px solid var(--na-line)!important;border-radius:1rem!important;box-shadow:none!important;backdrop-filter:none!important;min-height:206px!important;padding:1.55rem!important;justify-content:flex-start!important;}',
+            'body.new-api-premium-home .new-api-section-stage .new-api-stage-side-card div[class*="rounded-2xl"]{width:2.75rem!important;height:2.75rem!important;border-radius:999px!important;background:var(--na-accent-soft)!important;border-color:oklch(79% .15 188 / .28)!important;}',
+            'body.new-api-premium-home .new-api-section-stage .new-api-stage-side-card h4{font-size:1.2rem!important;line-height:1.25!important;margin-bottom:.55rem!important;color:var(--na-heading)!important;}',
+            'body.new-api-premium-home .new-api-section-stage .new-api-stage-side-card p{font-size:1rem!important;line-height:1.72!important;color:var(--na-body)!important;}',
+            'body.new-api-premium-home .new-api-section-stage .new-api-stage-feature-card{background:oklch(100% 0 0 / .025)!important;border-color:var(--na-line)!important;border-radius:1rem!important;padding:1.55rem!important;}',
+            'body.new-api-premium-home .new-api-section-stage .new-api-stage-feature-card h4{font-size:1.22rem!important;line-height:1.25!important;color:var(--na-heading)!important;}',
+            'body.new-api-premium-home .new-api-section-stage .new-api-stage-feature-card p{font-size:1rem!important;line-height:1.7!important;color:var(--na-body)!important;}',
+            'body.new-api-premium-home .new-api-section-why .new-api-compare-table{background:oklch(16% .014 245 / .72)!important;border:1px solid var(--na-line)!important;border-radius:1.1rem!important;box-shadow:none!important;backdrop-filter:none!important;overflow:hidden!important;}',
+            'body.new-api-premium-home .new-api-section-why .new-api-compare-table > div:first-child{grid-template-columns:minmax(8.5rem,.72fr) minmax(0,1.12fr) minmax(0,1.12fr)!important;align-items:stretch!important;background:oklch(100% 0 0 / .026)!important;border-bottom:1px solid var(--na-line)!important;color:var(--na-subtle)!important;font-size:.82rem!important;letter-spacing:.08em!important;}',
+            'body.new-api-premium-home .new-api-section-why .new-api-compare-table > div:last-child > div{grid-template-columns:minmax(8.5rem,.72fr) minmax(0,1.12fr) minmax(0,1.12fr)!important;min-height:132px!important;padding:0!important;gap:0!important;border-color:var(--na-line)!important;}',
+            'body.new-api-premium-home .new-api-section-why .new-api-compare-table > div:last-child > div > div{display:flex!important;align-items:center!important;padding:1.35rem 1.45rem!important;font-size:1rem!important;line-height:1.72!important;color:var(--na-body)!important;}',
+            'body.new-api-premium-home .new-api-section-why .new-api-compare-table > div:last-child > div > div:first-child{color:var(--na-heading)!important;font-size:1.03rem!important;font-weight:700!important;border-left:0!important;}',
+            'body.new-api-premium-home .new-api-section-why .new-api-compare-table > div:last-child > div > div:nth-child(2){color:oklch(68% .038 20)!important;background:oklch(42% .065 20 / .075)!important;border-left:1px solid var(--na-line)!important;}',
+            'body.new-api-premium-home .new-api-section-why .new-api-compare-table > div:last-child > div > div:nth-child(3){color:oklch(82% .055 190)!important;background:oklch(42% .085 190 / .08)!important;border-left:1px solid var(--na-line)!important;border-radius:0!important;}',
+            'body.new-api-premium-home .new-api-section-why .new-api-metric-panel,body.new-api-premium-home .new-api-section-core .glass-card,body.new-api-premium-home .new-api-section-guide .glass-card{background:transparent!important;border:0!important;border-top:1px solid var(--na-line)!important;border-radius:0!important;box-shadow:none!important;backdrop-filter:none!important;}',
+            'body.new-api-premium-home .new-api-section-why .new-api-metric-panel{padding:1.35rem 0!important;}',
+            'body.new-api-premium-home .new-api-section-why .new-api-metric-panel div:first-child{font-size:clamp(2.35rem,3.8vw,4.1rem)!important;line-height:1!important;}',
+            'body.new-api-premium-home .new-api-section-why .new-api-metric-panel p{font-size:1rem!important;line-height:1.74!important;color:var(--na-body)!important;}',
+            'body.new-api-premium-home .new-api-section-core .glass-card,body.new-api-premium-home .new-api-section-guide .glass-card{padding:1.8rem 0!important;}',
+            'body.new-api-premium-home .new-api-section-core .glass-card h3,body.new-api-premium-home .new-api-section-guide .glass-card h3{font-size:clamp(1.35rem,2vw,1.85rem)!important;}',
+            'body.new-api-premium-home .new-api-section-core .glass-card p,body.new-api-premium-home .new-api-section-guide .glass-card p{font-size:1.05rem!important;line-height:1.82!important;color:var(--na-body)!important;}',
+            'body.new-api-premium-home .new-api-section-guide .glass-card > div:first-child + div:before{content:"";display:block;width:3rem;height:1px;background:var(--na-accent);margin-bottom:1.2rem;}',
+            'body.new-api-premium-home .new-api-section-demo .glass-card{background:oklch(12% .013 245 / .82)!important;border:1px solid var(--na-line)!important;border-radius:1rem!important;box-shadow:var(--na-shadow)!important;}',
+            'body.new-api-premium-home h2{letter-spacing:-.04em!important;color:var(--na-heading)!important;}',
+            'body.new-api-premium-home h3,body.new-api-premium-home h4{letter-spacing:-.025em!important;color:var(--na-heading)!important;}',
+            'body.new-api-premium-home p,body.new-api-premium-home li{color:var(--na-body)!important;}',
+            'body.new-api-premium-home .text-brand-cyan,body.new-api-premium-home .text-brand-blue,body.new-api-premium-home .text-brand-purple{color:var(--na-accent)!important;}',
+            'body.new-api-premium-home .bg-brand-cyan\\/10,body.new-api-premium-home .bg-brand-blue\\/10,body.new-api-premium-home .bg-brand-purple\\/10{background:var(--na-accent-soft)!important;}',
+            'body.new-api-premium-home .border-brand-cyan\\/25,body.new-api-premium-home .border-brand-blue\\/20,body.new-api-premium-home .border-brand-purple\\/25{border-color:oklch(79% .15 188 / .34)!important;}',
+            '@media(max-width:1023px){body.new-api-premium-home .new-api-section-stage .new-api-stage-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;}body.new-api-premium-home .new-api-section-stage .new-api-stage-side-card{min-height:auto!important;}body.new-api-premium-home .new-api-gateway-card h3{font-size:clamp(2rem,5vw,3.4rem)!important;}body.new-api-premium-home .new-api-gateway-visual{width:22rem!important;height:17rem!important;right:1.25rem!important;}}',
+            '@media(max-width:900px){body.new-api-premium-home .new-api-hero-content{grid-template-columns:1fr!important;}body.new-api-premium-home .new-api-hero-copy{grid-column:1!important;margin-top:1.25rem!important;}body.new-api-premium-home .new-api-home-hero:after{display:none;}body.new-api-premium-home .new-api-hero-title{max-width:none!important;}}',
+            '@media(max-width:767px){body.new-api-premium-home header{position:sticky!important;top:0!important;}body.new-api-premium-home .new-api-home-hero{min-height:auto!important;padding:6.75rem 1rem 3.5rem!important;}body.new-api-premium-home .new-api-hero-title{font-size:clamp(2.45rem,12vw,3.45rem)!important;line-height:1.04!important;letter-spacing:-.045em!important;}body.new-api-premium-home .new-api-model-track .glass-card,body.new-api-premium-home .new-api-section-models .new-api-model-track .glass-card{width:19rem!important;flex-basis:19rem!important;min-height:18.5rem!important;}body.new-api-premium-home .new-api-hero-actions{flex-direction:column!important;align-items:stretch!important;}body.new-api-premium-home .new-api-hero-actions button{width:100%!important;justify-content:center!important;}body.new-api-premium-home .new-api-section-stage .new-api-stage-grid{grid-template-columns:1fr!important;}body.new-api-premium-home .new-api-trust-grid-primary,body.new-api-premium-home .new-api-trust-grid-secondary{max-width:32rem!important;grid-template-columns:1fr!important;}body.new-api-premium-home .new-api-trust-card + .new-api-trust-card,body.new-api-premium-home .new-api-trust-mini + .new-api-trust-mini{border-left:0!important;border-top:1px solid var(--na-line)!important;}body.new-api-premium-home .new-api-gateway-card{min-height:auto!important;}body.new-api-premium-home .new-api-gateway-card h3{white-space:normal!important;}}',
+            '@media(prefers-reduced-motion:reduce){body.new-api-premium-home *,body.new-api-premium-home *:before,body.new-api-premium-home *:after{animation:none!important;transition:none!important;scroll-behavior:auto!important;}}',
+          ].join('');
+          document.head.appendChild(style);
+        }
+
         function replaceBrandLogos() {
           var brandLabels = Array.prototype.slice
             .call(document.querySelectorAll('span'))
@@ -23,6 +170,7 @@
             });
 
           brandLabels.forEach(function (label) {
+            label.classList.add('new-api-brand-label');
             var logoWrap = label.previousElementSibling;
             if (
               !logoWrap ||
@@ -37,22 +185,362 @@
           });
         }
 
-        function restyleGatewayCard() {
-          var gatewayTitle = Array.prototype.slice
-            .call(document.querySelectorAll('h3'))
+        function tagHeroSection() {
+          var heroTitle = Array.prototype.slice
+            .call(document.querySelectorAll('h1'))
             .find(function (node) {
-              return (node.textContent || '').trim() === '异构网关 统一融合';
+              var text = node.textContent || '';
+              return (
+                text.indexOf('一个 API 接入') !== -1 ||
+                text.indexOf('大模型聚合平台') !== -1
+              );
             });
+          if (!heroTitle) return;
+
+          var heroSection = heroTitle.closest
+            ? heroTitle.closest('section')
+            : null;
+          var heroContent = heroTitle.parentElement;
+          var experienceButton = document.getElementById('btn-experience-hero');
+          var actionGroup = experienceButton && experienceButton.parentElement;
+          var badge = heroContent && heroContent.firstElementChild;
+
+          if (heroSection) heroSection.classList.add('new-api-home-hero');
+          if (heroContent) heroContent.classList.add('new-api-hero-content');
+          if (badge) badge.classList.add('new-api-hero-badge');
+          heroTitle.classList.add('new-api-hero-title');
+          if (actionGroup) actionGroup.classList.add('new-api-hero-actions');
+
+          if (
+            heroTitle.getAttribute('data-new-api-title-rewritten') !== 'true'
+          ) {
+            heroTitle.setAttribute('data-new-api-title-rewritten', 'true');
+            heroTitle.textContent = '大模型聚合平台';
+          }
+
+          var subtitle = document.querySelector('.new-api-hero-subtitle');
+          if (!subtitle) {
+            subtitle = document.createElement('p');
+            subtitle.className = 'new-api-hero-subtitle';
+            subtitle.textContent = '一个 API 接入全球顶尖模型';
+            heroTitle.insertAdjacentElement('afterend', subtitle);
+          }
+
+          var heroCopy =
+            subtitle.nextElementSibling || heroTitle.nextElementSibling;
+          if (heroCopy) heroCopy.classList.add('new-api-hero-copy');
+
+          var modelsButton = document.getElementById('btn-models-hero');
+          if (modelsButton)
+            modelsButton.classList.add('new-api-secondary-button');
+        }
+
+        function tagContentSections() {
+          var modelsHeading = findByText('h2', '推荐模型提供商');
+          if (modelsHeading) {
+            modelsHeading.textContent = '推荐模型供应商';
+          }
+
+          [
+            ['推荐模型供应商', 'new-api-section-models'],
+            ['为什么选择 Flowbay API?', 'new-api-section-why'],
+            ['核心优势', 'new-api-section-core'],
+            ['操作指南 & 如何使用', 'new-api-section-guide'],
+            ['极简接入', 'new-api-section-demo'],
+          ].forEach(function (entry) {
+            var heading = Array.prototype.slice
+              .call(document.querySelectorAll('h2'))
+              .find(function (node) {
+                return (node.textContent || '').indexOf(entry[0]) !== -1;
+              });
+            var section =
+              heading && heading.closest ? heading.closest('section') : null;
+            if (section) section.classList.add(entry[1]);
+          });
+        }
+
+        function tagWhySectionPanels() {
+          var section = document.querySelector('.new-api-section-why');
+          if (!section) return;
+
+          var panels = Array.prototype.slice.call(
+            section.querySelectorAll('.glass-card'),
+          );
+          if (panels[0]) panels[0].classList.add('new-api-compare-table');
+          panels.slice(1).forEach(function (panel) {
+            panel.classList.add('new-api-metric-panel');
+          });
+        }
+
+        var modelShowcaseLoaded = false;
+
+        function getVendorById(vendors, vendorId) {
+          if (!vendors || vendorId === undefined || vendorId === null)
+            return null;
+
+          if (Array.isArray(vendors)) {
+            return (
+              vendors.find(function (vendor) {
+                return String(vendor.id) === String(vendorId);
+              }) || null
+            );
+          }
+
+          return vendors[String(vendorId)] || vendors[vendorId] || null;
+        }
+
+        function getVendorName(model, vendors) {
+          var vendor = getVendorById(vendors, model && model.vendor_id);
+          if (vendor && vendor.name) return vendor.name;
+          if (model && model.icon) return String(model.icon).split('.')[0];
+          var name = (
+            model && model.model_name ? model.model_name : ''
+          ).toLowerCase();
+          if (name.indexOf('claude') !== -1) return 'Anthropic';
+          if (name.indexOf('gemini') !== -1) return 'Google';
+          if (name.indexOf('gpt') !== -1 || name.indexOf('o4') !== -1)
+            return 'OpenAI';
+          return 'AI Model';
+        }
+
+        function getDiscountZhe(groupRatio) {
+          var ratio = Number(groupRatio);
+          if (!Number.isFinite(ratio)) return null;
+          var zhe = Math.max(0, Math.min(10, (ratio / 6.8) * 10));
+          return Number(zhe.toFixed(1));
+        }
+
+        function formatRatio(value) {
+          var ratio = Number(value);
+          if (!Number.isFinite(ratio)) return '-';
+          if (ratio >= 10) return ratio.toFixed(2).replace(/\.?0+$/, '') + 'x';
+          if (ratio >= 1) return ratio.toFixed(3).replace(/\.?0+$/, '') + 'x';
+          return ratio.toFixed(4).replace(/0+$/, '').replace(/\.$/, '') + 'x';
+        }
+
+        function pickPrimaryGroup(model, groupRatio) {
+          var groups = Array.isArray(model.enable_groups)
+            ? model.enable_groups
+            : [];
+          var selected = groups[0] || '默认分组';
+          var selectedRatio = groupRatio && groupRatio[selected];
+
+          groups.forEach(function (group) {
+            var ratio = groupRatio && groupRatio[group];
+            if (
+              ratio !== undefined &&
+              (selectedRatio === undefined || ratio < selectedRatio)
+            ) {
+              selected = group;
+              selectedRatio = ratio;
+            }
+          });
+
+          return {
+            name: selected,
+            ratio: selectedRatio === undefined ? 1 : selectedRatio,
+          };
+        }
+
+        function getModelFamily(name) {
+          var lower = String(name || '').toLowerCase();
+          if (lower.indexOf('gpt') !== -1) return 'gpt';
+          if (lower.indexOf('claude') !== -1) return 'claude';
+          if (lower.indexOf('gemini') !== -1) return 'gemini';
+          return 'other';
+        }
+
+        function modelFamilyRank(family) {
+          if (family === 'gpt') return 0;
+          if (family === 'claude') return 1;
+          if (family === 'gemini') return 2;
+          return 9;
+        }
+
+        function modelMainstreamScore(model) {
+          var name = String(model && model.model_name ? model.model_name : '');
+          var lower = name.toLowerCase();
+          var score = Number(
+            model && model.model_ratio ? model.model_ratio : 0,
+          );
+
+          if (lower.indexOf('latest') !== -1) score += 80;
+          if (lower.indexOf('pro') !== -1) score += 70;
+          if (lower.indexOf('opus') !== -1) score += 65;
+          if (lower.indexOf('sonnet') !== -1) score += 58;
+          if (lower.indexOf('flash') !== -1) score += 45;
+          if (lower.indexOf('codex') !== -1) score += 42;
+          if (lower.indexOf('4o') !== -1 || lower.indexOf('4.1') !== -1)
+            score += 38;
+          if (lower.indexOf('mini') !== -1 || lower.indexOf('haiku') !== -1)
+            score += 18;
+          if (lower.indexOf(':free') !== -1) score -= 90;
+          if (lower.indexOf('embedding') !== -1) score -= 120;
+          if (lower.indexOf('image') !== -1) score -= 60;
+
+          return score;
+        }
+
+        function pickShowcaseModels(models) {
+          var buckets = { gpt: [], claude: [], gemini: [] };
+          models.forEach(function (model) {
+            var family = getModelFamily(model.model_name);
+            if (buckets[family]) buckets[family].push(model);
+          });
+
+          Object.keys(buckets).forEach(function (family) {
+            buckets[family].sort(function (a, b) {
+              return modelMainstreamScore(b) - modelMainstreamScore(a);
+            });
+          });
+
+          var selected = [];
+          var familyOrder = ['gpt', 'claude', 'gemini'];
+          for (var index = 0; index < 5; index += 1) {
+            familyOrder.forEach(function (family) {
+              if (buckets[family][index]) selected.push(buckets[family][index]);
+            });
+          }
+
+          return selected.slice(0, 15);
+        }
+
+        function createModelCard(model, vendors, groupRatio) {
+          var card = document.createElement('article');
+          card.className = 'glass-card new-api-dynamic-model-card';
+
+          var provider = getVendorName(model, vendors);
+          var group = pickPrimaryGroup(model, groupRatio || {});
+          var discount = getDiscountZhe(group.ratio);
+          var tags = String(model.tags || '')
+            .split(',')
+            .map(function (tag) {
+              return tag.trim();
+            })
+            .filter(Boolean)
+            .slice(0, 3);
+          if (tags.length === 0) tags = ['文本生成', '结构化输出'];
+
+          card.innerHTML =
+            '<div>' +
+            '<h3>' +
+            escapeHtml(model.model_name || 'model') +
+            '</h3>' +
+            '<p class="new-api-model-card-provider">' +
+            escapeHtml(provider) +
+            '</p>' +
+            '</div>' +
+            '<div class="new-api-model-card-tags">' +
+            tags
+              .map(function (tag) {
+                return '<span>' + escapeHtml(tag) + '</span>';
+              })
+              .join('') +
+            '</div>' +
+            '<div class="new-api-model-card-meta">' +
+            '<div><span>模型分组</span><strong>' +
+            escapeHtml(group.name) +
+            '</strong></div>' +
+            '<div><span>分组倍率</span><strong>' +
+            formatRatio(group.ratio) +
+            '</strong></div>' +
+            '<div class="new-api-model-card-discount"><span>分组折扣</span><strong>' +
+            (discount === null ? '-' : discount + ' 折') +
+            '</strong></div>' +
+            '</div>';
+
+          return card;
+        }
+
+        function escapeHtml(value) {
+          return String(value)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;');
+        }
+
+        function renderModelShowcase(payload) {
+          var section = document.querySelector('.new-api-section-models');
+          if (
+            !section ||
+            section.getAttribute('data-new-api-model-marquee') === 'true'
+          )
+            return false;
+
+          var grid = Array.prototype.slice
+            .call(section.querySelectorAll('.grid'))
+            .find(function (node) {
+              return node.querySelector('.glass-card');
+            });
+          if (!grid) return false;
+
+          var models = Array.isArray(payload && payload.data)
+            ? payload.data.slice()
+            : [];
+          var vendors = (payload && payload.vendors) || {};
+          var groupRatio = (payload && payload.group_ratio) || {};
+
+          models = models.filter(function (model) {
+            var name = String(model.model_name || '').toLowerCase();
+            return (
+              (name.indexOf('gpt') !== -1 ||
+                name.indexOf('claude') !== -1 ||
+                name.indexOf('gemini') !== -1) &&
+              Array.isArray(model.supported_endpoint_types) &&
+              model.supported_endpoint_types.indexOf('openai') !== -1
+            );
+          });
+          models = pickShowcaseModels(models).sort(function (a, b) {
+            var rank =
+              modelFamilyRank(getModelFamily(a.model_name)) -
+              modelFamilyRank(getModelFamily(b.model_name));
+            if (rank !== 0) return rank;
+            return modelMainstreamScore(b) - modelMainstreamScore(a);
+          });
+
+          if (models.length < 4) return false;
+
+          var marquee = document.createElement('div');
+          marquee.className = 'new-api-model-marquee';
+          var track = document.createElement('div');
+          track.className = 'new-api-model-track';
+          models.concat(models).forEach(function (model) {
+            track.appendChild(createModelCard(model, vendors, groupRatio));
+          });
+          marquee.appendChild(track);
+
+          grid.replaceWith(marquee);
+          section.setAttribute('data-new-api-model-marquee', 'true');
+          return true;
+        }
+
+        function loadModelShowcase() {
+          if (modelShowcaseLoaded) return;
+          modelShowcaseLoaded = true;
+
+          fetch('/api/pricing', { credentials: 'same-origin' })
+            .then(function (response) {
+              if (!response.ok) throw new Error('pricing request failed');
+              return response.json();
+            })
+            .then(function (payload) {
+              if (!renderModelShowcase(payload)) modelShowcaseLoaded = false;
+            })
+            .catch(function () {
+              modelShowcaseLoaded = false;
+            });
+        }
+
+        function restyleGatewayCard() {
+          var gatewayTitle = findByText('h3', '异构网关 统一融合');
           if (!gatewayTitle) return;
 
-          var card = gatewayTitle.parentElement;
-          while (
-            card &&
-            (!card.className ||
-              String(card.className).indexOf('lg:col-span-2') === -1)
-          ) {
-            card = card.parentElement;
-          }
+          var card = closestWithClass(
+            gatewayTitle.parentElement,
+            'lg:col-span-2',
+          );
           if (
             !card ||
             card.getAttribute('data-new-api-gateway-style') === 'true'
@@ -60,19 +548,36 @@
             return;
 
           card.setAttribute('data-new-api-gateway-style', 'true');
-          card.style.background =
-            'linear-gradient(135deg, rgba(10,12,16,0.98) 0%, rgba(15,23,42,0.96) 44%, rgba(17,24,39,0.95) 100%)';
-          card.style.border = '1px solid rgba(34,211,238,0.16)';
-          card.style.boxShadow =
-            '0 22px 60px rgba(0,0,0,0.34), inset 0 1px 0 rgba(255,255,255,0.06)';
+          card.classList.add('new-api-gateway-card');
 
-          gatewayTitle.style.color = '#f8fafc';
-          gatewayTitle.style.textShadow = '0 0 24px rgba(34,211,238,0.18)';
+          var stageSection = card.closest ? card.closest('section') : null;
+          if (stageSection) stageSection.classList.add('new-api-section-stage');
 
-          var description = gatewayTitle.nextElementSibling;
-          if (description) {
-            description.style.color = 'rgba(203,213,225,0.86)';
+          var stageGrid = card.parentElement;
+          if (stageGrid) {
+            stageGrid.classList.add('new-api-stage-grid');
+            Array.prototype.slice
+              .call(stageGrid.children)
+              .forEach(function (column) {
+                if (column === card) return;
+                column.classList.add('new-api-stage-side-column');
+                Array.prototype.slice
+                  .call(column.children || [])
+                  .forEach(function (panel) {
+                    panel.classList.add('new-api-stage-side-card');
+                  });
+              });
           }
+
+          ['AI 编程', '智能体与全域能力', '内容生成', '网页阅读与搜索'].forEach(
+            function (title) {
+              var heading = findByText('h4', title);
+              var panel =
+                heading &&
+                closestWithClass(heading.parentElement, 'rounded-3xl');
+              if (panel) panel.classList.add('new-api-stage-feature-card');
+            },
+          );
 
           Array.prototype.slice.call(card.children).forEach(function (child) {
             var className = String(child.className || '');
@@ -81,47 +586,38 @@
               className.indexOf('right-0') !== -1
             ) {
               child.style.background =
-                'radial-gradient(circle, rgba(34,211,238,0.18), rgba(139,92,246,0.10) 42%, transparent 70%)';
+                'radial-gradient(circle, oklch(78% .14 189 / .22), transparent 68%)';
               child.style.opacity = '1';
+            }
+
+            if (
+              className.indexOf('absolute') !== -1 &&
+              className.indexOf('bottom-2') !== -1 &&
+              className.indexOf('select-none') !== -1
+            ) {
+              child.classList.add('new-api-gateway-visual');
             }
           });
         }
 
         function restyleTrustBlocks() {
-          if (!document.getElementById('new-api-trust-blocks-style')) {
-            var style = document.createElement('style');
-            style.id = 'new-api-trust-blocks-style';
-            style.textContent = [
-              '.new-api-trust-grid{max-width:72rem!important;width:100%;}',
-              '.new-api-trust-grid-primary{margin-top:3.75rem!important;gap:1rem!important;}',
-              '.new-api-trust-grid-secondary{margin-top:1rem!important;padding:0!important;background:transparent!important;border:0!important;backdrop-filter:none!important;gap:1rem!important;divide:none!important;}',
-              '.new-api-trust-card{min-height:156px;text-align:left!important;background:linear-gradient(135deg,rgba(10,12,16,.66),rgba(15,23,42,.48))!important;border:1px solid rgba(255,255,255,.065)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.045),0 18px 48px rgba(0,0,0,.18)!important;}',
-              '.new-api-trust-card:hover{border-color:rgba(34,211,238,.18)!important;background:linear-gradient(135deg,rgba(10,12,16,.78),rgba(15,23,42,.58))!important;}',
-              '.new-api-trust-card-icon{margin-left:0!important;margin-right:0!important;}',
-              '.new-api-trust-mini{min-height:132px;padding:1.25rem!important;border:1px solid rgba(255,255,255,.065)!important;border-radius:1rem;background:linear-gradient(135deg,rgba(255,255,255,.025),rgba(15,23,42,.32));box-shadow:inset 0 1px 0 rgba(255,255,255,.035);}',
-              '.new-api-trust-mini{padding-top:1.25rem!important;padding-left:1.25rem!important;padding-right:1.25rem!important;}',
-              '.new-api-trust-mini + .new-api-trust-mini{border-left:1px solid rgba(255,255,255,.065)!important;}',
-              '@media(max-width:767px){.new-api-trust-grid-primary,.new-api-trust-grid-secondary{max-width:28rem!important;grid-template-columns:1fr!important;}.new-api-trust-mini{min-height:auto;}.new-api-trust-mini + .new-api-trust-mini{border-left:1px solid rgba(255,255,255,.065)!important;}}',
-            ].join('');
-            document.head.appendChild(style);
-          }
-
-          var complianceTitle = Array.prototype.slice
-            .call(document.querySelectorAll('h4'))
-            .find(function (node) {
-              return (node.textContent || '').trim() === '业务监管合规';
-            });
+          var complianceTitle = findByText('h4', '业务监管合规');
           if (!complianceTitle) return;
 
-          var firstCard = complianceTitle.parentElement;
-          while (
-            firstCard &&
-            (!firstCard.className ||
-              String(firstCard.className).indexOf('glass-card') === -1)
-          ) {
-            firstCard = firstCard.parentElement;
-          }
+          var firstCard = closestWithClass(
+            complianceTitle.parentElement,
+            'glass-card',
+          );
           if (!firstCard) return;
+
+          var complianceCopy = firstCard.querySelector('p');
+          if (complianceCopy) {
+            var complianceCopyText =
+              '围绕模型接入、密钥权限、调用记录与风险处置建立标准化治理流程，支持企业按业务场景沉淀审计线索、权限边界和责任闭环，让中转调用更清晰、更可控。';
+            if ((complianceCopy.textContent || '') !== complianceCopyText) {
+              complianceCopy.textContent = complianceCopyText;
+            }
+          }
 
           var primaryGrid = firstCard.parentElement;
           if (
@@ -142,11 +638,7 @@
               });
           }
 
-          var nodeLabel = Array.prototype.slice
-            .call(document.querySelectorAll('span'))
-            .find(function (node) {
-              return (node.textContent || '').trim() === '国内直连 · 全球节点';
-            });
+          var nodeLabel = findByText('span', '国内直连 · 全球节点');
           if (!nodeLabel) return;
 
           var miniCard = nodeLabel.parentElement;
@@ -178,14 +670,97 @@
         }
 
         function applyHomeAdjustments() {
+          injectPremiumHomeStyle();
           replaceBrandLogos();
+          tagHeroSection();
+          tagContentSections();
+          tagWhySectionPanels();
+          loadModelShowcase();
           restyleGatewayCard();
           restyleTrustBlocks();
         }
 
+        function isHomeAdjusted() {
+          return !!(
+            document.querySelector('.new-api-home-hero') &&
+            document.querySelector('.new-api-gateway-card') &&
+            document.querySelector('.new-api-gateway-visual') &&
+            document.querySelector('.new-api-compare-table') &&
+            document.querySelector('.new-api-trust-grid-primary') &&
+            document.querySelector('.new-api-trust-grid-secondary')
+          );
+        }
+
+        var pendingHomeAdjustment = false;
+        var homeObserver = null;
+
+        function scheduleHomeAdjustments() {
+          if (pendingHomeAdjustment) return;
+
+          pendingHomeAdjustment = true;
+          requestAnimationFrame(function () {
+            pendingHomeAdjustment = false;
+            applyHomeAdjustments();
+
+            if (homeObserver && isHomeAdjusted()) {
+              homeObserver.disconnect();
+              homeObserver = null;
+            }
+          });
+        }
+
         applyHomeAdjustments();
-        var homeObserver = new MutationObserver(applyHomeAdjustments);
-        homeObserver.observe(document.body, { childList: true, subtree: true });
+        if (!isHomeAdjusted()) {
+          homeObserver = new MutationObserver(scheduleHomeAdjustments);
+          homeObserver.observe(document.body, {
+            childList: true,
+            subtree: true,
+          });
+          [250, 750, 1500].forEach(function (delay) {
+            window.setTimeout(scheduleHomeAdjustments, delay);
+          });
+        }
+
+        var routeMap = {
+          登录: '/login',
+          开始使用: '/register',
+          立即体验: '/console',
+          模型广场: '/pricing',
+          更多: '/pricing',
+          价格方案: '/pricing',
+          '前往申请 Key': '/console/token',
+        };
+
+        document.addEventListener(
+          'click',
+          function (event) {
+            var target =
+              event.target && event.target.closest
+                ? event.target.closest('a, button')
+                : null;
+            if (!target) return;
+
+            var text = (target.textContent || '').trim();
+            var route = routeMap[text];
+
+            if (route) {
+              event.preventDefault();
+              event.stopPropagation();
+              window.parent.postMessage(
+                { type: 'new-api-home-route', route: route },
+                '*',
+              );
+              return;
+            }
+
+            if (target.tagName === 'A' && text === '开发文档') {
+              target.setAttribute('href', '/docs');
+              target.setAttribute('target', '_blank');
+              target.setAttribute('rel', 'noopener noreferrer');
+            }
+          },
+          true,
+        );
       })();
     </script>
   </body>
