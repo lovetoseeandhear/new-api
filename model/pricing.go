@@ -1,7 +1,6 @@
 package model
 
 import (
-	"encoding/json"
 	"fmt"
 	"strings"
 
@@ -10,30 +9,32 @@ import (
 
 	"github.com/QuantumNous/new-api/common"
 	"github.com/QuantumNous/new-api/constant"
+	"github.com/QuantumNous/new-api/relay/media_billing"
 	"github.com/QuantumNous/new-api/setting/ratio_setting"
 	"github.com/QuantumNous/new-api/types"
 )
 
 type Pricing struct {
-	ModelName              string                  `json:"model_name"`
-	Description            string                  `json:"description,omitempty"`
-	Icon                   string                  `json:"icon,omitempty"`
-	Tags                   string                  `json:"tags,omitempty"`
-	VendorID               int                     `json:"vendor_id,omitempty"`
-	VendorName             string                  `json:"vendor_name,omitempty"`
-	QuotaType              int                     `json:"quota_type"`
-	ModelRatio             float64                 `json:"model_ratio"`
-	ModelPrice             float64                 `json:"model_price"`
-	OwnerBy                string                  `json:"owner_by"`
-	CompletionRatio        float64                 `json:"completion_ratio"`
-	CacheRatio             *float64                `json:"cache_ratio,omitempty"`
-	CreateCacheRatio       *float64                `json:"create_cache_ratio,omitempty"`
-	ImageRatio             *float64                `json:"image_ratio,omitempty"`
-	AudioRatio             *float64                `json:"audio_ratio,omitempty"`
-	AudioCompletionRatio   *float64                `json:"audio_completion_ratio,omitempty"`
-	EnableGroup            []string                `json:"enable_groups"`
-	SupportedEndpointTypes []constant.EndpointType `json:"supported_endpoint_types"`
-	PricingVersion         string                  `json:"pricing_version,omitempty"`
+	ModelName              string                           `json:"model_name"`
+	Description            string                           `json:"description,omitempty"`
+	Icon                   string                           `json:"icon,omitempty"`
+	Tags                   string                           `json:"tags,omitempty"`
+	VendorID               int                              `json:"vendor_id,omitempty"`
+	VendorName             string                           `json:"vendor_name,omitempty"`
+	QuotaType              int                              `json:"quota_type"`
+	ModelRatio             float64                          `json:"model_ratio"`
+	ModelPrice             float64                          `json:"model_price"`
+	OwnerBy                string                           `json:"owner_by"`
+	CompletionRatio        float64                          `json:"completion_ratio"`
+	CacheRatio             *float64                         `json:"cache_ratio,omitempty"`
+	CreateCacheRatio       *float64                         `json:"create_cache_ratio,omitempty"`
+	ImageRatio             *float64                         `json:"image_ratio,omitempty"`
+	AudioRatio             *float64                         `json:"audio_ratio,omitempty"`
+	AudioCompletionRatio   *float64                         `json:"audio_completion_ratio,omitempty"`
+	MediaRatio             *media_billing.ModelMediaPricing `json:"media_ratio,omitempty"`
+	EnableGroup            []string                         `json:"enable_groups"`
+	SupportedEndpointTypes []constant.EndpointType          `json:"supported_endpoint_types"`
+	PricingVersion         string                           `json:"pricing_version,omitempty"`
 }
 
 type PricingVendor struct {
@@ -209,7 +210,7 @@ func updatePricing() {
 			continue
 		}
 		var raw map[string]interface{}
-		if err := json.Unmarshal([]byte(meta.Endpoints), &raw); err == nil {
+		if err := common.UnmarshalJsonStr(meta.Endpoints, &raw); err == nil {
 			endpoints := make([]string, 0, len(raw))
 			for k, v := range raw {
 				switch v.(type) {
@@ -221,6 +222,15 @@ func updatePricing() {
 			}
 			if len(endpoints) > 0 {
 				modelSupportEndpointsStr[modelName] = endpoints
+			}
+		}
+	}
+
+	for modelName := range modelGroupsMap {
+		if media_billing.HasVideoModelRule(modelName) {
+			endpoints := modelSupportEndpointsStr[modelName]
+			if !common.StringsContains(endpoints, string(constant.EndpointTypeOpenAIVideo)) {
+				modelSupportEndpointsStr[modelName] = append(endpoints, string(constant.EndpointTypeOpenAIVideo))
 			}
 		}
 	}
@@ -253,7 +263,7 @@ func updatePricing() {
 			continue
 		}
 		var raw map[string]interface{}
-		if err := json.Unmarshal([]byte(meta.Endpoints), &raw); err == nil {
+		if err := common.UnmarshalJsonStr(meta.Endpoints, &raw); err == nil {
 			for k, v := range raw {
 				switch val := v.(type) {
 				case string:
@@ -327,6 +337,9 @@ func updatePricing() {
 		if ratio_setting.ContainsAudioCompletionRatio(model) {
 			audioCompletionRatio := ratio_setting.GetAudioCompletionRatio(model)
 			pricing.AudioCompletionRatio = &audioCompletionRatio
+		}
+		if mediaPricing := media_billing.GetModelMediaPricing(model); mediaPricing != nil {
+			pricing.MediaRatio = mediaPricing
 		}
 		pricingMap = append(pricingMap, pricing)
 	}

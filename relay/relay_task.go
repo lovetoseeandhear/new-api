@@ -18,6 +18,7 @@ import (
 	relaycommon "github.com/QuantumNous/new-api/relay/common"
 	relayconstant "github.com/QuantumNous/new-api/relay/constant"
 	"github.com/QuantumNous/new-api/relay/helper"
+	"github.com/QuantumNous/new-api/relay/media_billing"
 	"github.com/QuantumNous/new-api/service"
 	"github.com/gin-gonic/gin"
 )
@@ -190,6 +191,15 @@ func RelayTaskSubmit(c *gin.Context, info *relaycommon.RelayInfo) (*TaskSubmitRe
 	if estimatedRatios := adaptor.EstimateBilling(c, info); len(estimatedRatios) > 0 {
 		for k, v := range estimatedRatios {
 			info.PriceData.AddOtherRatio(k, v)
+		}
+	}
+	if taskReq, err := relaycommon.GetTaskRequest(c); err == nil {
+		if mediaRatios, err := media_billing.ApplyVideoSpecRatios(taskReq, info.OriginModelName, media_billing.GetStableChannelKey(info.ChannelType)); err != nil {
+			return nil, service.TaskErrorWrapperLocal(err, "media_billing_failed", http.StatusBadRequest)
+		} else {
+			for k, v := range mediaRatios {
+				info.PriceData.AddOtherRatio(k, v)
+			}
 		}
 	}
 

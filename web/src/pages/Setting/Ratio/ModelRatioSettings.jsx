@@ -46,6 +46,7 @@ export default function ModelRatioSettings(props) {
     CreateCacheRatio: '',
     CompletionRatio: '',
     ImageRatio: '',
+    MediaRatio: '',
     AudioRatio: '',
     AudioCompletionRatio: '',
     ExposeRatioEnabled: false,
@@ -268,6 +269,30 @@ export default function ModelRatioSettings(props) {
                 },
               ]}
               onChange={(value) => setInputs({ ...inputs, ImageRatio: value })}
+            />
+          </Col>
+        </Row>
+        <Row gutter={16}>
+          <Col xs={24} sm={16}>
+            <Form.TextArea
+              label={t('媒体规格倍率')}
+              extraText={t(
+                '图片和视频按尺寸、质量、分辨率、时长计费的倍率设置，键为映射后的模型名称',
+              )}
+              placeholder={t(
+                '为一个 JSON 文本，例如：{"image":{"models":{"flux-pro":{"size_ratios":{"1024x1024":1,"2048x2048":4}}}},"video":{"models":{"veo-3.1":{"billing_mode":"per_second","default_duration_seconds":8,"default_resolution":"720p","resolution_ratios":{"720p":1,"1080p":1.8,"4k":4}}}}}',
+              )}
+              field={'MediaRatio'}
+              autosize={{ minRows: 8, maxRows: 18 }}
+              trigger='blur'
+              stopValidateWithError
+              rules={[
+                {
+                  validator: (rule, value) => verifyJSON(value),
+                  message: '不是合法的 JSON 字符串',
+                },
+              ]}
+              onChange={(value) => setInputs({ ...inputs, MediaRatio: value })}
             />
           </Col>
         </Row>

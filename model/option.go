@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/QuantumNous/new-api/common"
+	"github.com/QuantumNous/new-api/relay/media_billing"
 	"github.com/QuantumNous/new-api/setting"
 	"github.com/QuantumNous/new-api/setting/config"
 	"github.com/QuantumNous/new-api/setting/operation_setting"
@@ -165,6 +166,7 @@ func InitOptionMap() {
 	common.OptionMap["ImageRatio"] = ratio_setting.ImageRatio2JSONString()
 	common.OptionMap["AudioRatio"] = ratio_setting.AudioRatio2JSONString()
 	common.OptionMap["AudioCompletionRatio"] = ratio_setting.AudioCompletionRatio2JSONString()
+	common.OptionMap[media_billing.OptionKeyMediaRatio] = media_billing.DefaultMediaRatioJSONString()
 	common.OptionMap["TopUpLink"] = common.TopUpLink
 	//common.OptionMap["ChatLink"] = common.ChatLink
 	//common.OptionMap["ChatLink2"] = common.ChatLink2
@@ -560,6 +562,8 @@ func updateOptionMap(key string, value string) (err error) {
 		err = ratio_setting.UpdateAudioRatioByJSONString(value)
 	case "AudioCompletionRatio":
 		err = ratio_setting.UpdateAudioCompletionRatioByJSONString(value)
+	case media_billing.OptionKeyMediaRatio:
+		err = media_billing.UpdateMediaRatioByJSONString(value)
 	case "TopUpLink":
 		common.TopUpLink = value
 	//case "ChatLink":

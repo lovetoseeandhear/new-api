@@ -86,17 +86,39 @@ func validateMultipartTaskRequest(c *gin.Context, info *RelayInfo, action string
 
 	formData := c.Request.PostForm
 	req = TaskSubmitReq{
-		Prompt:   formData.Get("prompt"),
-		Model:    formData.Get("model"),
-		Mode:     formData.Get("mode"),
-		Image:    formData.Get("image"),
-		Size:     formData.Get("size"),
-		Metadata: make(map[string]interface{}),
+		Prompt:      formData.Get("prompt"),
+		Model:       formData.Get("model"),
+		Mode:        formData.Get("mode"),
+		Image:       formData.Get("image"),
+		Size:        formData.Get("size"),
+		Resolution:  formData.Get("resolution"),
+		AspectRatio: formData.Get("aspect_ratio"),
+		Metadata:    make(map[string]interface{}),
 	}
 
 	if durationStr := formData.Get("seconds"); durationStr != "" {
 		if duration, err := strconv.Atoi(durationStr); err == nil {
 			req.Duration = duration
+		}
+	}
+	if durationStr := formData.Get("duration"); durationStr != "" {
+		if duration, err := strconv.Atoi(durationStr); err == nil {
+			req.Duration = duration
+		}
+	}
+	if widthStr := formData.Get("width"); widthStr != "" {
+		if width, err := strconv.Atoi(widthStr); err == nil {
+			req.Width = width
+		}
+	}
+	if heightStr := formData.Get("height"); heightStr != "" {
+		if height, err := strconv.Atoi(heightStr); err == nil {
+			req.Height = height
+		}
+	}
+	if nStr := formData.Get("n"); nStr != "" {
+		if n, err := strconv.Atoi(nStr); err == nil {
+			req.N = n
 		}
 	}
 
@@ -189,6 +211,11 @@ func isKnownTaskField(field string) bool {
 		"image":           true,
 		"images":          true,
 		"size":            true,
+		"resolution":      true,
+		"aspect_ratio":    true,
+		"width":           true,
+		"height":          true,
+		"n":               true,
 		"duration":        true,
 		"input_reference": true, // Sora 特有字段
 	}
@@ -204,10 +231,11 @@ func ValidateBasicTaskRequest(c *gin.Context, info *RelayInfo, action string) *d
 		if err != nil {
 			return createTaskError(err, "invalid_multipart_form", http.StatusBadRequest, true)
 		}
-	}
-	// 为了metadata字段的兼容性，统一UnmarshalBodyReusable
-	if err := common.UnmarshalBodyReusable(c, &req); err != nil {
-		return createTaskError(err, "invalid_request", http.StatusBadRequest, true)
+	} else {
+		// 为了metadata字段的兼容性，JSON 请求继续走统一的 body 反序列化路径。
+		if err := common.UnmarshalBodyReusable(c, &req); err != nil {
+			return createTaskError(err, "invalid_request", http.StatusBadRequest, true)
+		}
 	}
 
 	if taskErr := validatePrompt(req.Prompt); taskErr != nil {

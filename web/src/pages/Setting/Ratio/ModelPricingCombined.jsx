@@ -22,6 +22,7 @@ import { Radio, RadioGroup } from '@douyinfe/semi-ui';
 import { useTranslation } from 'react-i18next';
 import ModelPricingEditor from './components/ModelPricingEditor';
 import ModelRatioSettings from './ModelRatioSettings';
+import MediaRatioSettings from './MediaRatioSettings';
 
 export default function ModelPricingCombined({ options, refresh }) {
   const { t } = useTranslation();
@@ -38,12 +39,17 @@ export default function ModelPricingCombined({ options, refresh }) {
         >
           <Radio value='visual'>{t('可视化编辑')}</Radio>
           <Radio value='manual'>{t('手动编辑')}</Radio>
+          <Radio value='media'>{t('媒体规格倍率')}</Radio>
         </RadioGroup>
       </div>
-      {editMode === 'visual' ? (
+      {editMode === 'visual' && (
         <ModelPricingEditor options={options} refresh={refresh} />
-      ) : (
+      )}
+      {editMode === 'manual' && (
         <ModelRatioSettings options={options} refresh={refresh} />
+      )}
+      {editMode === 'media' && (
+        <MediaRatioSettings options={options} refresh={refresh} />
       )}
     </div>
   );

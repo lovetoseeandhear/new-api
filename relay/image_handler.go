@@ -13,6 +13,7 @@ import (
 	"github.com/QuantumNous/new-api/logger"
 	relaycommon "github.com/QuantumNous/new-api/relay/common"
 	"github.com/QuantumNous/new-api/relay/helper"
+	"github.com/QuantumNous/new-api/relay/media_billing"
 	"github.com/QuantumNous/new-api/service"
 	"github.com/QuantumNous/new-api/setting/model_setting"
 	"github.com/QuantumNous/new-api/types"
@@ -124,6 +125,13 @@ func ImageHelper(c *gin.Context, info *relaycommon.RelayInfo) (newAPIError *type
 	// upstream response; only set the default when they haven't.
 	if _, hasN := info.PriceData.OtherRatios["n"]; !hasN {
 		info.PriceData.AddOtherRatio("n", float64(imageN))
+	}
+	if mediaRatios, err := media_billing.ApplyImageSpecRatios(request, info.OriginModelName, media_billing.GetStableChannelKey(info.ChannelType)); err != nil {
+		return types.NewError(err, types.ErrorCodeInvalidRequest, types.ErrOptionWithSkipRetry())
+	} else {
+		for k, v := range mediaRatios {
+			info.PriceData.AddOtherRatio(k, v)
+		}
 	}
 
 	if usage.(*dto.Usage).TotalTokens == 0 {
