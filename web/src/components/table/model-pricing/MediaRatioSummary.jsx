@@ -33,25 +33,10 @@ const mapToItems = (source, suffix = 'x') => {
   }));
 };
 
-const pushValue = (items, key, label, value) => {
-  if (value === undefined || value === null || value === '') return;
-  items.push({ key, label, value });
-};
-
 const buildImageSections = (image, t) => {
   if (!image) return [];
-  const defaults = [];
-  pushValue(defaults, 'default_size', t('默认尺寸'), image.default_size);
-  pushValue(defaults, 'default_quality', t('默认质量'), image.default_quality);
-  pushValue(
-    defaults,
-    'unknown_spec_policy',
-    t('缺省策略'),
-    image.unknown_spec_policy,
-  );
 
   return [
-    { key: 'image-defaults', title: t('图片默认规则'), items: defaults },
     {
       key: 'image-size',
       title: t('图片尺寸倍率'),
@@ -72,31 +57,8 @@ const buildImageSections = (image, t) => {
 
 const buildVideoSections = (video, t) => {
   if (!video) return [];
-  const defaults = [];
-  pushValue(defaults, 'billing_mode', t('计费模式'), video.billing_mode);
-  pushValue(
-    defaults,
-    'default_duration_seconds',
-    t('默认秒数'),
-    video.default_duration_seconds
-      ? `${video.default_duration_seconds}${t('秒')}`
-      : '',
-  );
-  pushValue(
-    defaults,
-    'default_resolution',
-    t('默认分辨率'),
-    video.default_resolution,
-  );
-  pushValue(
-    defaults,
-    'unknown_spec_policy',
-    t('缺省策略'),
-    video.unknown_spec_policy,
-  );
 
   return [
-    { key: 'video-defaults', title: t('视频默认规则'), items: defaults },
     {
       key: 'video-resolution',
       title: t('视频分辨率倍率'),
