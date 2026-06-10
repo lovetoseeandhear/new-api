@@ -22,7 +22,6 @@ import { Modal, Tag, Typography, Avatar } from '@douyinfe/semi-ui';
 import { copy, showSuccess } from './utils';
 import { MOBILE_BREAKPOINT } from '../hooks/common/useIsMobile';
 import { visit } from 'unist-util-visit';
-import * as LobeIcons from '@lobehub/icons';
 import {
   OpenAI,
   Claude,
@@ -56,7 +55,135 @@ import {
   Jimeng,
   Perplexity,
   Replicate,
+  AzureAI,
+  Azure,
+  Anthropic,
+  Kimi,
+  Grok,
+  Stability,
+  Flux,
+  Ideogram,
+  Luma,
+  Pika,
+  Runway,
+  Vidu,
+  Hailuo,
+  Baichuan,
+  Stepfun,
+  Groq,
+  Together,
+  Fireworks,
+  Nvidia,
+  Meta,
+  Microsoft,
+  Google,
+  Volcengine,
+  Tencent,
+  Baidu,
+  Alibaba,
+  ByteDance,
+  HuggingFace,
+  Bedrock,
+  Aws,
+  Cerebras,
+  SenseNova,
+  InternLM,
+  ChatGLM,
+  Gemma,
+  Qingyan,
+  Lambda,
+  Novita,
+  Hyperbolic,
+  SambaNova,
+  Cline,
+  Adobe,
+  Ai21,
+  AlephAlpha,
 } from '@lobehub/icons';
+
+// 厂商图标注册表：替代原先的 `import * as LobeIcons`（通配符）。
+// 通配符会把 @lobehub/icons 上千个图标全量打包（gzip 约 946KB），而本项目实际
+// 只用到数十个 AI 厂商图标。改为显式注册常用厂商后，配合 tree-shaking 仅打包
+// 用到的图标，体积降至零头。getLobeHubIcon 按名动态查找时若未命中本表，会自动
+// 回退到首字母 Avatar（与原行为一致），新增厂商只需在此补充即可。
+const lobeIconRegistry = {
+  OpenAI,
+  Claude,
+  Gemini,
+  Moonshot,
+  Zhipu,
+  Qwen,
+  DeepSeek,
+  Minimax,
+  Wenxin,
+  Spark,
+  Midjourney,
+  Hunyuan,
+  Cohere,
+  Cloudflare,
+  Ai360,
+  Yi,
+  Jina,
+  Mistral,
+  XAI,
+  Ollama,
+  Doubao,
+  Suno,
+  Xinference,
+  OpenRouter,
+  Dify,
+  Coze,
+  SiliconCloud,
+  FastGPT,
+  Kling,
+  Jimeng,
+  Perplexity,
+  Replicate,
+  AzureAI,
+  Azure,
+  Anthropic,
+  Kimi,
+  Grok,
+  Stability,
+  Flux,
+  Ideogram,
+  Luma,
+  Pika,
+  Runway,
+  Vidu,
+  Hailuo,
+  Baichuan,
+  Stepfun,
+  Groq,
+  Together,
+  Fireworks,
+  Nvidia,
+  Meta,
+  Microsoft,
+  Google,
+  Volcengine,
+  Tencent,
+  Baidu,
+  Alibaba,
+  ByteDance,
+  HuggingFace,
+  Bedrock,
+  Aws,
+  Cerebras,
+  SenseNova,
+  InternLM,
+  ChatGLM,
+  Gemma,
+  Qingyan,
+  Lambda,
+  Novita,
+  Hyperbolic,
+  SambaNova,
+  Cline,
+  Adobe,
+  Ai21,
+  AlephAlpha,
+};
 
 import { Layers } from 'lucide-react';
 import {
@@ -397,7 +524,7 @@ export function getLobeHubIcon(iconName, size = 14) {
     );
   }
 
-  const BaseIcon = LobeIcons[baseKey];
+  const BaseIcon = lobeIconRegistry[baseKey];
 
   let IconComponent = undefined;
   let propStartIndex = 1;
@@ -406,7 +533,7 @@ export function getLobeHubIcon(iconName, size = 14) {
     IconComponent = BaseIcon[segments[1]];
     propStartIndex = 2;
   } else {
-    IconComponent = LobeIcons[baseKey];
+    IconComponent = lobeIconRegistry[baseKey];
     propStartIndex = 1;
   }
 
