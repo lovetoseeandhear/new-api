@@ -2,8 +2,9 @@
 <html lang="zh">
   <head>
     <meta charset="UTF-8" />
+    <link rel="icon" href="/logo.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>new-api 首页</title>
+    <title>Flowbay API</title>
     <style>
       html,
       body,
@@ -95,26 +96,16 @@
             'body.new-api-premium-home .new-api-section-models,body.new-api-premium-home .new-api-section-stage,body.new-api-premium-home .new-api-section-why,body.new-api-premium-home .new-api-section-core,body.new-api-premium-home .new-api-section-guide,body.new-api-premium-home .new-api-section-demo{padding-top:clamp(5rem,8vw,7.5rem)!important;padding-bottom:clamp(5rem,8vw,7.5rem)!important;border-top:1px solid var(--na-line)!important;}',
             'body.new-api-premium-home .new-api-section-models h2,body.new-api-premium-home .new-api-section-why h2,body.new-api-premium-home .new-api-section-core h2,body.new-api-premium-home .new-api-section-guide h2,body.new-api-premium-home .new-api-section-demo h2{font-size:clamp(2.05rem,3.4vw,3.65rem)!important;line-height:1.08!important;letter-spacing:-.045em!important;color:var(--na-heading)!important;}',
             'body.new-api-premium-home .new-api-section-models h2 + p,body.new-api-premium-home .new-api-section-why h2 + p,body.new-api-premium-home .new-api-section-guide h2 + p,body.new-api-premium-home .new-api-section-demo p{font-size:clamp(1.04rem,1.25vw,1.18rem)!important;line-height:1.78!important;color:var(--na-body)!important;}',
-            'body.new-api-premium-home .new-api-model-marquee{position:relative!important;overflow:hidden!important;margin-inline:calc(clamp(1rem,4vw,4rem) * -1)!important;padding-inline:clamp(1rem,4vw,4rem)!important;}',
-            'body.new-api-premium-home .new-api-model-marquee:before,body.new-api-premium-home .new-api-model-marquee:after{content:"";position:absolute;top:0;bottom:0;width:clamp(2.5rem,8vw,8rem);z-index:2;pointer-events:none;}',
-            'body.new-api-premium-home .new-api-model-marquee:before{left:0;background:linear-gradient(90deg,var(--na-bg),transparent);}',
-            'body.new-api-premium-home .new-api-model-marquee:after{right:0;background:linear-gradient(270deg,var(--na-bg),transparent);}',
-            'body.new-api-premium-home .new-api-model-track{display:flex!important;width:max-content!important;gap:1.1rem!important;animation:newApiModelMarquee 46s linear infinite!important;}',
-            'body.new-api-premium-home .new-api-model-marquee:hover .new-api-model-track{animation-play-state:paused!important;}',
-            'body.new-api-premium-home .new-api-model-track .glass-card{width:23rem!important;min-height:19rem!important;flex:0 0 23rem!important;padding:1.45rem!important;display:flex!important;flex-direction:column!important;gap:1rem!important;}',
-            'body.new-api-premium-home .new-api-model-track .glass-card h3{font-size:1.34rem!important;line-height:1.18!important;letter-spacing:-.02em!important;overflow-wrap:anywhere!important;}',
+            'body.new-api-premium-home .new-api-model-static-grid{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:1rem!important;}',
+            'body.new-api-premium-home .new-api-model-static-card{min-height:18rem!important;padding:1.45rem!important;display:flex!important;flex-direction:column!important;gap:1rem!important;}',
+            'body.new-api-premium-home .new-api-model-static-card h3{font-size:1.34rem!important;line-height:1.18!important;letter-spacing:-.02em!important;overflow-wrap:anywhere!important;}',
             'body.new-api-premium-home .new-api-model-card-provider{font-size:.94rem!important;line-height:1.45!important;color:var(--na-muted)!important;}',
             'body.new-api-premium-home .new-api-model-card-tags{display:flex!important;flex-wrap:wrap!important;gap:.45rem!important;}',
             'body.new-api-premium-home .new-api-model-card-tags span{border:1px solid var(--na-line)!important;background:oklch(100% 0 0 / .03)!important;color:var(--na-body)!important;border-radius:.45rem!important;padding:.2rem .48rem!important;font-size:.74rem!important;font-weight:700!important;letter-spacing:.02em!important;}',
-            'body.new-api-premium-home .new-api-model-card-meta{margin-top:auto!important;border-top:1px solid var(--na-line)!important;padding-top:1rem!important;display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:.65rem!important;}',
-            'body.new-api-premium-home .new-api-model-card-meta div{border:1px solid var(--na-line)!important;background:oklch(100% 0 0 / .025)!important;border-radius:.7rem!important;padding:.62rem .7rem!important;min-width:0!important;}',
-            'body.new-api-premium-home .new-api-model-card-meta span{display:block!important;color:var(--na-subtle)!important;font-size:.72rem!important;line-height:1.2!important;margin-bottom:.24rem!important;}',
-            'body.new-api-premium-home .new-api-model-card-meta strong{display:block!important;color:var(--na-text)!important;font-size:.96rem!important;line-height:1.25!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;}',
-            'body.new-api-premium-home .new-api-model-card-discount strong{color:var(--na-accent)!important;}',
-            '@keyframes newApiModelMarquee{from{transform:translateX(0);}to{transform:translateX(-50%);}}',
+            'body.new-api-premium-home .new-api-model-card-description{margin-top:auto!important;border-top:1px solid var(--na-line)!important;padding-top:1rem!important;color:var(--na-body)!important;font-size:.96rem!important;line-height:1.72!important;}',
             'body.new-api-premium-home .new-api-section-models .glass-card{background:transparent!important;border:0!important;border-top:1px solid var(--na-line)!important;border-radius:0!important;box-shadow:none!important;backdrop-filter:none!important;padding:1.55rem 0!important;}',
             'body.new-api-premium-home .new-api-section-models .glass-card:hover{border-color:var(--na-line-strong)!important;background:oklch(100% 0 0 / .018)!important;}',
-            'body.new-api-premium-home .new-api-section-models .new-api-model-track .glass-card{width:23rem!important;min-height:19rem!important;flex:0 0 23rem!important;padding:1.45rem!important;background:linear-gradient(145deg,oklch(100% 0 0 / .055),oklch(100% 0 0 / .018))!important;border:1px solid var(--na-line)!important;border-radius:1rem!important;box-shadow:inset 0 1px 0 oklch(100% 0 0 / .055)!important;backdrop-filter:blur(18px)!important;}',
+            'body.new-api-premium-home .new-api-section-models .new-api-model-static-card{background:linear-gradient(145deg,oklch(100% 0 0 / .055),oklch(100% 0 0 / .018))!important;border:1px solid var(--na-line)!important;border-radius:1rem!important;box-shadow:inset 0 1px 0 oklch(100% 0 0 / .055)!important;backdrop-filter:blur(18px)!important;}',
             'body.new-api-premium-home .new-api-section-models h3{font-size:1.28rem!important;color:var(--na-heading)!important;}',
             'body.new-api-premium-home .new-api-section-stage .new-api-stage-grid{grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:1.25rem!important;}',
             'body.new-api-premium-home .new-api-gateway-card{isolation:isolate;border-radius:0!important;background:linear-gradient(115deg,oklch(100% 0 0 / .055),transparent 58%)!important;border:0!important;border-top:1px solid var(--na-line-strong)!important;border-bottom:1px solid var(--na-line)!important;box-shadow:none!important;min-height:460px!important;}',
@@ -154,9 +145,9 @@
             'body.new-api-premium-home .text-brand-cyan,body.new-api-premium-home .text-brand-blue,body.new-api-premium-home .text-brand-purple{color:var(--na-accent)!important;}',
             'body.new-api-premium-home .bg-brand-cyan\\/10,body.new-api-premium-home .bg-brand-blue\\/10,body.new-api-premium-home .bg-brand-purple\\/10{background:var(--na-accent-soft)!important;}',
             'body.new-api-premium-home .border-brand-cyan\\/25,body.new-api-premium-home .border-brand-blue\\/20,body.new-api-premium-home .border-brand-purple\\/25{border-color:oklch(79% .15 188 / .34)!important;}',
-            '@media(max-width:1023px){body.new-api-premium-home .new-api-section-stage .new-api-stage-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;}body.new-api-premium-home .new-api-section-stage .new-api-stage-side-card{min-height:auto!important;}body.new-api-premium-home .new-api-gateway-card h3{font-size:clamp(2rem,5vw,3.4rem)!important;}body.new-api-premium-home .new-api-gateway-visual{width:22rem!important;height:17rem!important;right:1.25rem!important;}}',
+            '@media(max-width:1023px){body.new-api-premium-home .new-api-model-static-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;}body.new-api-premium-home .new-api-section-stage .new-api-stage-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;}body.new-api-premium-home .new-api-section-stage .new-api-stage-side-card{min-height:auto!important;}body.new-api-premium-home .new-api-gateway-card h3{font-size:clamp(2rem,5vw,3.4rem)!important;}body.new-api-premium-home .new-api-gateway-visual{width:22rem!important;height:17rem!important;right:1.25rem!important;}}',
             '@media(max-width:900px){body.new-api-premium-home .new-api-hero-content{grid-template-columns:1fr!important;}body.new-api-premium-home .new-api-hero-copy{grid-column:1!important;margin-top:1.25rem!important;}body.new-api-premium-home .new-api-home-hero:after{display:none;}body.new-api-premium-home .new-api-hero-title{max-width:none!important;}}',
-            '@media(max-width:767px){body.new-api-premium-home header{position:sticky!important;top:0!important;}body.new-api-premium-home .new-api-home-hero{min-height:auto!important;padding:6.75rem 1rem 3.5rem!important;}body.new-api-premium-home .new-api-hero-title{font-size:clamp(2.45rem,12vw,3.45rem)!important;line-height:1.04!important;letter-spacing:-.045em!important;}body.new-api-premium-home .new-api-model-track .glass-card,body.new-api-premium-home .new-api-section-models .new-api-model-track .glass-card{width:19rem!important;flex-basis:19rem!important;min-height:18.5rem!important;}body.new-api-premium-home .new-api-hero-actions{flex-direction:column!important;align-items:stretch!important;}body.new-api-premium-home .new-api-hero-actions button{width:100%!important;justify-content:center!important;}body.new-api-premium-home .new-api-section-stage .new-api-stage-grid{grid-template-columns:1fr!important;}body.new-api-premium-home .new-api-trust-grid-primary,body.new-api-premium-home .new-api-trust-grid-secondary{max-width:32rem!important;grid-template-columns:1fr!important;}body.new-api-premium-home .new-api-trust-card + .new-api-trust-card,body.new-api-premium-home .new-api-trust-mini + .new-api-trust-mini{border-left:0!important;border-top:1px solid var(--na-line)!important;}body.new-api-premium-home .new-api-gateway-card{min-height:auto!important;}body.new-api-premium-home .new-api-gateway-card h3{white-space:normal!important;}}',
+            '@media(max-width:767px){body.new-api-premium-home header{position:sticky!important;top:0!important;}body.new-api-premium-home .new-api-home-hero{min-height:auto!important;padding:6.75rem 1rem 3.5rem!important;}body.new-api-premium-home .new-api-hero-title{font-size:clamp(2.45rem,12vw,3.45rem)!important;line-height:1.04!important;letter-spacing:-.045em!important;}body.new-api-premium-home .new-api-model-static-grid{grid-template-columns:1fr!important;}body.new-api-premium-home .new-api-model-static-card{min-height:auto!important;}body.new-api-premium-home .new-api-hero-actions{flex-direction:column!important;align-items:stretch!important;}body.new-api-premium-home .new-api-hero-actions button{width:100%!important;justify-content:center!important;}body.new-api-premium-home .new-api-section-stage .new-api-stage-grid{grid-template-columns:1fr!important;}body.new-api-premium-home .new-api-trust-grid-primary,body.new-api-premium-home .new-api-trust-grid-secondary{max-width:32rem!important;grid-template-columns:1fr!important;}body.new-api-premium-home .new-api-trust-card + .new-api-trust-card,body.new-api-premium-home .new-api-trust-mini + .new-api-trust-mini{border-left:0!important;border-top:1px solid var(--na-line)!important;}body.new-api-premium-home .new-api-gateway-card{min-height:auto!important;}body.new-api-premium-home .new-api-gateway-card h3{white-space:normal!important;}}',
             '@media(prefers-reduced-motion:reduce){body.new-api-premium-home *,body.new-api-premium-home *:before,body.new-api-premium-home *:after{animation:none!important;transition:none!important;scroll-behavior:auto!important;}}',
           ].join('');
           document.head.appendChild(style);
@@ -272,182 +263,61 @@
           });
         }
 
-        var modelShowcaseLoaded = false;
+        var staticModelShowcaseRendered = false;
+        var staticModelShowcase = [
+          {
+            name: 'gpt-5.5',
+            provider: 'OpenAI',
+            tags: ['文本生成', '推理', '长上下文'],
+            description:
+              '面向复杂推理、代码生成与高质量内容生产的旗舰模型，适合承担核心业务请求和高价值任务。',
+          },
+          {
+            name: 'claude-opus-4.8',
+            provider: 'Anthropic',
+            tags: ['深度推理', '代码', '智能体'],
+            description:
+              '适合复杂分析、长任务拆解和智能体工作流，强调稳定的推理质量与多步骤执行能力。',
+          },
+          {
+            name: 'gemini-3.1-flash-image-preview',
+            provider: 'Google',
+            tags: ['视觉理解', '图像生成', '快速响应'],
+            description:
+              '面向多模态与图像场景，适合视觉理解、图片生成预览和轻量化的创意内容处理。',
+          },
+          {
+            name: 'claude-sonnet-4.6',
+            provider: 'Anthropic',
+            tags: ['通用对话', '代码', '高性价比'],
+            description:
+              '兼顾效果、速度与成本的通用主力模型，适合日常对话、编码辅助和业务自动化调用。',
+          },
+        ];
 
-        function getVendorById(vendors, vendorId) {
-          if (!vendors || vendorId === undefined || vendorId === null)
-            return null;
-
-          if (Array.isArray(vendors)) {
-            return (
-              vendors.find(function (vendor) {
-                return String(vendor.id) === String(vendorId);
-              }) || null
-            );
-          }
-
-          return vendors[String(vendorId)] || vendors[vendorId] || null;
-        }
-
-        function getVendorName(model, vendors) {
-          var vendor = getVendorById(vendors, model && model.vendor_id);
-          if (vendor && vendor.name) return vendor.name;
-          if (model && model.icon) return String(model.icon).split('.')[0];
-          var name = (
-            model && model.model_name ? model.model_name : ''
-          ).toLowerCase();
-          if (name.indexOf('claude') !== -1) return 'Anthropic';
-          if (name.indexOf('gemini') !== -1) return 'Google';
-          if (name.indexOf('gpt') !== -1 || name.indexOf('o4') !== -1)
-            return 'OpenAI';
-          return 'AI Model';
-        }
-
-        function getDiscountZhe(groupRatio) {
-          var ratio = Number(groupRatio);
-          if (!Number.isFinite(ratio)) return null;
-          var zhe = Math.max(0, Math.min(10, (ratio / 6.8) * 10));
-          return Number(zhe.toFixed(1));
-        }
-
-        function formatRatio(value) {
-          var ratio = Number(value);
-          if (!Number.isFinite(ratio)) return '-';
-          if (ratio >= 10) return ratio.toFixed(2).replace(/\.?0+$/, '') + 'x';
-          if (ratio >= 1) return ratio.toFixed(3).replace(/\.?0+$/, '') + 'x';
-          return ratio.toFixed(4).replace(/0+$/, '').replace(/\.$/, '') + 'x';
-        }
-
-        function pickPrimaryGroup(model, groupRatio) {
-          var groups = Array.isArray(model.enable_groups)
-            ? model.enable_groups
-            : [];
-          var selected = groups[0] || '默认分组';
-          var selectedRatio = groupRatio && groupRatio[selected];
-
-          groups.forEach(function (group) {
-            var ratio = groupRatio && groupRatio[group];
-            if (
-              ratio !== undefined &&
-              (selectedRatio === undefined || ratio < selectedRatio)
-            ) {
-              selected = group;
-              selectedRatio = ratio;
-            }
-          });
-
-          return {
-            name: selected,
-            ratio: selectedRatio === undefined ? 1 : selectedRatio,
-          };
-        }
-
-        function getModelFamily(name) {
-          var lower = String(name || '').toLowerCase();
-          if (lower.indexOf('gpt') !== -1) return 'gpt';
-          if (lower.indexOf('claude') !== -1) return 'claude';
-          if (lower.indexOf('gemini') !== -1) return 'gemini';
-          return 'other';
-        }
-
-        function modelFamilyRank(family) {
-          if (family === 'gpt') return 0;
-          if (family === 'claude') return 1;
-          if (family === 'gemini') return 2;
-          return 9;
-        }
-
-        function modelMainstreamScore(model) {
-          var name = String(model && model.model_name ? model.model_name : '');
-          var lower = name.toLowerCase();
-          var score = Number(
-            model && model.model_ratio ? model.model_ratio : 0,
-          );
-
-          if (lower.indexOf('latest') !== -1) score += 80;
-          if (lower.indexOf('pro') !== -1) score += 70;
-          if (lower.indexOf('opus') !== -1) score += 65;
-          if (lower.indexOf('sonnet') !== -1) score += 58;
-          if (lower.indexOf('flash') !== -1) score += 45;
-          if (lower.indexOf('codex') !== -1) score += 42;
-          if (lower.indexOf('4o') !== -1 || lower.indexOf('4.1') !== -1)
-            score += 38;
-          if (lower.indexOf('mini') !== -1 || lower.indexOf('haiku') !== -1)
-            score += 18;
-          if (lower.indexOf(':free') !== -1) score -= 90;
-          if (lower.indexOf('embedding') !== -1) score -= 120;
-          if (lower.indexOf('image') !== -1) score -= 60;
-
-          return score;
-        }
-
-        function pickShowcaseModels(models) {
-          var buckets = { gpt: [], claude: [], gemini: [] };
-          models.forEach(function (model) {
-            var family = getModelFamily(model.model_name);
-            if (buckets[family]) buckets[family].push(model);
-          });
-
-          Object.keys(buckets).forEach(function (family) {
-            buckets[family].sort(function (a, b) {
-              return modelMainstreamScore(b) - modelMainstreamScore(a);
-            });
-          });
-
-          var selected = [];
-          var familyOrder = ['gpt', 'claude', 'gemini'];
-          for (var index = 0; index < 5; index += 1) {
-            familyOrder.forEach(function (family) {
-              if (buckets[family][index]) selected.push(buckets[family][index]);
-            });
-          }
-
-          return selected.slice(0, 15);
-        }
-
-        function createModelCard(model, vendors, groupRatio) {
+        function createStaticModelCard(model) {
           var card = document.createElement('article');
-          card.className = 'glass-card new-api-dynamic-model-card';
-
-          var provider = getVendorName(model, vendors);
-          var group = pickPrimaryGroup(model, groupRatio || {});
-          var discount = getDiscountZhe(group.ratio);
-          var tags = String(model.tags || '')
-            .split(',')
-            .map(function (tag) {
-              return tag.trim();
-            })
-            .filter(Boolean)
-            .slice(0, 3);
-          if (tags.length === 0) tags = ['文本生成', '结构化输出'];
+          card.className = 'glass-card new-api-model-static-card';
 
           card.innerHTML =
             '<div>' +
             '<h3>' +
-            escapeHtml(model.model_name || 'model') +
+            escapeHtml(model.name) +
             '</h3>' +
             '<p class="new-api-model-card-provider">' +
-            escapeHtml(provider) +
+            escapeHtml(model.provider) +
             '</p>' +
             '</div>' +
             '<div class="new-api-model-card-tags">' +
-            tags
+            model.tags
               .map(function (tag) {
                 return '<span>' + escapeHtml(tag) + '</span>';
               })
               .join('') +
             '</div>' +
-            '<div class="new-api-model-card-meta">' +
-            '<div><span>模型分组</span><strong>' +
-            escapeHtml(group.name) +
-            '</strong></div>' +
-            '<div><span>分组倍率</span><strong>' +
-            formatRatio(group.ratio) +
-            '</strong></div>' +
-            '<div class="new-api-model-card-discount"><span>分组折扣</span><strong>' +
-            (discount === null ? '-' : discount + ' 折') +
-            '</strong></div>' +
-            '</div>';
+            '<p class="new-api-model-card-description">' +
+            escapeHtml(model.description) +
+            '</p>';
 
           return card;
         }
@@ -461,11 +331,11 @@
             .replace(/'/g, '&#39;');
         }
 
-        function renderModelShowcase(payload) {
+        function renderModelShowcase() {
           var section = document.querySelector('.new-api-section-models');
           if (
             !section ||
-            section.getAttribute('data-new-api-model-marquee') === 'true'
+            section.getAttribute('data-new-api-model-static') === 'true'
           )
             return false;
 
@@ -476,61 +346,20 @@
             });
           if (!grid) return false;
 
-          var models = Array.isArray(payload && payload.data)
-            ? payload.data.slice()
-            : [];
-          var vendors = (payload && payload.vendors) || {};
-          var groupRatio = (payload && payload.group_ratio) || {};
-
-          models = models.filter(function (model) {
-            var name = String(model.model_name || '').toLowerCase();
-            return (
-              (name.indexOf('gpt') !== -1 ||
-                name.indexOf('claude') !== -1 ||
-                name.indexOf('gemini') !== -1) &&
-              Array.isArray(model.supported_endpoint_types) &&
-              model.supported_endpoint_types.indexOf('openai') !== -1
-            );
-          });
-          models = pickShowcaseModels(models).sort(function (a, b) {
-            var rank =
-              modelFamilyRank(getModelFamily(a.model_name)) -
-              modelFamilyRank(getModelFamily(b.model_name));
-            if (rank !== 0) return rank;
-            return modelMainstreamScore(b) - modelMainstreamScore(a);
+          var staticGrid = document.createElement('div');
+          staticGrid.className = 'new-api-model-static-grid';
+          staticModelShowcase.forEach(function (model) {
+            staticGrid.appendChild(createStaticModelCard(model));
           });
 
-          if (models.length < 4) return false;
-
-          var marquee = document.createElement('div');
-          marquee.className = 'new-api-model-marquee';
-          var track = document.createElement('div');
-          track.className = 'new-api-model-track';
-          models.concat(models).forEach(function (model) {
-            track.appendChild(createModelCard(model, vendors, groupRatio));
-          });
-          marquee.appendChild(track);
-
-          grid.replaceWith(marquee);
-          section.setAttribute('data-new-api-model-marquee', 'true');
+          grid.replaceWith(staticGrid);
+          section.setAttribute('data-new-api-model-static', 'true');
           return true;
         }
 
         function loadModelShowcase() {
-          if (modelShowcaseLoaded) return;
-          modelShowcaseLoaded = true;
-
-          fetch('/api/pricing', { credentials: 'same-origin' })
-            .then(function (response) {
-              if (!response.ok) throw new Error('pricing request failed');
-              return response.json();
-            })
-            .then(function (payload) {
-              if (!renderModelShowcase(payload)) modelShowcaseLoaded = false;
-            })
-            .catch(function () {
-              modelShowcaseLoaded = false;
-            });
+          if (staticModelShowcaseRendered) return;
+          staticModelShowcaseRendered = renderModelShowcase();
         }
 
         function restyleGatewayCard() {
@@ -746,10 +575,14 @@
             if (route) {
               event.preventDefault();
               event.stopPropagation();
-              window.parent.postMessage(
-                { type: 'new-api-home-route', route: route },
-                '*',
-              );
+              if (window.parent && window.parent !== window) {
+                window.parent.postMessage(
+                  { type: 'new-api-home-route', route: route },
+                  '*',
+                );
+              } else {
+                window.location.assign(route);
+              }
               return;
             }
 

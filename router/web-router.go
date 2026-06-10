@@ -31,9 +31,11 @@ func SetWebRouter(router *gin.Engine, buildFS embed.FS, indexPage []byte) {
 	router.GET("/home", serveHomePage)
 	router.GET("/home/", serveHomePage)
 	router.GET("/home/index.html", serveHomePage)
+	router.GET("/", serveHomePage)
 	router.HEAD("/home", serveHomePage)
 	router.HEAD("/home/", serveHomePage)
 	router.HEAD("/home/index.html", serveHomePage)
+	router.HEAD("/", serveHomePage)
 
 	router.Use(static.Serve("/", common.EmbedFolder(buildFS, "web/dist")))
 	router.NoRoute(func(c *gin.Context) {
