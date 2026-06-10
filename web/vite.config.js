@@ -62,6 +62,12 @@ export default defineConfig({
   build: {
     rollupOptions: {
       output: {
+        // 仅对“真正首屏(入口)必加载”的稳定基础库显式分包以获得 immutable 长缓存；
+        // 体积大但仅特定页面使用的库（@douyinfe/semi-ui 后台框架、@visactor 图表、
+        // @lobehub/icons 厂商图标）刻意不强制分包——一旦强制分包且被众多 lazy 页面
+        // 共享，rollup 会把它作为 side-effect import 灌进入口/共享 chunk，导致轻量
+        // 公开页(/login 等)也被迫下载它们。交给 rollup 按动态 import 边界自然分包，
+        // 它们只会落入真正使用的 lazy 页面 chunk。
         manualChunks: {
           'react-core': [
             'react',
@@ -70,7 +76,6 @@ export default defineConfig({
             'react/jsx-runtime',
             'react/jsx-dev-runtime',
           ],
-          'semi-ui': ['@douyinfe/semi-icons', '@douyinfe/semi-ui'],
           tools: ['axios', 'history'],
           markdown: ['marked'],
           upload: ['react-dropzone'],
@@ -78,11 +83,6 @@ export default defineConfig({
           captcha: ['react-turnstile'],
           telegram: ['react-telegram-login'],
           toast: ['react-toastify'],
-          charts: [
-            '@visactor/react-vchart',
-            '@visactor/vchart',
-            '@visactor/vchart-semi-theme',
-          ],
           i18n: [
             'i18next',
             'react-i18next',
