@@ -166,6 +166,72 @@ func GetStatus(c *gin.Context) {
 	return
 }
 
+func buildCustomOAuthProviderInfo() []gin.H {
+	customProviders := oauth.GetEnabledCustomProviders()
+	if len(customProviders) == 0 {
+		return nil
+	}
+	providersInfo := make([]gin.H, 0, len(customProviders))
+	for _, p := range customProviders {
+		config := p.GetConfig()
+		providersInfo = append(providersInfo, gin.H{
+			"id":                     config.Id,
+			"name":                   config.Name,
+			"slug":                   config.Slug,
+			"icon":                   config.Icon,
+			"client_id":              config.ClientId,
+			"authorization_endpoint": config.AuthorizationEndpoint,
+			"scopes":                 config.Scopes,
+		})
+	}
+	return providersInfo
+}
+
+func GetPublicStatus(c *gin.Context) {
+	passkeySetting := system_setting.GetPasskeySettings()
+	legalSetting := system_setting.GetLegalSettings()
+
+	data := gin.H{
+		"email_verification": common.EmailVerificationEnabled,
+		"github_oauth":       common.GitHubOAuthEnabled,
+		"github_client_id":   common.GitHubClientId,
+		"discord_oauth":      system_setting.GetDiscordSettings().Enabled,
+		"discord_client_id":  system_setting.GetDiscordSettings().ClientId,
+		"linuxdo_oauth":      common.LinuxDOOAuthEnabled,
+		"linuxdo_client_id":  common.LinuxDOClientId,
+		"telegram_oauth":     common.TelegramOAuthEnabled,
+		"telegram_bot_name":  common.TelegramBotName,
+		"system_name":        common.SystemName,
+		"logo":               common.Logo,
+		"footer_html":        common.Footer,
+		"wechat_qrcode":      common.WeChatAccountQRCodeImageURL,
+		"wechat_login":       common.WeChatAuthEnabled,
+		"server_address":     system_setting.ServerAddress,
+		"turnstile_check":    common.TurnstileCheckEnabled,
+		"turnstile_site_key": common.TurnstileSiteKey,
+		"docs_link":          operation_setting.GetGeneralSetting().DocsLink,
+		"oidc_enabled":       system_setting.GetOIDCSettings().Enabled,
+		"oidc_client_id":     system_setting.GetOIDCSettings().ClientId,
+		"oidc_authorization_endpoint": system_setting.GetOIDCSettings().
+			AuthorizationEndpoint,
+		"passkey_login":          passkeySetting.Enabled,
+		"setup":                  constant.Setup,
+		"user_agreement_enabled": legalSetting.UserAgreement != "",
+		"privacy_policy_enabled": legalSetting.PrivacyPolicy != "",
+		"self_use_mode_enabled":  operation_setting.SelfUseModeEnabled,
+	}
+
+	if providersInfo := buildCustomOAuthProviderInfo(); len(providersInfo) > 0 {
+		data["custom_oauth_providers"] = providersInfo
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"success": true,
+		"message": "",
+		"data":    data,
+	})
+}
+
 func GetNotice(c *gin.Context) {
 	common.OptionMapRWMutex.RLock()
 	defer common.OptionMapRWMutex.RUnlock()
