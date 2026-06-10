@@ -18,14 +18,13 @@ For commercial licensing, please contact support@quantumnous.com
 */
 
 import { useState, useCallback, useEffect } from 'react';
-import { initVChartSemiTheme } from '@visactor/vchart-semi-theme';
 import {
   modelColorMap,
   renderNumber,
   renderQuota,
   modelToColor,
   getQuotaWithUnit,
-} from '../../helpers';
+} from '../../helpers/dashboardFormat';
 import {
   processRawData,
   calculateTrendData,
@@ -630,8 +629,10 @@ export const useDashboardCharts = (
 
   // ========== 初始化图表主题 ==========
   useEffect(() => {
-    initVChartSemiTheme({
-      isWatchingThemeSwitch: true,
+    import('@visactor/vchart-semi-theme').then(({ initVChartSemiTheme }) => {
+      initVChartSemiTheme({
+        isWatchingThemeSwitch: true,
+      });
     });
   }, []);
 

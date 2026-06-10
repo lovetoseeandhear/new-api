@@ -18,7 +18,9 @@ For commercial licensing, please contact support@quantumnous.com
 */
 
 import HeaderBar from './headerbar';
-import { Layout } from '@douyinfe/semi-ui';
+import '@douyinfe/semi-ui/dist/css/semi.css';
+import 'react-toastify/dist/ReactToastify.css';
+import { Layout, LocaleProvider } from '@douyinfe/semi-ui';
 import App from '../../App';
 import FooterBar from './Footer';
 import { ToastContainer } from 'react-toastify';
@@ -34,6 +36,8 @@ import { UserContext } from '../../context/User';
 import { StatusContext } from '../../context/Status';
 import { useLocation } from 'react-router-dom';
 import { normalizeLanguage } from '../../i18n/language';
+import zh_CN from '@douyinfe/semi-ui/lib/es/locale/source/zh_CN';
+import en_GB from '@douyinfe/semi-ui/lib/es/locale/source/en_GB';
 const { Sider, Content, Header } = Layout;
 
 const SiderBar = lazy(() => import('./SiderBar'));
@@ -46,6 +50,10 @@ const PageLayout = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const { i18n } = useTranslation();
   const location = useLocation();
+  const semiLocale = React.useMemo(
+    () => ({ zh: zh_CN, en: en_GB })[i18n.language] || zh_CN,
+    [i18n.language],
+  );
 
   const cardProPages = [
     '/',
@@ -144,6 +152,7 @@ const PageLayout = () => {
   }, [i18n, userState?.user?.setting]);
 
   return (
+    <LocaleProvider locale={semiLocale}>
     <Layout
       className='app-layout'
       style={{
@@ -188,6 +197,9 @@ const PageLayout = () => {
               border: 'none',
               paddingRight: '0',
               width: 'var(--sidebar-current-width)',
+              minWidth: 'var(--sidebar-current-width)',
+              maxWidth: 'var(--sidebar-current-width)',
+              flex: '0 0 var(--sidebar-current-width)',
             }}
           >
             <Suspense fallback={null}>
@@ -204,9 +216,10 @@ const PageLayout = () => {
             marginLeft: isMobile
               ? '0'
               : showSider
-                ? 'var(--sidebar-current-width)'
+                ? 'var(--sidebar-content-offset)'
                 : '0',
             flex: '1 1 auto',
+            minWidth: 0,
             display: 'flex',
             flexDirection: 'column',
           }}
@@ -238,6 +251,7 @@ const PageLayout = () => {
       </Layout>
       <ToastContainer />
     </Layout>
+    </LocaleProvider>
   );
 };
 

@@ -17,14 +17,26 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 For commercial licensing, please contact support@quantumnous.com
 */
 
-import React from 'react';
-
-const Loading = () => {
-  return (
-    <div className='fixed inset-0 z-50 flex h-screen w-screen items-center justify-center bg-[rgba(248,250,252,0.72)]'>
-      <div className='h-8 w-8 animate-spin rounded-full border-2 border-slate-200 border-t-slate-700' />
-    </div>
+function showPublicToast(message, type = 'info') {
+  if (typeof window === 'undefined') return;
+  window.dispatchEvent(
+    new CustomEvent('flowbay-public-toast', {
+      detail: {
+        message: String(message || ''),
+        type,
+      },
+    }),
   );
-};
+}
 
-export default Loading;
+export function publicError(message) {
+  showPublicToast(message, 'error');
+}
+
+export function publicInfo(message) {
+  showPublicToast(message, 'info');
+}
+
+export function publicSuccess(message) {
+  showPublicToast(message, 'success');
+}

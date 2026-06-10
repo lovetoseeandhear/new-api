@@ -18,7 +18,7 @@ For commercial licensing, please contact support@quantumnous.com
 */
 
 import React, { useContext, useEffect } from 'react';
-import { getRelativeTime } from '../../helpers';
+import { getRelativeTime } from '../../helpers/utils';
 import { UserContext } from '../../context/User';
 import { StatusContext } from '../../context/Status';
 

@@ -17,11 +17,18 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 For commercial licensing, please contact support@quantumnous.com
 */
 
-import React from 'react';
+import React, { lazy, Suspense } from 'react';
 import { Card, Avatar, Skeleton, Tag } from '@douyinfe/semi-ui';
-import { VChart } from '@visactor/react-vchart';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+
+const VChart = lazy(() =>
+  import('@visactor/react-vchart').then((module) => ({ default: module.VChart })),
+);
+
+const MiniChartFallback = () => (
+  <div className='dashboard-plaza-chart-skeleton h-full w-full' />
+);
 
 const StatsCards = ({
   groupedStatsData,
@@ -100,10 +107,12 @@ const StatsCards = ({
                       (item.trendData && item.trendData.length > 0)) && (
                       <div className='w-24 h-10'>
                         <div className='dashboard-plaza-stat-chart h-full w-full'>
-                        <VChart
-                          spec={getTrendSpec(item.trendData, item.trendColor)}
-                          option={CHART_CONFIG}
-                        />
+                          <Suspense fallback={<MiniChartFallback />}>
+                            <VChart
+                              spec={getTrendSpec(item.trendData, item.trendColor)}
+                              option={CHART_CONFIG}
+                            />
+                          </Suspense>
                         </div>
                       </div>
                     )
