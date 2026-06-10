@@ -20,12 +20,12 @@ For commercial licensing, please contact support@quantumnous.com
 import React, { useEffect, useMemo, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { getLucideIcon } from '../../helpers/render';
+import { getLucideIcon } from '../../helpers/sidebarIcons';
 import { ChevronLeft } from 'lucide-react';
 import { useSidebarCollapsed } from '../../hooks/common/useSidebarCollapsed';
 import { useSidebar } from '../../hooks/common/useSidebar';
 import { useMinimumLoadingTime } from '../../hooks/common/useMinimumLoadingTime';
-import { isAdmin, isRoot, showError } from '../../helpers';
+import { isAdmin, isRoot, showError } from '../../helpers/utils';
 import SkeletonWrapper from './components/SkeletonWrapper';
 
 import { Nav, Divider, Button } from '@douyinfe/semi-ui';
@@ -495,7 +495,7 @@ const SiderBar = ({ onNavigate = () => {} }) => {
         <SkeletonWrapper
           loading={showSkeleton}
           type='button'
-          width={collapsed ? 36 : 156}
+          width={collapsed ? 34 : 128}
           height={24}
           className='w-full'
         >
@@ -517,7 +517,7 @@ const SiderBar = ({ onNavigate = () => {} }) => {
             icononly={collapsed}
             style={
               collapsed
-                ? { width: 36, height: 24, padding: 0 }
+                ? { width: 34, height: 24, padding: 0 }
                 : { padding: '4px 12px', width: '100%' }
             }
           >

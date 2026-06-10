@@ -63,7 +63,13 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks: {
-          'react-core': ['react', 'react-dom', 'react-router-dom'],
+          'react-core': [
+            'react',
+            'react-dom',
+            'react-router-dom',
+            'react/jsx-runtime',
+            'react/jsx-dev-runtime',
+          ],
           'semi-ui': ['@douyinfe/semi-icons', '@douyinfe/semi-ui'],
           tools: ['axios', 'history'],
           markdown: ['marked'],
