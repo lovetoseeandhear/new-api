@@ -23,23 +23,27 @@ import { UserContext } from '../../context/User';
 import { StatusContext } from '../../context/Status';
 import {
   API,
-  getLogo,
-  showError,
-  showInfo,
-  showSuccess,
-  updateAPI,
-  getSystemName,
-  getOAuthProviderIcon,
-  setUserData,
+  onCustomOAuthClicked,
   onGitHubOAuthClicked,
   onDiscordOAuthClicked,
   onOIDCClicked,
   onLinuxDOOAuthClicked,
-  onCustomOAuthClicked,
+  updateAPI,
+} from '../../helpers/api';
+import { setUserData } from '../../helpers/data';
+import { getOAuthProviderIcon } from '../../helpers/oauthIcon';
+import {
   prepareCredentialRequestOptions,
   buildAssertionResult,
   isPasskeySupported,
-} from '../../helpers';
+} from '../../helpers/passkey';
+import {
+  getLogo,
+  getSystemName,
+  showError,
+  showInfo,
+  showSuccess,
+} from '../../helpers/utils';
 import Turnstile from 'react-turnstile';
 import {
   Button,

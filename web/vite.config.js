@@ -65,13 +65,17 @@ export default defineConfig({
         manualChunks: {
           'react-core': ['react', 'react-dom', 'react-router-dom'],
           'semi-ui': ['@douyinfe/semi-icons', '@douyinfe/semi-ui'],
-          tools: ['axios', 'history', 'marked'],
-          'react-components': [
-            'react-dropzone',
-            'react-fireworks',
-            'react-telegram-login',
-            'react-toastify',
-            'react-turnstile',
+          tools: ['axios', 'history'],
+          markdown: ['marked'],
+          upload: ['react-dropzone'],
+          fireworks: ['react-fireworks'],
+          captcha: ['react-turnstile'],
+          telegram: ['react-telegram-login'],
+          toast: ['react-toastify'],
+          charts: [
+            '@visactor/react-vchart',
+            '@visactor/vchart',
+            '@visactor/vchart-semi-theme',
           ],
           i18n: [
             'i18next',

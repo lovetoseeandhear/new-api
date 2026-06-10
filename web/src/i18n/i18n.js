@@ -21,14 +21,46 @@ import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 
-import enTranslation from './locales/en.json';
-import frTranslation from './locales/fr.json';
 import zhCNTranslation from './locales/zh-CN.json';
-import zhTWTranslation from './locales/zh-TW.json';
-import ruTranslation from './locales/ru.json';
-import jaTranslation from './locales/ja.json';
-import viTranslation from './locales/vi.json';
-import { supportedLanguages } from './language';
+import { normalizeLanguage, supportedLanguages } from './language';
+
+const localeLoaders = {
+  en: () => import('./locales/en.json'),
+  fr: () => import('./locales/fr.json'),
+  'zh-TW': () => import('./locales/zh-TW.json'),
+  ru: () => import('./locales/ru.json'),
+  ja: () => import('./locales/ja.json'),
+  vi: () => import('./locales/vi.json'),
+};
+
+const loadedLanguages = new Set(['zh-CN']);
+
+export async function loadLanguageResource(language) {
+  const normalizedLanguage = normalizeLanguage(language) || 'zh-CN';
+  if (!supportedLanguages.includes(normalizedLanguage)) {
+    return 'zh-CN';
+  }
+
+  if (loadedLanguages.has(normalizedLanguage)) {
+    return normalizedLanguage;
+  }
+
+  const loader = localeLoaders[normalizedLanguage];
+  if (!loader) {
+    return 'zh-CN';
+  }
+
+  const translation = await loader();
+  i18n.addResourceBundle(
+    normalizedLanguage,
+    'translation',
+    translation.default || translation,
+    true,
+    true,
+  );
+  loadedLanguages.add(normalizedLanguage);
+  return normalizedLanguage;
+}
 
 i18n
   .use(LanguageDetector)
@@ -37,13 +69,7 @@ i18n
     load: 'currentOnly',
     supportedLngs: supportedLanguages,
     resources: {
-      en: enTranslation,
       'zh-CN': zhCNTranslation,
-      'zh-TW': zhTWTranslation,
-      fr: frTranslation,
-      ru: ruTranslation,
-      ja: jaTranslation,
-      vi: viTranslation,
     },
     fallbackLng: 'zh-CN',
     nsSeparator: false,
@@ -51,6 +77,19 @@ i18n
       escapeValue: false,
     },
   });
+
+const originalChangeLanguage = i18n.changeLanguage.bind(i18n);
+i18n.changeLanguage = async (language, callback) => {
+  const normalizedLanguage = await loadLanguageResource(language);
+  return originalChangeLanguage(normalizedLanguage, callback);
+};
+
+const initialLanguage = normalizeLanguage(i18n.language);
+if (initialLanguage && initialLanguage !== 'zh-CN') {
+  loadLanguageResource(initialLanguage)
+    .then((loadedLanguage) => originalChangeLanguage(loadedLanguage))
+    .catch(() => originalChangeLanguage('zh-CN'));
+}
 
 window.__i18n = i18n;
 

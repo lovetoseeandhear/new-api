@@ -100,6 +100,9 @@ import {
   SiWechat,
   SiX,
 } from 'react-icons/si';
+import { stringToColor } from './color';
+
+export { stringToColor };
 
 // 获取侧边栏Lucide图标组件
 export function getLucideIcon(key, selected = false) {
@@ -625,25 +628,6 @@ export function getOAuthProviderIcon(iconName, size = 20) {
   );
 }
 
-// 颜色列表
-const colors = [
-  'amber',
-  'blue',
-  'cyan',
-  'green',
-  'grey',
-  'indigo',
-  'light-blue',
-  'lime',
-  'orange',
-  'pink',
-  'purple',
-  'red',
-  'teal',
-  'violet',
-  'yellow',
-];
-
 // 基础10色色板 (N ≤ 10)
 const baseColors = [
   '#1664FF', // 主色
@@ -746,15 +730,6 @@ export function modelToColor(modelName) {
   // 4. 使用hash值选择颜色
   const index = hash % colorPalette.length;
   return colorPalette[index];
-}
-
-export function stringToColor(str) {
-  let sum = 0;
-  for (let i = 0; i < str.length; i++) {
-    sum += str.charCodeAt(i);
-  }
-  let i = sum % colors.length;
-  return colors[i];
 }
 
 // 渲染带有模型图标的标签

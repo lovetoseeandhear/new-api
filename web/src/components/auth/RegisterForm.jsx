@@ -21,17 +21,22 @@ import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {
   API,
+  onCustomOAuthClicked,
+  onDiscordOAuthClicked,
+  onGitHubOAuthClicked,
+  onLinuxDOOAuthClicked,
+  onOIDCClicked,
+  updateAPI,
+} from '../../helpers/api';
+import { setUserData } from '../../helpers/data';
+import { getOAuthProviderIcon } from '../../helpers/oauthIcon';
+import {
   getLogo,
+  getSystemName,
   showError,
   showInfo,
   showSuccess,
-  updateAPI,
-  getSystemName,
-  getOAuthProviderIcon,
-  setUserData,
-  onDiscordOAuthClicked,
-  onCustomOAuthClicked,
-} from '../../helpers';
+} from '../../helpers/utils';
 import Turnstile from 'react-turnstile';
 import {
   Button,
@@ -51,11 +56,6 @@ import {
   IconLock,
   IconKey,
 } from '@douyinfe/semi-icons';
-import {
-  onGitHubOAuthClicked,
-  onLinuxDOOAuthClicked,
-  onOIDCClicked,
-} from '../../helpers';
 import OIDCIcon from '../common/logo/OIDCIcon';
 import LinuxDoIcon from '../common/logo/LinuxDoIcon';
 import WeChatIcon from '../common/logo/WeChatIcon';
