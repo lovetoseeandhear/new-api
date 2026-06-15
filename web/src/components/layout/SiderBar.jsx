@@ -495,7 +495,7 @@ const SiderBar = ({ onNavigate = () => {} }) => {
         <SkeletonWrapper
           loading={showSkeleton}
           type='button'
-          width={collapsed ? 34 : 128}
+          width={collapsed ? 34 : 156}
           height={24}
           className='w-full'
         >

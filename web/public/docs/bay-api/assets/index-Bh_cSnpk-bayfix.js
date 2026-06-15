@@ -29863,294 +29863,244 @@ const rR = {
       ],
     }),
   uR = () => {
-    const [e, i] = xr.useState({
-        gpt: !0,
-        geminiKey: !0,
-        minimax: !0,
-        glm: !0,
-        deepseek: !0,
-        kimi: !0,
-        codex: !1,
-        kling: !1,
-        gemini: !1,
-        cc: !1,
-        ccAws: !1,
-        ccOffical: !1,
-      }),
-      l = (r) => i((o) => ({ ...o, [r]: !o[r] })),
-      o = (r, o, c, u) =>
-        H.jsxs('div', {
+    const e = [
+        {
+          name: '聚合官Key',
+          badge: '综合聚合',
+          ratio: '6.12x',
+          summary:
+            '覆盖面最广的综合分组，汇聚 OpenAI、Google、Anthropic、阿里、Mistral、DeepSeek、MiniMax、Kimi 等多家供应商。',
+          fit: '希望一个令牌覆盖多供应商、多端点、多模态能力的用户。',
+          note:
+            '该分组模型数量最多，包含文本、视觉、embedding、生图、生视频等能力；计费跨度也最大，调用前建议在模型广场确认价格。',
+          examples: ['GPT 系列', 'Gemini 系列', 'Claude 系列', 'Qwen / DeepSeek / Kimi'],
+        },
+        {
+          name: 'GPT Pro',
+          badge: 'OpenAI 高阶',
+          ratio: '2x',
+          summary:
+            '面向 OpenAI 高阶能力的分组，主要承载 GPT 系列的强推理、代码、长上下文与多模态模型。',
+          fit: '复杂推理、代码生成、Agent 工作流、需要稳定 OpenAI 兼容体验的场景。',
+          note:
+            '适合对模型能力要求更高的任务；如果只是连通性测试或轻量任务，优先使用基础分组验证。',
+          examples: ['gpt-5.4-mini', 'gpt-5.4', 'gpt-5.5'],
+        },
+        {
+          name: 'CC Max',
+          badge: 'Claude 高阶',
+          ratio: '3x',
+          summary:
+            '面向 Claude Code 和高强度 Claude 调用的高级分组，覆盖 Sonnet、Opus、Haiku 等 Claude 能力。',
+          fit: 'Claude Code、长上下文代码库分析、复杂文档处理、智能体任务。',
+          note:
+            '该分组倍率高于基础分组，建议给明确需要 Claude 高阶能力的令牌使用。',
+          examples: ['claude-sonnet-4.6', 'claude-opus-4.6', 'claude-haiku-4.5'],
+        },
+        {
+          name: 'Gemini Ultra',
+          badge: 'Google 高阶',
+          ratio: '2x',
+          summary:
+            '面向 Gemini 高阶模型的分组，重点覆盖长上下文、多模态理解、音视频理解和轻量快速响应。',
+          fit: 'Gemini CLI、多模态分析、长文本处理、需要 Google 模型能力的项目。',
+          note:
+            'Gemini 相关客户端可能使用 Gemini 原生端点或 OpenAI 兼容端点，配置时要和教程中的 Base URL 保持一致。',
+          examples: ['gemini-3-flash-preview', 'gemini-3.1-pro-preview', 'gemini-2.5-flash'],
+        },
+        {
+          name: 'Image-2',
+          badge: '图像生成',
+          ratio: '1.5x',
+          summary:
+            '专门用于 GPT-Image-2 等图像生成模型的分组，计费会结合模型基础价格、图片 size、quality 和数量。',
+          fit: '文生图、图像编辑、不同分辨率和质量档位的图片生成测试。',
+          note:
+            '图片模型会按媒体计费规则处理；请求 size 或 quality 不在配置范围时，会按后台缺省策略处理。',
+          examples: ['gpt-image-2'],
+        },
+      ],
+      l = (s) =>
+        H.jsx('span', {
           className:
-            'border-2 border-gray-100 rounded-xl overflow-hidden shadow-inner',
+            'inline-flex items-center rounded-md bg-gray-50 border border-gray-200 px-2.5 py-1 text-xs font-semibold text-gray-700',
+          children: s,
+        }),
+      r = (s, a) =>
+        H.jsxs('article', {
+          className:
+            'rounded-xl border border-gray-200 bg-white p-6 shadow-sm hover:border-gray-300 transition-colors',
           children: [
-            H.jsxs('button', {
-              onClick: () => l(o),
-              className:
-                'w-full flex items-center justify-between p-5 bg-gray-50 hover:bg-white transition-colors border-b-2 border-gray-100',
+            H.jsxs('div', {
+              className: 'flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between',
               children: [
                 H.jsxs('div', {
-                  className:
-                    'flex items-center gap-3 text-gray-900 text-base font-black uppercase tracking-tight',
+                  className: 'min-w-0',
                   children: [
-                    e[o] ? H.jsx($f, { size: 20 }) : H.jsx(Wf, { size: 20 }),
-                    r,
+                    H.jsxs('div', {
+                      className: 'flex flex-wrap items-center gap-3',
+                      children: [
+                        H.jsx('span', {
+                          className:
+                            'inline-flex h-7 w-7 items-center justify-center rounded-md bg-gray-100 text-xs font-black text-gray-500',
+                          children: String(a + 1).padStart(2, '0'),
+                        }),
+                        H.jsx('h3', {
+                          className: 'text-2xl font-black text-gray-950 tracking-tight',
+                          children: s.name,
+                        }),
+                        H.jsx('span', {
+                          className:
+                            'rounded-md border border-gray-200 bg-gray-50 px-2.5 py-1 text-xs font-bold text-gray-600',
+                          children: s.badge,
+                        }),
+                      ],
+                    }),
+                    H.jsx('p', {
+                      className: 'mt-4 max-w-3xl text-sm leading-7 font-medium text-gray-650',
+                      children: s.summary,
+                    }),
+                  ],
+                }),
+                H.jsxs('div', {
+                  className:
+                    'shrink-0 rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 text-left lg:text-right',
+                  children: [
+                    H.jsx('p', {
+                      className: 'text-[10px] uppercase tracking-widest font-black text-gray-400',
+                      children: '倍率',
+                    }),
+                    H.jsx('p', {
+                      className: 'mt-1 text-xl font-black text-gray-950 font-mono',
+                      children: s.ratio,
+                    }),
+                  ],
+                }),
+              ],
+            }),
+            H.jsx('div', {
+              className: 'my-5 h-px bg-gray-100',
+            }),
+            H.jsxs('div', {
+              className: 'grid grid-cols-1 gap-5 lg:grid-cols-[1fr_1fr]',
+              children: [
+                H.jsxs('div', {
+                  children: [
+                    H.jsx('p', {
+                      className: 'text-[11px] font-black uppercase tracking-widest text-gray-400',
+                      children: '适合场景',
+                    }),
+                    H.jsx('p', {
+                      className: 'mt-2 text-sm leading-6 font-semibold text-gray-800',
+                      children: s.fit,
+                    }),
+                  ],
+                }),
+                H.jsxs('div', {
+                  children: [
+                    H.jsx('p', {
+                      className: 'text-[11px] font-black uppercase tracking-widest text-gray-400',
+                      children: '使用提醒',
+                    }),
+                    H.jsx('p', {
+                      className: 'mt-2 text-sm leading-6 font-semibold text-gray-800',
+                      children: s.note,
+                    }),
+                  ],
+                }),
+              ],
+            }),
+            H.jsx('div', {
+              className: 'mt-5 flex flex-wrap gap-2',
+              children: s.examples.map((n) => l(n)),
+            }),
+          ],
+        }),
+      o = (s, a, t) =>
+        H.jsxs('div', {
+          className:
+            'rounded-xl border border-gray-200 bg-white p-5 shadow-sm',
+          children: [
+            H.jsx('p', {
+              className: 'text-[11px] font-black uppercase tracking-widest text-gray-400',
+              children: s,
+            }),
+            H.jsx('p', {
+              className: 'mt-2 text-sm leading-6 font-bold text-gray-800',
+              children: a,
+            }),
+            t &&
+              H.jsx('p', {
+                className: 'mt-3 text-xs leading-5 font-medium text-gray-500',
+                children: t,
+              }),
+          ],
+        });
+    return H.jsxs('div', {
+      className: 'max-w-6xl mx-auto py-14 px-8',
+      children: [
+        H.jsxs('div', {
+          className: 'mb-10',
+          children: [
+            H.jsx('h1', {
+              className:
+                'text-5xl font-black text-gray-950 mb-4 tracking-tight leading-none',
+              children: '分组介绍',
+            }),
+            H.jsx('p', {
+              className: 'text-base text-gray-600 font-medium max-w-3xl leading-7',
+              children:
+                '令牌分组决定一个 API 令牌可以调用哪些资源池，也会影响展示倍率和最终扣费。这里按用途介绍主要分组，不展开全部模型清单，具体模型以模型广场实时展示为准。',
+            }),
+          ],
+        }),
+        H.jsxs('section', {
+          className:
+            'rounded-2xl border border-gray-200 bg-gray-50/60 p-5 md:p-6 mb-8',
+          children: [
+            H.jsxs('div', {
+              className: 'mb-5 flex flex-col gap-2 md:flex-row md:items-end md:justify-between',
+              children: [
+                H.jsxs('div', {
+                  children: [
+                    H.jsx('h2', {
+                      className: 'text-xl font-black text-gray-950 tracking-tight',
+                      children: '主要可选分组',
+                    }),
+                    H.jsx('p', {
+                      className: 'mt-1 text-sm font-medium text-gray-500',
+                      children: '按用途选择分组，再在模型广场确认具体模型与价格。',
+                    }),
                   ],
                 }),
                 H.jsx('span', {
                   className:
-                    'text-[10px] bg-black text-white px-2 py-1 rounded font-black tracking-widest uppercase italic',
-                  children: c,
+                    'inline-flex w-fit rounded-md border border-gray-200 bg-white px-3 py-1.5 text-xs font-bold text-gray-500',
+                  children: 'GROUPS',
                 }),
               ],
             }),
-            e[o] &&
-              H.jsx(vr.div, {
-                initial: { height: 0 },
-                animate: { height: 'auto' },
-                className: 'overflow-hidden bg-white',
-                children: H.jsx('div', {
-                  className: 'grid grid-cols-1 divide-y divide-gray-100',
-                  children: u,
-                }),
-              }),
-          ],
-        }),
-      c = (r, o, c, u) =>
-        H.jsx(Kl, { name: r, provider: o, price: c, multiplier: u });
-    return H.jsxs('div', {
-      className: 'max-w-5xl mx-auto py-16 px-8',
-      children: [
-        H.jsxs('div', {
-          className: 'mb-12',
-          children: [
-            H.jsx('h1', {
-              className:
-                'text-6xl font-black text-gray-900 mb-4 uppercase tracking-tighter leading-none border-b-8 border-black pb-4 inline-block',
-              children: '分组介绍',
-            }),
-            H.jsx('p', {
-              className: 'text-xl text-gray-500 font-medium max-w-2xl mt-4',
-              children:
-                '了解如何通过资源分组来精细化管理您的模型调用权限与配额。',
-            }),
-          ],
-        }),
-        H.jsxs(vr.div, {
-          initial: { opacity: 0, y: 20 },
-          animate: { opacity: 1, y: 0 },
-          className:
-            'bg-white rounded-2xl border-4 border-black shadow-2xl overflow-hidden mb-16',
-          children: [
             H.jsx('div', {
-              className:
-                'bg-gray-900 px-8 py-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-4',
-              children: H.jsxs('div', {
-                className: 'flex items-center gap-4',
-                children: [
-                  H.jsx('div', {
-                    className:
-                      'p-3 bg-orange-500 text-white rounded-xl shadow-lg shadow-orange-500/20',
-                    children: H.jsx(qM, { size: 24 }),
-                  }),
-                  H.jsxs('div', {
-                    children: [
-                      H.jsx('h2', {
-                        className:
-                          'text-lg font-black text-white uppercase tracking-tight',
-                        children: '分组面板 / Group Panel',
-                      }),
-                      H.jsx('p', {
-                        className:
-                          'text-xs text-gray-400 font-mono tracking-widest',
-                        children: 'LOGICAL RESOURCE CONTAINER',
-                      }),
-                    ],
-                  }),
-                ],
-              }),
+              className: 'grid grid-cols-1 gap-4',
+              children: e.map((s, a) => r(s, a)),
             }),
-            H.jsxs('div', {
-              className: 'p-8 space-y-6',
-              children: [
-                o('模型列表 · gpt官key非订阅', 'gpt', '9 MODELS', [
-                  c('gpt-5.2', 'OPENAI', '官方 Key', '1'),
-                  c('gpt-5.4', 'OPENAI', '官方 Key', '1'),
-                  c('gpt-5.4-mini', 'OPENAI', '官方 Key', '1'),
-                  c('gpt-5.4-nano', 'OPENAI', '官方 Key', '1'),
-                  c('gpt-5.4-pro', 'OPENAI', '官方 Key', '1'),
-                  c('gpt-5.5', 'OPENAI', '官方 Key', '1'),
-                  c('gpt-5.5-instant', 'OPENAI', '官方 Key', '1'),
-                  c('gpt-5-mini', 'OPENAI', '官方 Key', '1'),
-                  c('gpt-5-nano', 'OPENAI', '官方 Key', '1'),
-                ]),
-                o('模型列表 · gemini官key非订阅', 'geminiKey', '2 MODELS', [
-                  c('gemini-3.1-pro', 'GOOGLE', '官方 Key', '1'),
-                  c('gemini-3-flash', 'GOOGLE', '官方 Key', '1'),
-                ]),
-                o('模型列表 · minimax官key非订阅', 'minimax', '2 MODELS', [
-                  c('minimax-m2.5', 'MINIMAX', '官方 Key', '1'),
-                  c('minimax-m2.7', 'MINIMAX', '官方 Key', '1'),
-                ]),
-                o('模型列表 · glm官key非订阅', 'glm', '2 MODELS', [
-                  c('glm-5', 'GLM', '官方 Key', '1'),
-                  c('glm-5.1', 'GLM', '官方 Key', '1'),
-                ]),
-                o('模型列表 · deepseek官key非订阅', 'deepseek', '3 MODELS', [
-                  c('deepseek-v3.2', 'DEEPSEEK', '官方 Key', '1'),
-                  c('deepseek-v4-flash', 'DEEPSEEK', '官方 Key', '1'),
-                  c('deepseek-v4-pro', 'DEEPSEEK', '官方 Key', '1'),
-                ]),
-                o('模型列表 · kimi官key非订阅', 'kimi', '1 MODEL', [
-                  c('kimi-k2.5', 'KIMI', '官方 Key', '1'),
-                ]),
-                o('模型列表 · codex', 'codex', '21 MODELS', [
-                  c('codex-auto-review', 'CODEX', '分组模型', '1'),
-                  c('gpt-5.2', 'CODEX', '分组模型', '1'),
-                  c('gpt-5.2-codex', 'CODEX', '分组模型', '1'),
-                  c('gpt-5.2-high', 'CODEX', '分组模型', '1'),
-                  c('gpt-5.2-low', 'CODEX', '分组模型', '1'),
-                  c('gpt-5.2-medium', 'CODEX', '分组模型', '1'),
-                  c('gpt-5.2-xhigh', 'CODEX', '分组模型', '1'),
-                  c('gpt-5.3', 'CODEX', '分组模型', '1'),
-                  c('gpt-5.3-codex', 'CODEX', '分组模型', '1'),
-                  c('gpt-5.3-codex-high', 'CODEX', '分组模型', '1'),
-                  c('gpt-5.3-codex-low', 'CODEX', '分组模型', '1'),
-                  c('gpt-5.3-codex-medium', 'CODEX', '分组模型', '1'),
-                  c('gpt-5.3-codex-xhigh', 'CODEX', '分组模型', '1'),
-                  c('gpt-5.4', 'CODEX', '分组模型', '1'),
-                  c('gpt-5.4-fast', 'CODEX', '分组模型', '1'),
-                  c('gpt-5.4-high', 'CODEX', '分组模型', '1'),
-                  c('gpt-5.4-mini', 'CODEX', '分组模型', '1'),
-                  c('gpt-5.5', 'CODEX', '分组模型', '1'),
-                  c('gpt-5.5-fast', 'CODEX', '分组模型', '1'),
-                  c('gpt-image-1', 'CODEX', '分组模型', '1'),
-                  c('gpt-image-2', 'CODEX', '分组模型', '1'),
-                ]),
-                o('模型列表 · kling', 'kling', '13 MODELS', [
-                  c('kling-v1', 'KLING', '分组模型', '1'),
-                  c('kling-v1-5', 'KLING', '分组模型', '1'),
-                  c('kling-v1-6', 'KLING', '分组模型', '1'),
-                  c('kling-v2', 'KLING', '分组模型', '1'),
-                  c('kling-v2-1', 'KLING', '分组模型', '1'),
-                  c('kling-v2-1-master', 'KLING', '分组模型', '1'),
-                  c('kling-v2-5', 'KLING', '分组模型', '1'),
-                  c('kling-v2-5-turbo', 'KLING', '分组模型', '1'),
-                  c('kling-v2-6', 'KLING', '分组模型', '1'),
-                  c('kling-v2-master', 'KLING', '分组模型', '1'),
-                  c('kling-v3', 'KLING', '分组模型', '1'),
-                  c('kling-v3-omni', 'KLING', '分组模型', '1'),
-                  c('kling-video-o1', 'KLING', '分组模型', '1'),
-                ]),
-                o('模型列表 · gemini', 'gemini', '10 MODELS', [
-                  c('gemini-2.5-flash', 'GEMINI', '分组模型', '1'),
-                  c('gemini-2.5-flash-lite', 'GEMINI', '分组模型', '1'),
-                  c('gemini-2.5-pro', 'GEMINI', '分组模型', '1'),
-                  c('gemini-3.1-flash-lite-preview', 'GEMINI', '分组模型', '1'),
-                  c('gemini-3.1-pro-preview', 'GEMINI', '分组模型', '1'),
-                  c('gemini-3-flash-preview', 'GEMINI', '分组模型', '1'),
-                  c('gpt-5.1-codex-max', 'GEMINI', '分组模型', '1'),
-                  c('gpt-5.2-codex', 'GEMINI', '分组模型', '1'),
-                  c('gpt-5.3-codex', 'GEMINI', '分组模型', '1'),
-                  c('gpt-5.4-mini', 'GEMINI', '分组模型', '1'),
-                ]),
-                o('模型列表 · cc', 'cc', '3 MODELS', [
-                  c('claude-haiku-4-5-20251001', 'CLAUDE', '分组模型', '4'),
-                  c('claude-opus-4-6', 'CLAUDE', '分组模型', '4'),
-                  c('claude-sonnet-4-6', 'CLAUDE', '分组模型', '4'),
-                ]),
-                o('模型列表 · cc-aws', 'ccAws', '18 MODELS', [
-                  c('claude-haiku-4-5-20251001', 'AWS', '分组模型', '0.3'),
-                  c('claude-opus-4-1-20250805', 'AWS', '分组模型', '0.3'),
-                  c('claude-opus-4-20250514', 'AWS', '分组模型', '0.3'),
-                  c('claude-opus-4-5-20251101', 'AWS', '分组模型', '0.3'),
-                  c('claude-opus-4-6', 'AWS', '分组模型', '0.3'),
-                  c('claude-opus-4-6-high', 'AWS', '分组模型', '0.3'),
-                  c('claude-opus-4-6-low', 'AWS', '分组模型', '0.3'),
-                  c('claude-opus-4-6-max', 'AWS', '分组模型', '0.3'),
-                  c('claude-opus-4-6-medium', 'AWS', '分组模型', '0.3'),
-                  c('claude-opus-4-7', 'AWS', '分组模型', '0.3'),
-                  c('claude-opus-4-7-high', 'AWS', '分组模型', '0.3'),
-                  c('claude-opus-4-7-low', 'AWS', '分组模型', '0.3'),
-                  c('claude-opus-4-7-max', 'AWS', '分组模型', '0.3'),
-                  c('claude-opus-4-7-medium', 'AWS', '分组模型', '0.3'),
-                  c('claude-opus-4-7-xhigh', 'AWS', '分组模型', '0.3'),
-                  c('claude-sonnet-4-20250514', 'AWS', '分组模型', '0.3'),
-                  c('claude-sonnet-4-5-20250929', 'AWS', '分组模型', '0.3'),
-                  c('claude-sonnet-4-6', 'AWS', '分组模型', '0.3'),
-                ]),
-                o('模型列表 · cc-offical', 'ccOffical', '18 MODELS', [
-                  c('claude-haiku-4-5-20251001', 'OFFICIAL', '分组模型', '2'),
-                  c('claude-opus-4-1-20250805', 'OFFICIAL', '分组模型', '2'),
-                  c('claude-opus-4-20250514', 'OFFICIAL', '分组模型', '2'),
-                  c('claude-opus-4-5-20251101', 'OFFICIAL', '分组模型', '2'),
-                  c('claude-opus-4-6', 'OFFICIAL', '分组模型', '2'),
-                  c('claude-opus-4-6-high', 'OFFICIAL', '分组模型', '2'),
-                  c('claude-opus-4-6-low', 'OFFICIAL', '分组模型', '2'),
-                  c('claude-opus-4-6-max', 'OFFICIAL', '分组模型', '2'),
-                  c('claude-opus-4-6-medium', 'OFFICIAL', '分组模型', '2'),
-                  c('claude-opus-4-7', 'OFFICIAL', '分组模型', '2'),
-                  c('claude-opus-4-7-high', 'OFFICIAL', '分组模型', '2'),
-                  c('claude-opus-4-7-low', 'OFFICIAL', '分组模型', '2'),
-                  c('claude-opus-4-7-max', 'OFFICIAL', '分组模型', '2'),
-                  c('claude-opus-4-7-medium', 'OFFICIAL', '分组模型', '2'),
-                  c('claude-opus-4-7-xhigh', 'OFFICIAL', '分组模型', '2'),
-                  c('claude-sonnet-4-20250514', 'OFFICIAL', '分组模型', '2'),
-                  c('claude-sonnet-4-5-20250929', 'OFFICIAL', '分组模型', '2'),
-                  c('claude-sonnet-4-6', 'OFFICIAL', '分组模型', '2'),
-                ]),
-              ],
-            }),
-            H.jsxs('div', {
-              className:
-                'px-8 pb-8 -mt-2 grid grid-cols-1 md:grid-cols-3 gap-4',
-              children: [
-                H.jsxs('div', {
-                  className: 'rounded-xl bg-gray-50 p-4 border border-gray-100',
-                  children: [
-                    H.jsx('p', {
-                      className:
-                        'text-[10px] font-black uppercase tracking-widest text-gray-400',
-                      children: '排序规则',
-                    }),
-                    H.jsx('p', {
-                      className: 'mt-2 text-sm font-bold text-gray-800',
-                      children:
-                        '所有官key非订阅分组已置顶，其余工具与渠道分组按名称分开展示。',
-                    }),
-                  ],
-                }),
-                H.jsxs('div', {
-                  className:
-                    'rounded-xl bg-orange-50 p-4 border border-orange-100',
-                  children: [
-                    H.jsx('p', {
-                      className:
-                        'text-[10px] font-black uppercase tracking-widest text-orange-500',
-                      children: '高倍率',
-                    }),
-                    H.jsx('p', {
-                      className: 'mt-2 text-sm font-bold text-gray-800',
-                      children: 'cc 为 4，cc-offical 为 2。',
-                    }),
-                  ],
-                }),
-                H.jsxs('div', {
-                  className:
-                    'rounded-xl bg-emerald-50 p-4 border border-emerald-100',
-                  children: [
-                    H.jsx('p', {
-                      className:
-                        'text-[10px] font-black uppercase tracking-widest text-emerald-600',
-                      children: '低倍率',
-                    }),
-                    H.jsx('p', {
-                      className: 'mt-2 text-sm font-bold text-gray-800',
-                      children: 'cc-aws 为 0.3。',
-                    }),
-                  ],
-                }),
-              ],
-            }),
+          ],
+        }),
+        H.jsxs('section', {
+          className: 'grid grid-cols-1 md:grid-cols-3 gap-4',
+          children: [
+            o(
+              '选择规则',
+              '先按客户端选择分组，再按模型能力选择具体模型。Claude Code、Gemini CLI、图片生成等场景不要混用分组。',
+            ),
+            o(
+              '计费提醒',
+              '最终扣费会同时受模型价格、分组倍率、补全倍率、缓存倍率以及媒体分辨率规则影响。',
+            ),
+            o(
+              '查看模型',
+              '完整模型、价格、折扣和端点支持范围，请在模型广场按分组筛选查看实时数据。',
+            ),
           ],
         }),
       ],
@@ -30409,6 +30359,8 @@ export ANTHROPIC_MODEL="claude-sonnet-4-6"
 
 模型广场汇聚了来自各大家主流厂商的最先进语言模型，为您提供一站式的模型调用与管理服务。
 
+![模型广场](/docs/bay-api/images/model-square.png)
+
 目前我们支持的模型家族包括：
 - **Claude 系列**: 提供卓越的逻辑推理与长文本处理能力。
 - **GPT 系列**: 业界公认的多才多艺，适用于各种通用场景。
@@ -30417,55 +30369,208 @@ export ANTHROPIC_MODEL="claude-sonnet-4-6"
 
 通过 Aiflowbay LLM 服务，您可以轻松在不同模型间切换，灵活应对多变的业务需求。
 `,
-    register: {
-      title: '注册账号',
-      content: '欢迎使用 Aiflowbay LLM 服务。完成注册即可开启您的 AI 之旅。',
-      image: '/docs/bay-api/images/register-account.png',
-      requirement: {
-        title: '注册入口',
-        desc: 'https://www.aiflowbay.com/register',
-      },
-      action: { title: '进入注册页', desc: '点击右上角“注册”或登录页底部链接' },
-    },
-    login: {
-      title: '登录账号',
-      content: '注册完成后，使用您的凭据登录系统。我们会妥善保护您的账号安全。',
-      image: '/docs/bay-api/images/login-account.png',
-      requirement: {
-        title: '登录入口',
-        desc: 'https://www.aiflowbay.com.com/login',
-      },
-      action: {
-        title: '使用邮箱/用户名登录',
-        desc: '输入邮箱地址或用户名。输入账号密码。点击“继续”完成登录。',
-      },
-    },
-    'buy-credits': {
-      title: '购买额度',
-      content:
-        '进入充值页面，选择适合您的额度方案。我们支持多种支付方式，秒到账。',
-      image:
-        'https://images.unsplash.com/photo-1556742049-13ff7337990c?auto=format&fit=crop&q=80&w=1000',
-    },
-    'create-api-key': {
-      title: '创建 API 令牌',
-      content: '在“令牌”管理页面点击“创建令牌”。根据需要设置有效期和额度限制。',
-      image: '/docs/bay-api/images/create-api-token.png',
-    },
-    'env-check': {
-      title: '环境检查',
-      content:
-        '在配置前，请确保您的终端环境已连接至互联网，且具备必要的运行环境（如 Node.js 或 Python）。',
-      image:
-        'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&q=80&w=1000',
-    },
-    'cli-config': {
-      title: '配置 CLI 工具',
-      content:
-        '根据不同工具的使用文档，将您的 API 令牌配置到对应的配置文件或环境变量中即可开始调用。',
-      image:
-        'https://images.unsplash.com/photo-1629654297299-c8506221ca97?auto=format&fit=crop&q=80&w=1000',
-    },
+    register: `
+# 注册账号
+
+## 给阅读者的忠告
+
+01. 使用前建议先查看 **模型分组介绍** 与 **常见问题**，先理解分组、端点和令牌的关系。
+02. 配置不是单纯复制，理解每个字段的含义，后续排查会更快。
+03. 如果遇到模型不可用、接口不通、登录异常，优先回查这些基础说明。
+
+## 注册入口
+
+- 注册入口：<https://www.aiflowbay.com/register>
+
+![注册账号](/docs/bay-api/images/register-account.png)
+
+打开注册入口后，点击页面右上角的“注册”。如果已经在登录页，也可以点击底部“没有账户？注册”进入注册流程。
+
+## 方式一：使用 Google 账号注册
+
+1. 点击“使用 Google 继续”。
+2. 在弹窗中选择要绑定的 Google 账号并完成授权。
+3. 授权成功后，系统会自动创建账号并登录。
+
+使用 Google 注册无需额外设置密码，后续登录时继续选择同一个 Google 账号即可。
+
+## 方式二：使用邮箱注册
+
+1. 点击“使用用户名注册”。
+2. 填写邮箱、用户名和密码。
+3. 按页面提示提交，完成注册。
+
+> 注意：邮箱会用于接收验证与通知；密码建议使用字母、数字和特殊字符组合。请妥善保管登录凭证，避免账号被盗用。
+`,
+    login: `
+# 登录账号
+
+## 登录入口
+
+- 登录入口：<https://www.aiflowbay.com/login>
+
+![登录账号](/docs/bay-api/images/login-account.png)
+
+## 使用 Google 账号登录
+
+1. 点击“使用 Google 继续”。
+2. 选择注册时绑定的 Google 账号。
+3. 授权成功后即可自动登录。
+
+## 使用邮箱或用户名登录
+
+1. 输入邮箱地址或用户名。
+2. 输入账号密码。
+3. 点击“继续”完成登录。
+
+> 设备登录说明：浏览器会保持登录状态；在新设备、新浏览器或清理浏览器数据后，需要重新登录。
+
+## OIDC 获取 Token 失败
+
+如果点击“使用 Google 继续”后出现“错误：OIDC 获取 Token 失败，请检查设置！”，通常是浏览器缓存或 Cookie 状态异常导致。
+
+可以先清空浏览器缓存后重试：
+
+- Windows / Linux Chrome：按 \`Ctrl + Shift + Delete\` 打开清除浏览数据页面。
+- macOS Chrome：按 \`Command + Shift + Delete\` 打开清除浏览数据页面。
+
+如果清理缓存后仍然无效，请手动删除站点相关 Cookie：
+
+1. 在登录页按 \`F12\` 打开开发者工具。
+2. 进入“应用”面板。
+3. 在左侧依次选择“存储” -> “Cookie” -> 当前站点。
+4. 删除 \`session\`、\`TDC_itoken\` 等站点 Cookie。
+5. 刷新页面后重新登录。
+`,
+    'buy-credits': `
+# 购买额度
+
+登录控制台后，进入左侧“钱包管理”页面购买额度。额度到账后，令牌调用模型会从账户余额中扣费。
+
+![钱包管理](/docs/bay-api/images/wallet-topup.png)
+
+## 购买流程
+
+1. 在“选择充值额度”中选择固定额度，或在“自定义额度”中输入要充值的金额。
+2. 确认页面下方的“实付金额”。
+3. 点击“立即支付”。
+
+## 支付说明
+
+充值比例以平台当前控制台展示为准。来源文档说明为 \`1:1\`，即 **1 元人民币等同于 1 美元额度**。如果使用支付宝或微信支付时没有弹出支付页面，请先关闭代理后重试。
+
+## 临时公告：开票服务调整
+
+为配合近期结算与服务流程调整，开票服务会按支付主体与订单时间做阶段性调整：
+
+- 个人支付订单当前仅支持开具海外 Invoice。
+- 5 月已完成支付的订单，所有用户仍可在 6 月申请补开大陆发票；其中海外 Invoice 订单需完成补税后申请，申请截止至 6 月 15 日。
+- 自 6 月起，新购个人支付订单不再支持开具大陆发票；后续大陆发票仅支持企业对公支付订单。
+`,
+    'create-api-key': `
+# 创建 API 令牌
+
+API 令牌是 CLI、SDK 或第三方客户端调用接口时使用的凭证。创建时务必选择正确分组。
+
+## 进入令牌管理
+
+登录后进入控制台面板，左侧选择“令牌管理”。
+
+![创建 API 令牌](/docs/bay-api/images/create-api-token.png)
+
+1. 在左侧菜单点击“令牌管理”。
+2. 点击页面上方的“添加令牌”。
+
+## 创建新令牌
+
+在弹窗中填写令牌信息：
+
+- 令牌名称：用于区分不同用途，例如 \`Claude Code\`、\`Codex\`、\`Gemini\`。
+- 令牌分组：必须选择，分组决定这个令牌可以使用哪些模型。
+- 过期时间：默认“永不过期”，也可以按需要设置有效期。
+- 新建数量：一般保持 \`1\` 即可。
+- 额度设置：开启“无限额度”时，令牌实际可用额度仍受账户余额限制。
+- 访问限制：不熟悉时建议先保持默认，不要开启模型限制或 IP 白名单。
+
+> 令牌分组一定要选对：令牌分组会直接影响可用模型。比如 Claude Code、Codex、Gemini CLI 需要选择对应分组；如果分组选错，后续配置 CLI 时很容易出现“模型不存在”或无法调用的问题。
+
+填写完成后，点击右下角“提交”完成创建。
+
+## 查看分组可用模型
+
+你可以在“模型广场”查看每个令牌分组下支持哪些模型。
+
+![模型广场](/docs/bay-api/images/model-square.png)
+
+1. 点击页面右上角“模型广场”。
+2. 在左侧“可用令牌分组”中选择分组。
+3. 右侧模型卡片会显示该分组可用的模型、价格和折扣倍率。
+
+如果想了解折扣含义，可以点击模型广场右上方的“折扣说明”。
+`,
+    'env-check': `
+# 环境检查
+
+在配置 Claude Code、Codex 或 Gemini CLI 之前，请先确认本机已经正确安装 Node.js。
+
+## 检查命令
+
+在 Windows、macOS 或 Linux 终端中执行：
+
+\`\`\`bash
+npm list -g --depth-0
+\`\`\`
+
+如果命令可以正常执行，说明 Node.js 与 npm 已经可用。即使输出中没有安装任何全局包，也不影响后续配置。
+
+如果提示“命令未找到”或类似错误，说明当前环境还没有安装 Node.js，或安装后没有正确加入系统环境变量。请先完成 Node.js 安装，再重新执行上面的命令确认。
+
+> 必须先完成环境检查：CLI 工具依赖 Node.js 和 npm。环境没有准备好时，后续安装 Claude Code、Codex、Gemini CLI 都可能失败。
+`,
+    'cli-config': `
+# 配置 CLI 工具
+
+Bay API 支持在命令行中使用 Claude Code、Codex、Gemini CLI。配置前先完成环境检查、安装对应 CLI，并准备好正确分组的 API 令牌。
+
+## 基础条件
+
+开始配置 CLI 前，请先完成以下步骤：
+
+1. 完成环境检查，确保 Node.js 和 npm 可以正常使用。
+2. 完成 CLI 安装，安装 Claude Code、Codex、Gemini CLI。
+3. 创建 API 令牌，并确认令牌分组与目标工具匹配。
+
+## API 端点说明
+
+登录控制台后，可以在“数据看板”右侧查看当前可用的 API Endpoint。
+
+![API 信息位置](/docs/bay-api/images/dashboard-endpoint.png)
+
+- 主站 Endpoint：\`https://www.aiflowbay.com\`，稳定可靠，适合生产环境。
+- 优化线路 Endpoint：如果控制台提供优化线路，可用于对延迟敏感的场景。
+
+> OpenAI 兼容端点需要添加 \`/v1\`
+>
+> 如果使用的是 OpenAI 兼容格式的客户端或工具，例如 Codex、OpenAI SDK、Cherry Studio 的 OpenAI 兼容配置，请在 API 地址后添加 \`/v1\`：
+
+\`\`\`bash
+https://www.aiflowbay.com/v1
+\`\`\`
+
+如果使用的是 Claude Code、Gemini CLI 等专用配置，请以对应教程中的示例为准。
+
+## 推荐配置
+
+为了让配置过程更轻便，建议使用 CC-Switch 统一配置 Claude Code、Codex、Gemini。熟悉 CLI 的用户也可以参考手动配置教程；无论选择哪种方式，都要先完成基础条件。
+
+## CLI 手动配置教程传送门
+
+不管使用哪个 CLI，请一定先完成上方基础条件，确保 Node.js、npm 和对应 CLI 都可以正常使用。
+
+- Claude Code 配置教程
+- Codex 配置教程
+- Gemini 配置教程
+`,
   };
 function fR() {
   const [e, i] = xr.useState('register'),
