@@ -30131,16 +30131,16 @@ irm https://claude.ai/install.ps1 | iex
 npm install -g @anthropic-ai/claude-code
 \`\`\`
 
-### 步骤二：获取 panapi API
-1. 登录 panapi 聊天平台
+### 步骤二：获取 FlowBay API
+1. 登录 FlowBay API 聊天平台
 2. 导航至 API 密钥管理页面
 3. 点击创建新的 API 密钥
 **注意：** 请妥善保管您的 API 密钥——您将在下面的配置步骤中用到它。
 
 ---
 
-## 配置 panapi API
-两个先决条件都满足后，请选择以下任一选项来配置 panapi API。
+## 配置 FlowBay API
+两个先决条件都满足后，请选择以下任一选项来配置 FlowBay API。
 
 ### 选项 1：settings.json（推荐）
 这种方法通过 Claude Code 自身的设置文件进行配置，而无需修改系统环境变量。
@@ -30172,11 +30172,11 @@ claude
 #### Bash（Linux / macOS）
 编辑 \`~/.bashrc\`（或 \`~/.bash_profile\`）：
 \`\`\`bash
-# Claude Code - panapi Provider Configuration
+# Claude Code - FlowBay API Provider Configuration
 export ANTHROPIC_BASE_URL="https://www.aiflowbay.com"
 export ANTHROPIC_AUTH_TOKEN="your-api-key-here"
 export ANTHROPIC_MODEL="claude-sonnet-4-6"
-# End of panapi Provider Configuration
+# End of FlowBay API Provider Configuration
 \`\`\`
 应用更改：
 \`\`\`bash
@@ -30186,11 +30186,11 @@ source ~/.bashrc
 #### Zsh（Linux / macOS）
 编辑 \`~/.zshrc\`：
 \`\`\`bash
-# Claude Code - panapi Provider Configuration
+# Claude Code - FlowBay API Provider Configuration
 export ANTHROPIC_BASE_URL="https://www.aiflowbay.com"
 export ANTHROPIC_AUTH_TOKEN="your-api-key-here"
 export ANTHROPIC_MODEL="claude-sonnet-4-6"
-# End of panapi Provider Configuration
+# End of FlowBay API Provider Configuration
 \`\`\`
 应用更改：
 \`\`\`bash
@@ -30200,11 +30200,11 @@ source ~/.zshrc
 #### PowerShell（Windows）
 编辑您的 \`$PROFILE\` 文件：
 \`\`\`powershell
-# Claude Code - panapi Provider Configuration
+# Claude Code - FlowBay API Provider Configuration
 $env:ANTHROPIC_BASE_URL = "https://www.aiflowbay.com"
 $env:ANTHROPIC_AUTH_TOKEN = "your-api-key-here"
 $env:ANTHROPIC_MODEL = "claude-sonnet-4-6"
-# End of panapi Provider Configuration
+# End of FlowBay API Provider Configuration
 \`\`\`
 应用更改：
 \`\`\`powershell
@@ -30317,8 +30317,8 @@ irm https://claude.ai/install.ps1 | iex
 npm install -g @anthropic-ai/claude-code
 \`\`\`
 
-### 步骤二：获取 panapi API
-1. 登录 panapi 聊天平台
+### 步骤二：获取 FlowBay API
+1. 登录 FlowBay API 聊天平台
 2. 导航至 API 密钥管理页面
 3. 点击创建新的 API 密钥
 **注意：** 请妥善保管您的 API 密钥。
