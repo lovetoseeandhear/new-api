@@ -1,5 +1,3 @@
-export const DISCOUNT_BASE_RATIO = 6.8;
-
 export const getUsedGroupRatio = (model, selectedGroup, groupRatio = {}) => {
   let usedGroupRatio = groupRatio[selectedGroup];
 
@@ -27,12 +25,12 @@ export const getUsedGroupRatio = (model, selectedGroup, groupRatio = {}) => {
 
 export const getDiscountZheByGroupRatio = (groupRatio) => {
   const ratio = Number(groupRatio);
-  if (!Number.isFinite(ratio) || DISCOUNT_BASE_RATIO <= 0) {
+  if (!Number.isFinite(ratio)) {
     return null;
   }
 
-  // 折数 = (组倍率 / 6.8) * 10，保留到小数点后一位
-  const zhe = (ratio / DISCOUNT_BASE_RATIO) * 10;
+  // 折数 = 组倍率 * 10，保留到小数点后一位
+  const zhe = ratio * 10;
   const boundedZhe = Math.max(0, Math.min(10, zhe));
   return Number(boundedZhe.toFixed(1));
 };
