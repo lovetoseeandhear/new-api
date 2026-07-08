@@ -3,7 +3,9 @@ package dto
 import (
 	"encoding/json"
 	"fmt"
+	"strings"
 
+	"github.com/QuantumNous/new-api/common"
 	"github.com/QuantumNous/new-api/types"
 )
 
@@ -346,6 +348,50 @@ type ResponsesOutput struct {
 	CallId    string                   `json:"call_id,omitempty"`
 	Name      string                   `json:"name,omitempty"`
 	Arguments string                   `json:"arguments,omitempty"`
+}
+
+type flexibleJSONString string
+
+func (s *flexibleJSONString) UnmarshalJSON(data []byte) error {
+	trimmed := strings.TrimSpace(string(data))
+	if trimmed == "" || trimmed == "null" {
+		*s = ""
+		return nil
+	}
+	if strings.HasPrefix(trimmed, "\"") {
+		var value string
+		if err := common.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		*s = flexibleJSONString(value)
+		return nil
+	}
+
+	var value any
+	if err := common.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	normalized, err := common.Marshal(value)
+	if err != nil {
+		return err
+	}
+	*s = flexibleJSONString(normalized)
+	return nil
+}
+
+func (o *ResponsesOutput) UnmarshalJSON(data []byte) error {
+	type responsesOutputAlias ResponsesOutput
+	aux := struct {
+		Arguments flexibleJSONString `json:"arguments,omitempty"`
+		*responsesOutputAlias
+	}{
+		responsesOutputAlias: (*responsesOutputAlias)(o),
+	}
+	if err := common.Unmarshal(data, &aux); err != nil {
+		return err
+	}
+	o.Arguments = string(aux.Arguments)
+	return nil
 }
 
 type ResponsesOutputContent struct {

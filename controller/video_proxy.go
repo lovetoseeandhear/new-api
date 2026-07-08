@@ -109,6 +109,19 @@ func VideoProxy(c *gin.Context) {
 	case constant.ChannelTypeOpenAI, constant.ChannelTypeSora:
 		videoURL = fmt.Sprintf("%s/v1/videos/%s/content", baseURL, task.GetUpstreamTaskID())
 		req.Header.Set("Authorization", "Bearer "+channel.Key)
+	case constant.ChannelTypeOpenRouter:
+		apiKey := firstNonEmpty(task.PrivateData.Key, channel.Key)
+		baseURL = channel.GetBaseURL()
+		if baseURL == "" {
+			baseURL = "https://openrouter.ai/api"
+		}
+		videoURL, apiKey, err = buildOpenRouterVideoContentRequest(baseURL, apiKey, task)
+		if err != nil {
+			logger.LogError(c.Request.Context(), fmt.Sprintf("Failed to build OpenRouter video URL for task %s: %s", taskID, err.Error()))
+			videoProxyError(c, http.StatusBadGateway, "server_error", "Failed to fetch video content")
+			return
+		}
+		req.Header.Set("Authorization", "Bearer "+apiKey)
 	default:
 		// Video URL is stored in PrivateData.ResultURL (fallback to FailReason for old data)
 		videoURL = task.GetResultURL()
@@ -130,7 +143,10 @@ func VideoProxy(c *gin.Context) {
 	}
 
 	fetchSetting := system_setting.GetFetchSetting()
-	if err := common.ValidateURLWithFetchSetting(videoURL, fetchSetting.EnableSSRFProtection, fetchSetting.AllowPrivateIp, fetchSetting.DomainFilterMode, fetchSetting.IpFilterMode, fetchSetting.DomainList, fetchSetting.IpList, fetchSetting.AllowedPorts, fetchSetting.ApplyIPFilterForDomain); err != nil {
+	if channel.Type != constant.ChannelTypeOpenRouter || !sameURLHost(videoURL, baseURL) {
+		err = common.ValidateURLWithFetchSetting(videoURL, fetchSetting.EnableSSRFProtection, fetchSetting.AllowPrivateIp, fetchSetting.DomainFilterMode, fetchSetting.IpFilterMode, fetchSetting.DomainList, fetchSetting.IpList, fetchSetting.AllowedPorts, fetchSetting.ApplyIPFilterForDomain)
+	}
+	if err != nil {
 		logger.LogError(c.Request.Context(), fmt.Sprintf("Video URL blocked for task %s: %v", taskID, err))
 		videoProxyError(c, http.StatusForbidden, "server_error", fmt.Sprintf("request blocked: %v", err))
 		return
@@ -202,4 +218,47 @@ func writeVideoDataURL(c *gin.Context, dataURL string) error {
 	c.Writer.WriteHeader(http.StatusOK)
 	_, err = c.Writer.Write(videoBytes)
 	return err
+}
+
+func buildOpenRouterVideoContentRequest(baseURL string, fallbackKey string, task *model.Task) (string, string, error) {
+	if task == nil {
+		return "", "", fmt.Errorf("task is nil")
+	}
+	apiKey := firstNonEmpty(task.PrivateData.Key, fallbackKey)
+	if apiKey == "" {
+		return "", "", fmt.Errorf("openrouter api key is empty")
+	}
+	upstreamTaskID := strings.TrimSpace(task.GetUpstreamTaskID())
+	if upstreamTaskID == "" {
+		return "", "", fmt.Errorf("upstream task id is empty")
+	}
+	baseURL = strings.TrimRight(strings.TrimSpace(baseURL), "/")
+	if baseURL == "" {
+		baseURL = "https://openrouter.ai/api"
+	}
+	if strings.HasSuffix(baseURL, "/v1") {
+		return fmt.Sprintf("%s/videos/%s/content?index=0", baseURL, url.PathEscape(upstreamTaskID)), apiKey, nil
+	}
+	return fmt.Sprintf("%s/v1/videos/%s/content?index=0", baseURL, url.PathEscape(upstreamTaskID)), apiKey, nil
+}
+
+func firstNonEmpty(values ...string) string {
+	for _, value := range values {
+		if strings.TrimSpace(value) != "" {
+			return strings.TrimSpace(value)
+		}
+	}
+	return ""
+}
+
+func sameURLHost(targetURL string, baseURL string) bool {
+	target, err := url.Parse(targetURL)
+	if err != nil {
+		return false
+	}
+	base, err := url.Parse(baseURL)
+	if err != nil {
+		return false
+	}
+	return strings.EqualFold(target.Hostname(), base.Hostname())
 }

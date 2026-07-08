@@ -13,6 +13,7 @@ func SetVideoRouter(router *gin.Engine) {
 	videoProxyRouter.Use(middleware.RouteTag("relay"))
 	videoProxyRouter.Use(middleware.TokenOrUserAuth())
 	{
+		videoProxyRouter.GET("/media/:media_id/content", controller.MediaProxy)
 		videoProxyRouter.GET("/videos/:task_id/content", controller.VideoProxy)
 	}
 

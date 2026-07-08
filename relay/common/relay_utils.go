@@ -56,6 +56,9 @@ func createTaskError(err error, code string, statusCode int, localError bool) *d
 }
 
 func storeTaskRequest(c *gin.Context, info *RelayInfo, action string, requestObj TaskSubmitReq) {
+	if info.TaskRelayInfo == nil {
+		info.TaskRelayInfo = &TaskRelayInfo{}
+	}
 	info.Action = action
 	c.Set("task_request", requestObj)
 }
