@@ -77,7 +77,7 @@ func sweepTimedOutTasks(ctx context.Context) {
 			continue
 		}
 		timedOutCount++
-		if !isLegacy && task.Quota != 0 {
+		if !isLegacy && constant.TaskTimeoutRefundEnabled && task.Quota != 0 {
 			RefundTaskQuota(ctx, task, reason)
 		}
 	}
